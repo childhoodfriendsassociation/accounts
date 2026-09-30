@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আবদুল এর স্মার্ট ফিনান্সিয়াল ড্যাশবোর্ড</title>
+    <!-- Google Fonts: Anek Bangla & Times New Roman (fallback) -->
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --table-header: #f8fafc;
+            --radius: 16px;
+        }
+
+        [data-theme="dark"] {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --table-header: #1e293b;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Anek Bangla', 'Times New Roman', Times, serif; 
+            transition: background 0.3s, color 0.3s; 
+        }
+        
+        body { 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            padding: 12px; 
+            line-height: 1.5;
+        }
+
+        .container { 
+            max-width: 950px; 
+            margin: 0 auto; 
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-brand {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .nav-btn:hover { background: var(--border-color); }
+
+        /* Navbar Dropdown Jump Menu */
+        .nav-select {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Separated Widgets Grid (Top Widgets Only) */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .widget-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .widget-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .widget-content {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Full Month Calendar Widget */
+        .calendar-container {
+            margin-top: 6px;
+        }
+
+        .cal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .cal-day-name {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding-bottom: 4px;
+        }
+
+        .cal-date {
+            font-size: 11px;
+            padding: 6px 0;
+            border-radius: 6px;
+            background: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .cal-date.empty {
+            background: transparent;
+        }
+
+        .cal-date.today {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Section Cards (Initially Hidden, Shown when selected) */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            display: none; /* Hidden by default */
+        }
+
+        .section-card.active-table {
+            display: block; /* Shown when selected */
+        }
+
+        .table-header-wrap { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+        }
+
+        h2 { 
+            font-size: 14px; 
+            color: var(--text-main); 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 14px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .table-responsive { 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: var(--card-bg); 
+            white-space: nowrap;
+        }
+
+        th, td { 
+            padding: 10px 12px; 
+            text-align: left; 
+            font-size: 12px; 
+            color: var(--text-main);
+        }
+
+        th { 
+            background-color: var(--table-header); 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background-color: rgba(0,0,0,0.01); }
+        [data-theme="dark"] tr:nth-child(even) { background-color: rgba(255,255,255,0.01); }
+        
+        td[contenteditable="true"] { 
+            background-color: rgba(234, 179, 8, 0.08); 
+            cursor: pointer; 
+            border-radius: 4px;
+        }
+        td[contenteditable="true"]:focus { 
+            background-color: var(--card-bg); 
+            outline: 2px solid var(--primary); 
+        }
+        
+        .calculated-row { background-color: rgba(14, 165, 233, 0.08) !important; font-weight: 600; color: #0284c7; }
+        .locked-row { background-color: rgba(100, 116, 139, 0.08) !important; font-weight: 600; color: var(--text-muted); }
+        .final-zakat-row { background-color: rgba(34, 197, 94, 0.08) !important; font-weight: 700; color: #16a34a; font-size: 13px; }
+
+        .btn-add { 
+            background-color: rgba(79, 70, 229, 0.1); 
+            color: var(--primary); 
+            border: none; 
+            padding: 5px 10px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            border-radius: 6px; 
+            cursor: pointer; 
+        }
+        .btn-add:hover { background-color: rgba(79, 70, 229, 0.2); }
+        
+        .btn-del { 
+            background-color: rgba(220, 38, 38, 0.1); 
+            color: #dc2626; 
+            border: none; 
+            padding: 4px 8px; 
+            font-size: 10px; 
+            font-weight: 600;
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        .btn-del:hover { background-color: rgba(220, 38, 38, 0.2); }
+
+        .action-bar { 
+            display: flex; 
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px; 
+            background: var(--card-bg); 
+            padding: 16px; 
+            border-radius: var(--radius); 
+            border: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .btn { 
+            width: 100%;
+            background-color: #16a34a; 
+            color: white; 
+            border: none; 
+            padding: 11px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+        }
+        .btn:hover { background-color: #15803d; }
+        
+        .btn-secondary {
+            background-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+        }
+        .btn-secondary:hover { background-color: var(--primary-hover); }
+
+        #success-msg { 
+            color: #16a34a; 
+            font-weight: 600; 
+            font-size: 12px;
+            display: none; 
+        }
+
+        .info-note { 
+            font-size: 11px; 
+            color: var(--text-muted); 
+            font-style: italic; 
+            margin-top: 8px; 
+        }
+
+        .welcome-notice {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media(min-width: 640px) {
+            body { padding: 25px; }
+            .action-bar { flex-direction: row; justify-content: space-between; }
+            .btn { width: auto; min-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar with Jump Menu -->
+    <nav class="navbar">
+        <div class="nav-brand" id="brandTitle">আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড</div>
+        <div class="nav-controls">
+            <!-- Dropdown Jump Menu -->
+            <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
+                <option value="" disabled selected id="jumpDefaultOpt">📂 টেবিল সিলেক্ট করুন...</option>
+                <option value="cardAED" id="opt1">এইডি অ্যাকাউন্ট ও বিডিটি</option>
+                <option value="cardBDT" id="opt2">বিডিটি অ্যাকাউন্ট স্ট্যাটাস</option>
+                <option value="cardInvestment" id="opt3">ইনভেস্টমেন্ট ও কিস্তি হিসাব</option>
+                <option value="cardCredit" id="opt4">ক্রেডিট কার্ড স্ট্যাটাস</option>
+                <option value="cardOutstanding" id="opt5">মাসিক বকেয়া পেমেন্ট</option>
+                <option value="cardExpense" id="opt6">মাসিক খরচ ও পরিকল্পনা</option>
+                <option value="cardZakat" id="opt7">যাকাত ক্যালকুলেটর</option>
+            </select>
+            <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+            <button class="nav-btn" onclick="toggleLang()" id="langBtn">🇬🇧 EN</button>
+            <button class="nav-btn" onclick="window.print()" id="printBtn">🖨 প্রিন্ট</button>
+        </div>
+    </nav>
+
+    <!-- Top Widgets Grid (Time, Location, Calendar) -->
+    <div class="widgets-grid">
+        <!-- Time Widget -->
+        <div class="widget-card">
+            <div class="widget-header" id="lblTime">⏰ লাইভ সময়</div>
+            <div class="widget-content" id="liveTime">--:--:--</div>
+        </div>
+        <!-- Location Widget -->
+        <div class="widget-card">
+            <div class="widget-header" id="lblLocation">📍 লোকেশন</div>
+            <div class="widget-content" id="lblLocationVal">দুবাই, সংযুক্ত আরব আমিরাত</div>
+        </div>
+        <!-- Full Month Calendar Widget -->
+        <div class="widget-card" style="grid-column: 1 / -1;">
+            <div class="widget-header" id="lblCalendar">📅 ফুল মান্থ ক্যালেন্ডার</div>
+            <div class="calendar-container">
+                <div class="cal-header" id="calMonthYear">--</div>
+                <div class="cal-grid">
+                    <div class="cal-day-name" id="dSun">Su</div>
+                    <div class="cal-day-name" id="dMon">Mo</div>
+                    <div class="cal-day-name" id="dTue">Tu</div>
+                    <div class="cal-day-name" id="dWed">We</div>
+                    <div class="cal-day-name" id="dThu">Th</div>
+                    <div class="cal-day-name" id="dFri">Fr</div>
+                    <div class="cal-day-name" id="dSat">Sa</div>
+                </div>
+                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;">
+                    <!-- JavaScript will generate days here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Default Welcome Notice (Shown when no table selected) -->
+    <div class="welcome-notice" id="welcomeNotice">
+        👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।
+    </div>
+
+    <!-- AED Account Status -->
+    <div class="section-card" id="cardAED">
+        <div class="table-header-wrap">
+            <h2 id="t1Title">এইডি অ্যাকাউন্ট ও বিডিটি কনভার্শন</h2>
+            <button class="btn-add" onclick="addRow('tableAED', true)" id="addBtn1">+ Add</button>
+        </div>
+        <div class="table-responsive">
+            <table id="tableAED">
+                <tr id="thAED"><th>Account Name</th><th>Balance / Rate</th><th>Action</th></tr>
+                <tr><td contenteditable="true">HSBC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">HSBC GMA</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Ruya</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">PayIt</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Botim</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Fakhrul</td><td contenteditable="true" oninput="calculateAll()">48.33</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Current Month Salary</td><td contenteditable="true" oninput="calculateAll()">2555.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td id="lblAedTot">In AED Total</td><td id="aedTotal">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">AED to BDT Rate</td><td contenteditable="true" oninput="calculateAll()">33.43</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblInc">2.5% Incentive (Auto)</td><td id="incentiveBox">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblFinRate">Final Rate</td><td id="finalRate">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblConvBdt">Converted Total in BDT</td><td id="convertedBDT">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- BDT Account Status -->
+    <div class="section-card" id="cardBDT">
+        <div class="table-header-wrap">
+            <h2 id="t2Title">বিডিটি অ্যাকাউন্ট স্ট্যাটাস</h2>
+            <button class="btn-add" onclick="addRow('tableBDT', false, true)" id="addBtn2">+ Add</button>
+        </div>
+        <div class="table-responsive">
+            <table id="tableBDT">
+                <tr id="thBDT"><th>Account Name</th><th>Balance (BDT)</th><th>Action</th></tr>
+                <tr><td contenteditable="true">MTB Savings</td><td contenteditable="true" oninput="calculateAll()">199.37</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">MTB NRB</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">BRAC PLC</td><td contenteditable="true" oninput="calculateAll()">35.38</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">DBBL Agent</td><td contenteditable="true" oninput="calculateAll()">290.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">UCB PLC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td id="lblUsableBdt">Usable Asset in BDT</td><td id="bdtUsableTotal">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">DBBL Core</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Pubali Bank PLC</td><td contenteditable="true" oninput="calculateAll()">5040.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">IBBL PLC</td><td contenteditable="true" oninput="calculateAll()">251.50</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td id="lblHoldBdt">Amount In Hold In Bank</td><td id="bdtHoldTotal">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Investment & Installment -->
+    <div class="section-card" id="cardInvestment">
+        <div class="table-header-wrap">
+            <h2 id="t3Title">ইনভেস্টমেন্ট ও কিস্তি হিসাব</h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tableInvestment">
+                <tr id="thInv"><th>Parameter</th><th>Value / Number</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Down Payment (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Monthly Installment Count (Months)</td><td contenteditable="true" oninput="calculateAll()">0</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblInvMonTot">Total Monthly Installments [Auto]</td><td id="invMonthlyTotal">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblInvTot">Total Investment</td><td id="invTotalSum">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Amount to Divide by 12</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblInvDiv">Amount Divided by 12 [Auto]</td><td id="invDividedBy12">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblComDue">Committee Due Payment [Auto]</td><td id="invDifference">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Credit Card Status -->
+    <div class="section-card" id="cardCredit">
+        <div class="table-header-wrap">
+            <h2 id="t4Title">ক্রেডিট কার্ড স্ট্যাটাস</h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tableCredit">
+                <tr id="thCred"><th>Credit / Option Name</th><th>Amount / Details</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Tabby Credit Limit</td><td contenteditable="true" oninput="calculateAll()">6700.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblTabBal">Tabby Credit Balance</td><td id="tabbyBalanceBox">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Tabby Credit Used</td><td contenteditable="true" oninput="calculateAll()">1503.84</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblTabOut">Tabby Outstanding (Auto)</td><td id="tabbyOutstandingBox">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Tabby Split Charge</td><td contenteditable="true" oninput="calculateAll()">1.15</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Monthly Outstanding -->
+    <div class="section-card" id="cardOutstanding">
+        <div class="table-header-wrap">
+            <h2 id="t5Title">মাসিক বকেয়া পেমেন্ট (Outstanding)</h2>
+            <button class="btn-add" onclick="addRow('tableMonthlyOutstanding', false, false, true)" id="addBtn3">+ Add</button>
+        </div>
+        <div class="table-responsive">
+            <table id="tableMonthlyOutstanding">
+                <tr id="thOut"><th>Month / Name</th><th>Amount</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-10-01)</td><td contenteditable="true" oninput="calculateAll()">451.44</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-11-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-12-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2027-01-01)</td><td contenteditable="true" oninput="calculateAll()">351.19</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td id="lblOutTot">Total Monthly Outstanding</td><td id="monthlyOutstandingTotal">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Monthly Expenses -->
+    <div class="section-card" id="cardExpense">
+        <div class="table-header-wrap">
+            <h2 id="t6Title">মাসিক খরচ ও পরিকল্পনা</h2>
+            <button class="btn-add" onclick="addRow('tableExpense', false, false, false, true)" id="addBtn4">+ Add</button>
+        </div>
+        <div class="table-responsive">
+            <table id="tableExpense">
+                <tr id="thExp"><th>Expense Item</th><th>Amount (BDT)</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Mother</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">House Rent</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">WIFI Bill</td><td contenteditable="true" oninput="calculateAll()">500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Gas Bill</td><td contenteditable="true" oninput="calculateAll()">1500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Dust Bill</td><td contenteditable="true" oninput="calculateAll()">100.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Madrasah Fee</td><td contenteditable="true" oninput="calculateAll()">2600.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Home Tuition Fee</td><td contenteditable="true" oninput="calculateAll()">1020.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Electric Bill</td><td contenteditable="true" oninput="calculateAll()">2500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Food & Others</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Associates</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td id="lblExpTot">Total Expenses & Plans</td><td id="expenseTotal">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblExpAed">In AED</td><td id="expenseAEDTotal">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Zakat Calculator -->
+    <div class="section-card" id="cardZakat">
+        <div class="table-header-wrap">
+            <h2 id="t7Title">যাকাত ক্যালকুলেটর</h2>
+        </div>
+        <div class="table-responsive">
+            <table id="tableZakat">
+                <tr id="thZak"><th>Zakat Parameter</th><th>Value / Amount</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Total Cash / Bank Asset (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Gold Weight (in Grams)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Gold Price per Vori (BDT)</td><td contenteditable="true" oninput="calculateAll()">115000.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblEffGram">Gold Effective Price / Gram (-17%)</td><td id="effectiveGramRate">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblGoldTot">Total Gold Market Value (BDT)</td><td id="zakatGoldTotal">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblGrossWealth">Total Gross Wealth</td><td id="totalGrossWealth">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Total Liabilities / Debts</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td id="lblNetWealth">Net Combined Wealth</td><td id="netCombinedWealth">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Silver Price per Vori (Nisab)</td><td contenteditable="true" oninput="calculateAll()">1400.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblNisab">Combined Nisab Threshold</td><td id="combinedNisabThreshold">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td id="lblZakStatus">Zakat Eligibility Status</td><td id="zakatStatus">Not Applicable</td><td>-</td></tr>
+                <tr class="final-zakat-row"><td id="lblZakPay">Total Zakat Payable (2.5%)</td><td id="zakatPayableFinal">0.00</td><td>-</td></tr>
+            </table>
+        </div>
+        <div class="info-note" id="zakatNote">💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.</div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+        <button class="btn" onclick="saveData()" id="saveBtn">💾 সেভ করুন</button>
+        <span id="success-msg">✅ সফলভাবে সেভ হয়েছে!</span>
+        <button class="btn btn-secondary" onclick="calculateAll()" id="calcBtn">🔄 রি-ক্যালকুলেট</button>
+    </div>
+</div>
+
+<script>
+    /* Live Clock & Full Month Calendar */
+    function updateDateTime() {
+        const now = new Date();
+        document.getElementById('liveTime').innerText = now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    function renderFullCalendar() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const todayDate = now.getDate();
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        let daysContainer = document.getElementById('calDaysGrid');
+        daysContainer.innerHTML = '';
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            let emptyCell = document.createElement('div');
+            emptyCell.className = 'cal-date empty';
+            daysContainer.appendChild(emptyCell);
+        }
+
+        for (let d = 1; d <= totalDays; d++) {
+            let dayCell = document.createElement('div');
+            dayCell.className = 'cal-date';
+            dayCell.innerText = d;
+            if (d === todayDate) {
+                dayCell.classList.add('today');
+            }
+            daysContainer.appendChild(dayCell);
+        }
+    }
+    renderFullCalendar();
+
+    /* Theme Toggle */
+    function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeBtn');
+        if (html.getAttribute('data-theme') === 'light') {
+            html.setAttribute('data-theme', 'dark');
+            btn.innerText = '☀️ Light';
+            localStorage.setItem('abdul_theme', 'dark');
+        } else {
+            html.setAttribute('data-theme', 'light');
+            btn.innerText = '🌙 Dark';
+            localStorage.setItem('abdul_theme', 'light');
+        }
+    }
+
+    /* Language Switcher Text Dictionary */
+    let currentLang = 'bn'; // Default language set to Bangla
+
+    const dict = {
+        en: {
+            brand: "Abdul's Financial Dashboard",
+            lblTime: "⏰ Live Time",
+            lblLocation: "📍 Location",
+            lblLocationVal: "Dubai, UAE",
+            lblCalendar: "📅 Full Month Calendar",
+            jumpDefault: "📂 Select Table...",
+            opt1: "AED Account & BDT",
+            opt2: "BDT Account Status",
+            opt3: "Investment & Installment",
+            opt4: "Credit Card Status",
+            opt5: "Monthly Outstanding",
+            opt6: "Monthly Expenses & Plans",
+            opt7: "Zakat Calculator",
+            welcome: "👉 Select any table or account from the top menu.",
+            t1: "AED Account Status & BDT",
+            t2: "BDT Account Status",
+            t3: "Investment & Installment",
+            t4: "Credit Card Status",
+            t5: "Monthly Outstanding Payments",
+            t6: "Monthly Expenses & Plans",
+            t7: "Zakat Calculator",
+            save: "💾 Save Changes",
+            calc: "🔄 Recalculate",
+            savedMsg: "✅ Saved Successfully!",
+            printBtn: "🖨 Print",
+            addBtn: "+ Add",
+            dSun: "Su", dMon: "Mo", dTue: "Tu", dWed: "We", dThu: "Th", dFri: "Fr", dSat: "Sa",
+            thAED: ["Account Name", "Balance / Rate", "Action"],
+            thBDT: ["Account Name", "Balance (BDT)", "Action"],
+            thInv: ["Parameter", "Value / Number", "Action"],
+            thCred: ["Credit / Option Name", "Amount / Details", "Action"],
+            thOut: ["Month / Name", "Amount", "Action"],
+            thExp: ["Expense Item", "Amount (BDT)", "Action"],
+            thZak: ["Zakat Parameter", "Value / Amount", "Action"],
+            lblAedTot: "In AED Total",
+            lblInc: "2.5% Incentive (Auto)",
+            lblFinRate: "Final Rate",
+            lblConvBdt: "Converted Total in BDT",
+            lblUsableBdt: "Usable Asset in BDT",
+            lblHoldBdt: "Amount In Hold In Bank",
+            lblInvMonTot: "Total Monthly Installments [Auto]",
+            lblInvTot: "Total Investment",
+            lblInvDiv: "Amount Divided by 12 [Auto]",
+            lblComDue: "Committee Due Payment [Auto]",
+            lblTabBal: "Tabby Credit Balance",
+            lblTabOut: "Tabby Outstanding (Auto)",
+            lblOutTot: "Total Monthly Outstanding",
+            lblExpTot: "Total Expenses & Plans",
+            lblExpAed: "In AED",
+            lblEffGram: "Gold Effective Price / Gram (-17%)",
+            lblGoldTot: "Total Gold Market Value (BDT)",
+            lblGrossWealth: "Total Gross Wealth",
+            lblNetWealth: "Net Combined Wealth",
+            lblNisab: "Combined Nisab Threshold",
+            lblZakStatus: "Zakat Eligibility Status",
+            lblZakPay: "Total Zakat Payable (2.5%)",
+            zakatNote: "💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.",
+            zakApp: "Applicable - Zakat Due",
+            zakNotApp: "Not Applicable - Below Nisab"
+        },
+        bn: {
+            brand: "আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড",
+            lblTime: "⏰ লাইভ সময়",
+            lblLocation: "📍 লোকেশন",
+            lblLocationVal: "দুবাই, সংযুক্ত আরব আমিরাত",
+            lblCalendar: "📅 ফুল মান্থ ক্যালেন্ডার",
+            jumpDefault: "📂 টেবিল সিলেক্ট করুন...",
+            opt1: "এইডি অ্যাকাউন্ট ও বিডিটি",
+            opt2: "বিডিটি অ্যাকাউন্ট স্ট্যাটাস",
+            opt3: "ইনভেস্টমেন্ট ও কিস্তি হিসাব",
+            opt4: "ক্রেডিট কার্ড স্ট্যাটাস",
+            opt5: "মাসিক বকেয়া পেমেন্ট",
+            opt6: "মাসিক খরচ ও পরিকল্পনা",
+            opt7: "যাকাত ক্যালকুলেটর",
+            welcome: "👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।",
+            t1: "এইডি অ্যাকাউন্ট ও বিডিটি কনভার্শন",
+            t2: "বিডিটি অ্যাকাউন্ট স্ট্যাটাস",
+            t3: "ইনভেস্টমেন্ট ও কিস্তি হিসাব",
+            t4: "ক্রেডিট কার্ড স্ট্যাটাস",
+            t5: "মাসিক বকেয়া পেমেন্ট (Outstanding)",
+            t6: "মাসিক খরচ ও পরিকল্পনা",
+            t7: "যাকাত ক্যালকুলেটর",
+            save: "💾 সেভ করুন",
+            calc: "🔄 রি-ক্যালকুলেট",
+            savedMsg: "✅ সফলভাবে সেভ হয়েছে!",
+            printBtn: "🖨 প্রিন্ট",
+            addBtn: "+ যোগ করুন",
+            dSun: "রবি", dMon: "সোম", dTue: "মঙ্গল", dWed: "বুধ", dThu: "বৃহস্পতি", dFri: "শুক্র", dSat: "শনি",
+            thAED: ["অ্যাকাউন্টের নাম", "ব্যালেন্স / রেট", "অ্যাকশন"],
+            thBDT: ["অ্যাকাউন্টের নাম", "ব্যালেন্স (বিডিটি)", "অ্যাকশন"],
+            thInv: ["প্যারামিটার", "মান / সংখ্যা", "অ্যাকশন"],
+            thCred: ["ক্রেডিট / অপশনের নাম", "পরিমাণ / বিবরণ", "অ্যাকশন"],
+            thOut: ["মাস / নাম", "পরিমাণ", "অ্যাকশন"],
+            thExp: ["খরচের খাত", "পরিমাণ (বিডিটি)", "অ্যাকশন"],
+            thZak: ["যাকাতের প্যারামিটার", "মান / পরিমাণ", "অ্যাকশন"],
+            lblAedTot: "এইডি মোট",
+            lblInc: "২.৫% ইনসেন্টিভ (অটো)",
+            lblFinRate: "চূড়ান্ত রেট",
+            lblConvBdt: "বিডিটি-তে রূপান্তরিত মোট",
+            lblUsableBdt: "ব্যবহারযোগ্য সম্পদ (বিডিটি)",
+            lblHoldBdt: "ব্যাংকে হোল্ড থাকা পরিমাণ",
+            lblInvMonTot: "মোট মাসিক কিস্তি [অটো]",
+            lblInvTot: "মোট ইনভেস্টমেন্ট",
+            lblInvDiv: "১২ দিয়ে ভাগকৃত পরিমাণ [অটো]",
+            lblComDue: "কমিটি পাওনা পেমেন্ট [অটো]",
+            lblTabBal: "টাবি ক্রেডিট ব্যালেন্স",
+            lblTabOut: "টাবি বকেয়া (অটো)",
+            lblOutTot: "মোট মাসিক বকেয়া",
+            lblExpTot: "মোট খরচ ও পরিকল্পনা",
+            lblExpAed: "এইডি-তে মোট",
+            lblEffGram: "প্রতি গ্রাম সোনার কার্যকরী মূল্য (-১৭%)",
+            lblGoldTot: "সোনার মোট বাজারমূল্য (বিডিটি)",
+            lblGrossWealth: "মোট স্থূল সম্পদ",
+            lblNetWealth: "নিট সম্মিলিত সম্পদ",
+            lblNisab: "সম্মিলিত নিসাব সীমা",
+            lblZakStatus: "যাকাতের যোগ্যতা স্ট্যাটাস",
+            lblZakPay: "প্রদেয় মোট যাকাত (২.৫%)",
+            zakatNote: "💡 নোট: নিসাবের বেশি নিট সম্পদ থাকলে স্বয়ংক্রিয়ভাবে ২.৫% যাকাত হিসাব হবে।",
+            zakApp: "প্রযোজ্য - যাকাত ফরজ হয়েছে",
+            zakNotApp: "প্রযোজ্য নয় - নিসাব পরিমাণ হয়নি"
+        }
+    };
+
+    function toggleLang() {
+        currentLang = currentLang === 'en' ? 'bn' : 'en';
+        applyLanguage();
+        localStorage.setItem('abdul_lang', currentLang);
+    }
+
+    function applyLanguage() {
+        const t = dict[currentLang];
+        document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇩 BN' : '🇬🇧 EN';
+        document.getElementById('brandTitle').innerText = t.brand;
+        document.getElementById('lblTime').innerText = t.lblTime;
+        document.getElementById('lblLocation').innerText = t.lblLocation;
+        document.getElementById('lblLocationVal').innerText = t.lblLocationVal;
+        document.getElementById('lblCalendar').innerText = t.lblCalendar;
+        document.getElementById('jumpDefaultOpt').innerText = t.jumpDefault;
+        document.getElementById('opt1').innerText = t.opt1;
+        document.getElementById('opt2').innerText = t.opt2;
+        document.getElementById('opt3').innerText = t.opt3;
+        document.getElementById('opt4').innerText = t.opt4;
+        document.getElementById('opt5').innerText = t.opt5;
+        document.getElementById('opt6').innerText = t.opt6;
+        document.getElementById('opt7').innerText = t.opt7;
+        document.getElementById('welcomeNotice').innerText = t.welcome;
+        document.getElementById('t1Title').innerText = t.t1;
+        document.getElementById('t2Title').innerText = t.t2;
+        document.getElementById('t3Title').innerText = t.t3;
+        document.getElementById('t4Title').innerText = t.t4;
+        document.getElementById('t5Title').innerText = t.t5;
+        document.getElementById('t6Title').innerText = t.t6;
+        document.getElementById('t7Title').innerText = t.t7;
+        document.getElementById('saveBtn').innerText = t.save;
+        document.getElementById('calcBtn').innerText = t.calc;
+        document.getElementById('success-msg').innerText = t.savedMsg;
+        document.getElementById('printBtn').innerText = t.printBtn;
+
+        document.getElementById('addBtn1').innerText = t.addBtn;
+        document.getElementById('addBtn2').innerText = t.addBtn;
+        document.getElementById('addBtn3').innerText = t.addBtn;
+        document.getElementById('addBtn4').innerText = t.addBtn;
+
+        document.getElementById('dSun').innerText = t.dSun;
+        document.getElementById('dMon').innerText = t.dMon;
+        document.getElementById('dTue').innerText = t.dTue;
+        document.getElementById('dWed').innerText = t.dWed;
+        document.getElementById('dThu').innerText = t.dThu;
+        document.getElementById('dFri').innerText = t.dFri;
+        document.getElementById('dSat').innerText = t.dSat;
+
+        // Table headers
+        updateTableHeaders('thAED', t.thAED);
+        updateTableHeaders('thBDT', t.thBDT);
+        updateTableHeaders('thInv', t.thInv);
+        updateTableHeaders('thCred', t.thCred);
+        updateTableHeaders('thOut', t.thOut);
+        updateTableHeaders('thExp', t.thExp);
+        updateTableHeaders('thZak', t.thZak);
+
+        // Locked/Calculated row labels
+        document.getElementById('lblAedTot').innerText = t.lblAedTot;
+        document.getElementById('lblInc').innerText = t.lblInc;
+        document.getElementById('lblFinRate').innerText = t.lblFinRate;
+        document.getElementById('lblConvBdt').innerText = t.lblConvBdt;
+        document.getElementById('lblUsableBdt').innerText = t.lblUsableBdt;
+        document.getElementById('lblHoldBdt').innerText = t.lblHoldBdt;
+        document.getElementById('lblInvMonTot').innerText = t.lblInvMonTot;
+        document.getElementById('lblInvTot').innerText = t.lblInvTot;
+        document.getElementById('lblInvDiv').innerText = t.lblInvDiv;
+        document.getElementById('lblComDue').innerText = t.lblComDue;
+        document.getElementById('lblTabBal').innerText = t.lblTabBal;
+        document.getElementById('lblTabOut').innerText = t.lblTabOut;
+        document.getElementById('lblOutTot').innerText = t.lblOutTot;
+        document.getElementById('lblExpTot').innerText = t.lblExpTot;
+        document.getElementById('lblExpAed').innerText = t.lblExpAed;
+        document.getElementById('lblEffGram').innerText = t.lblEffGram;
+        document.getElementById('lblGoldTot').innerText = t.lblGoldTot;
+        document.getElementById('lblGrossWealth').innerText = t.lblGrossWealth;
+        document.getElementById('lblNetWealth').innerText = t.lblNetWealth;
+        document.getElementById('lblNisab').innerText = t.lblNisab;
+        document.getElementById('lblZakStatus').innerText = t.lblZakStatus;
+        document.getElementById('lblZakPay').innerText = t.lblZakPay;
+        document.getElementById('zakatNote').innerText = t.zakatNote;
+
+        calculateAll();
+    }
+
+    function updateTableHeaders(rowId, headers) {
+        let row = document.getElementById(rowId);
+        if (row) {
+            for (let i = 0; i < headers.length; i++) {
+                if (row.cells[i]) row.cells[i].innerText = headers[i];
+            }
+        }
+    }
+
+    /* Show Selected Table & Hide Others */
+    function showSelectedTable(cardId) {
+        const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
+        cards.forEach(id => {
+            let el = document.getElementById(id);
+            if (id === cardId) {
+                el.classList.add('active-table');
+            } else {
+                el.classList.remove('active-table');
+            }
+        });
+
+        let notice = document.getElementById('welcomeNotice');
+        if (notice) notice.style.display = 'none';
+
+        localStorage.setItem('abdul_selected_table', cardId);
+    }
+
+    function getNum(cellValue) {
+        let val = parseFloat(cellValue);
+        return isNaN(val) ? 0 : val;
+    }
+
+    function addRow(tableId, isAED = false, isBDT = false, isOutstanding = false, isExpense = false) {
+        let table = document.getElementById(tableId);
+        let newRow = table.insertRow();
+        
+        if (isAED) {
+            let insertIndex = table.rows.length - 5;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+        } else if (isBDT) {
+            let insertIndex = 6;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+        } else if (isOutstanding) {
+            let insertIndex = table.rows.length - 1;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+        } else if (isExpense) {
+            let insertIndex = table.rows.length - 2;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+        }
+        calculateAll();
+    }
+
+    function deleteRow(btn) {
+        let row = btn.parentNode.parentNode;
+        let table = row.parentNode;
+        table.deleteRow(row.rowIndex);
+        calculateAll();
+    }
+
+    function calculateAll() {
+        let aedTable = document.getElementById('tableAED');
+        let aedSum = 0;
+        let aedTotalRowIdx = aedTable.rows.length - 5;
+        for (let i = 1; i < aedTotalRowIdx; i++) {
+            aedSum += getNum(aedTable.rows[i].cells[1].innerText);
+        }
+        document.getElementById('aedTotal').innerText = aedSum.toFixed(2);
+
+        let rateRowIdx = aedTotalRowIdx + 1;
+        let rate = getNum(aedTable.rows[rateRowIdx].cells[1].innerText);
+        let incentive = rate * 0.025;
+        document.getElementById('incentiveBox').innerText = incentive.toFixed(4);
+
+        let finalRate = rate + incentive;
+        document.getElementById('finalRate').innerText = finalRate.toFixed(4);
+
+        let converted = aedSum * finalRate;
+        document.getElementById('convertedBDT').innerText = converted.toFixed(2);
+
+        let bdtTable = document.getElementById('tableBDT');
+        let usableSum = 0;
+        let bdtUsableTotalIdx = -1;
+        let bdtHoldTotalIdx = bdtTable.rows.length - 1;
+
+        for (let i = 1; i < bdtTable.rows.length; i++) {
+            if (bdtTable.rows[i].cells[0].innerText.includes("Usable Asset") || bdtTable.rows[i].cells[0].innerText.includes("ব্যবহারযোগ্য সম্পদ")) {
+                bdtUsableTotalIdx = i;
+                break;
+            }
+        }
+
+        for (let i = 1; i < bdtUsableTotalIdx; i++) {
+            usableSum += getNum(bdtTable.rows[i].cells[1].innerText);
+        }
+        document.getElementById('bdtUsableTotal').innerText = usableSum.toFixed(2);
+
+        let holdSum = usableSum;
+        for (let i = bdtUsableTotalIdx + 1; i < bdtHoldTotalIdx; i++) {
+            holdSum += getNum(bdtTable.rows[i].cells[1].innerText);
+        }
+        document.getElementById('bdtHoldTotal').innerText = holdSum.toFixed(2);
+
+        let invTable = document.getElementById('tableInvestment');
+        let downPayment = getNum(invTable.rows[1].cells[1].innerText);
+        let monthsCount = getNum(invTable.rows[2].cells[1].innerText);
+        
+        let monthlyInstallmentTotal = monthsCount * 15000;
+        document.getElementById('invMonthlyTotal').innerText = monthlyInstallmentTotal.toFixed(2);
+
+        let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
+        document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
+
+        let customAmount = getNum(invTable.rows[5].cells[1].innerText); 
+        let dividedBy12 = customAmount / 12;
+        document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
+
+        let committeeDue = dividedBy12 - totalInvestmentSum;
+        document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
+
+        let creditTable = document.getElementById('tableCredit');
+        let creditLimit = getNum(creditTable.rows[1].cells[1].innerText);
+        let creditUsed = getNum(creditTable.rows[3].cells[1].innerText);
+        let creditBalance = creditLimit - creditUsed;
+        document.getElementById('tabbyBalanceBox').innerText = creditBalance.toFixed(2);
+
+        let outTable = document.getElementById('tableMonthlyOutstanding');
+        let outSum = 0;
+        for (let i = 1; i < outTable.rows.length - 1; i++) {
+            outSum += getNum(outTable.rows[i].cells[1].innerText);
+        }
+        document.getElementById('monthlyOutstandingTotal').innerText = outSum.toFixed(2);
+        document.getElementById('tabbyOutstandingBox').innerText = outSum.toFixed(2);
+
+        let expTable = document.getElementById('tableExpense');
+        let expSum = 0;
+        for (let i = 1; i < expTable.rows.length - 2; i++) {
+            expSum += getNum(expTable.rows[i].cells[1].innerText);
+        }
+        document.getElementById('expenseTotal').innerText = expSum.toFixed(2);
+
+        let expenseAED = finalRate > 0 ? (expSum / finalRate) : 0;
+        document.getElementById('expenseAEDTotal').innerText = expenseAED.toFixed(2);
+
+        let zakatTable = document.getElementById('tableZakat');
+        let cashAsset = getNum(zakatTable.rows[1].cells[1].innerText);
+        let goldWeightGrams = getNum(zakatTable.rows[2].cells[1].innerText);
+        let voriPriceBDT = getNum(zakatTable.rows[3].cells[1].innerText);
+        
+        let pricePerGram = voriPriceBDT / 11.664;
+        let effectiveGramRate = pricePerGram * (1 - 0.17);
+        document.getElementById('effectiveGramRate').innerText = effectiveGramRate.toFixed(2);
+
+        let totalGoldVal = goldWeightGrams * effectiveGramRate;
+        document.getElementById('zakatGoldTotal').innerText = totalGoldVal.toFixed(2);
+
+        let totalGrossWealth = cashAsset + totalGoldVal;
+        document.getElementById('totalGrossWealth').innerText = totalGrossWealth.toFixed(2);
+
+        let liabilities = getNum(zakatTable.rows[6].cells[1].innerText);
+        let netCombinedWealth = totalGrossWealth - liabilities;
+        if (netCombinedWealth < 0) netCombinedWealth = 0;
+        document.getElementById('netCombinedWealth').innerText = netCombinedWealth.toFixed(2);
+
+        let silverVoriPrice = getNum(zakatTable.rows[8].cells[1].innerText);
+        let combinedNisab = 52.5 * silverVoriPrice;
+        document.getElementById('combinedNisabThreshold').innerText = combinedNisab.toFixed(2);
+
+        let zakatStatusBox = document.getElementById('zakatStatus');
+        let zakatPayableBox = document.getElementById('zakatPayableFinal');
+        let t = dict[currentLang];
+
+        let zakatPayableVal = 0;
+        if (netCombinedWealth >= combinedNisab) {
+            zakatStatusBox.innerText = t.zakApp;
+            zakatStatusBox.style.color = "#16a34a";
+            zakatPayableVal = (netCombinedWealth * 25) / 1000;
+        } else {
+            zakatStatusBox.innerText = t.zakNotApp;
+            zakatStatusBox.style.color = "#dc2626";
+            zakatPayableVal = 0;
+        }
+        zakatPayableBox.innerText = zakatPayableVal.toFixed(2);
+
+        saveDataSilently();
+    }
+
+    function saveDataSilently() {
+        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
+        let dataStore = {};
+        tables.forEach(tableId => {
+            let table = document.getElementById(tableId);
+            let rowsData = [];
+            for (let i = 1; i < table.rows.length; i++) {
+                let rowCells = [];
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    rowCells.push(table.rows[i].cells[j].innerHTML);
+                }
+                rowsData.push(rowCells);
+            }
+            dataStore[tableId] = rowsData;
+        });
+        localStorage.setItem('abdul_account_manager_v26', JSON.stringify(dataStore));
+    }
+
+    function saveData() {
+        calculateAll();
+        const msg = document.getElementById('success-msg');
+        msg.style.display = 'inline';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    window.onload = function() {
+        let savedTheme = localStorage.getItem('abdul_theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeBtn').innerText = '☀️ Light';
+        }
+
+        let savedLang = localStorage.getItem('abdul_lang');
+        if (savedLang) {
+            currentLang = savedLang;
+        } else {
+            currentLang = 'bn'; // Default to Bangla
+        }
+        applyLanguage();
+
+        let saved = localStorage.getItem('abdul_account_manager_v26');
+        if (saved) {
+            let dataStore = JSON.parse(saved);
+            for (let tableId in dataStore) {
+                let table = document.getElementById(tableId);
+                if (table) {
+                    let rowsData = dataStore[tableId];
+                    while (table.rows.length > 1) {
+                        table.deleteRow(1);
+                    }
+                    for (let i = 0; i < rowsData.length; i++) {
+                        let newRow = table.insertRow();
+                        for (let j = 0; j < rowsData[i].length; j++) {
+                            let newCell = newRow.insertCell();
+                            newCell.innerHTML = rowsData[i][j];
+                        }
+                    }
+                }
+            }
+        }
+
+        let savedTable = localStorage.getItem('abdul_selected_table');
+        if (savedTable) {
+            document.getElementById('jumpMenu').value = savedTable;
+            showSelectedTable(savedTable);
+        }
+
+        calculateAll();
+    }
+</script>
+
+</body>
+</html>
