@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আবদুল এর স্মার্ট ফিনান্সিয়াল ড্যাশবোর্ড</title>
-    <!-- Google Fonts: Anek Bangla & Times New Roman (fallback) -->
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Anek Bangla & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -34,7 +34,7 @@
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-            font-family: 'Anek Bangla', 'Times New Roman', Times, serif; 
+            font-family: 'Anek Bangla', 'Inter', sans-serif; 
             transition: background 0.3s, color 0.3s; 
         }
         
@@ -248,7 +248,7 @@
         [data-theme="dark"] tr:nth-child(even) { background-color: rgba(255,255,255,0.01); }
         
         td[contenteditable="true"] { 
-            background-color: rgba(234, 179, 8, 0.08); 
+            background-color: rgba(234, 179, 8, 0.12); 
             cursor: pointer; 
             border-radius: 4px;
         }
@@ -552,27 +552,21 @@
 
     <!-- Action Bar -->
     <div class="action-bar">
-        <button class="btn" onclick="saveData()" id="saveBtn">💾 সেভ করুন</button>
-        <span id="success-msg">✅ সফলভাবে সেভ হয়েছে!</span>
+        <button class="btn" onclick="saveData()" id="saveBtn">💾 সেভ ও সিঙ্ক করুন</button>
+        <span id="success-msg">✅ সফলভাবে সেভ ও শিটে সিঙ্ক হয়েছে!</span>
         <button class="btn btn-secondary" onclick="calculateAll()" id="calcBtn">🔄 রি-ক্যালকুলেট</button>
     </div>
 </div>
 
 <script>
-    /* Google Sheets API Integration URL */
+    /* Google Sheets API / Web App URL Integration */
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbysZiPjqykVgCxFkMMhO1RD-a4DxKzGgu-DMv_Yc_rLjbMR53du8XPjhRxVizMP4Z9k/exec";
 
-    function sendDataToGoogleSheets(tableName, itemName, amount) {
+    function sendDataToGoogleSheets(dataStore) {
         if (!WEB_APP_URL) {
             console.warn("Google Apps Script URL is not configured yet.");
             return;
         }
-
-        const payload = {
-            tableName: tableName,
-            itemName: itemName,
-            amount: amount
-        };
 
         fetch(WEB_APP_URL, {
             method: "POST",
@@ -580,10 +574,10 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(dataStore)
         })
         .then(() => {
-            console.log("Data synced with Google Sheets.");
+            console.log("Data synced with Google Sheets successfully.");
         })
         .catch(error => {
             console.error("Google Sheets sync error:", error);
@@ -669,7 +663,7 @@
             t5: "Monthly Outstanding Payments",
             t6: "Monthly Expenses & Plans",
             t7: "Zakat Calculator",
-            save: "💾 Save Changes",
+            save: "💾 Save & Sync",
             calc: "🔄 Recalculate",
             savedMsg: "✅ Saved & Synced Successfully!",
             printBtn: "🖨 Print",
@@ -730,9 +724,9 @@
             t5: "মাসিক বকেয়া পেমেন্ট (Outstanding)",
             t6: "মাসিক খরচ ও পরিকল্পনা",
             t7: "যাকাত ক্যালকুলেটর",
-            save: "💾 সেভ করুন",
+            save: "💾 সেভ ও সিঙ্ক করুন",
             calc: "🔄 রি-ক্যালকুলেট",
-            savedMsg: "✅ সফলভাবে সেভ ও শিটে সিন্স হয়েছে!",
+            savedMsg: "✅ সফলভাবে সেভ ও শিটে সিঙ্ক হয়েছে!",
             printBtn: "🖨 প্রিন্ট",
             addBtn: "+ যোগ করুন",
             dSun: "রবি", dMon: "সোম", dTue: "মঙ্গল", dWed: "বুধ", dThu: "বৃহস্পতি", dFri: "শুক্র", dSat: "শনি",
@@ -887,17 +881,22 @@
 
     function addRow(tableId, isAED = false, isBDT = false, isOutstanding = false, isExpense = false) {
         let table = document.getElementById(tableId);
+        let newRow;
         if (isAED) {
             let insertIndex = table.rows.length - 5;
-            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isBDT) {
-            table.insertRow(6).innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow = table.insertRow(6);
+            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isOutstanding) {
             let insertIndex = table.rows.length - 1;
-            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isExpense) {
             let insertIndex = table.rows.length - 2;
-            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         }
         calculateAll();
     }
@@ -961,7 +960,7 @@
         let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
         document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
 
-        let customAmount = getNum(invTable.rows[5].cells[1].innerText); 
+        let customAmount = getNum(invTable.rows[4].cells[1].innerText); 
         let dividedBy12 = customAmount / 12;
         document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
 
@@ -969,8 +968,8 @@
         document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
 
         let creditTable = document.getElementById('tableCredit');
-        let creditLimit = getNum(creditTable.rows[1].cells[1].innerText);
-        let creditUsed = getNum(creditTable.rows[3].cells[1].innerText);
+        let creditLimit = getNum(creditTable.rows[0].cells[1].innerText);
+        let creditUsed = getNum(creditTable.rows[2].cells[1].innerText);
         let creditBalance = creditLimit - creditUsed;
         document.getElementById('tabbyBalanceBox').innerText = creditBalance.toFixed(2);
 
@@ -993,9 +992,9 @@
         document.getElementById('expenseAEDTotal').innerText = expenseAED.toFixed(2);
 
         let zakatTable = document.getElementById('tableZakat');
-        let cashAsset = getNum(zakatTable.rows[1].cells[1].innerText);
-        let goldWeightGrams = getNum(zakatTable.rows[2].cells[1].innerText);
-        let voriPriceBDT = getNum(zakatTable.rows[3].cells[1].innerText);
+        let cashAsset = getNum(zakatTable.rows[0].cells[1].innerText);
+        let goldWeightGrams = getNum(zakatTable.rows[1].cells[1].innerText);
+        let voriPriceBDT = getNum(zakatTable.rows[2].cells[1].innerText);
         
         let pricePerGram = voriPriceBDT / 11.664;
         let effectiveGramRate = pricePerGram * (1 - 0.17);
@@ -1050,14 +1049,28 @@
             }
             dataStore[tableId] = rowsData;
         });
-        localStorage.setItem('abdul_account_manager_v26', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_account_manager_v28', JSON.stringify(dataStore));
     }
 
     function saveData() {
         calculateAll();
+        
+        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
+        let fullDataStore = {};
+        tables.forEach(tableId => {
+            let table = document.getElementById(tableId);
+            let rowsData = [];
+            for (let i = 1; i < table.rows.length; i++) {
+                let rowCells = [];
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    rowCells.push(table.rows[i].cells[j].innerText);
+                }
+                rowsData.push(rowCells);
+            }
+            fullDataStore[tableId] = rowsData;
+        });
 
-        // গুগল শিটে ডেটা পাঠানো (প্রথম টেবিলের প্রথম অ্যাকাউন্ট ও ব্যালেন্স পাঠানোর উদাহরণ)
-        sendDataToGoogleSheets("AED Account", document.getElementById('tableAED').rows[1].cells[0].innerText, document.getElementById('tableAED').rows[1].cells[1].innerText);
+        sendDataToGoogleSheets(fullDataStore);
 
         const msg = document.getElementById('success-msg');
         msg.style.display = 'inline';
@@ -1077,9 +1090,8 @@
         } else {
             currentLang = 'bn';
         }
-        applyLanguage();
 
-        let saved = localStorage.getItem('abdul_account_manager_v26');
+        let saved = localStorage.getItem('abdul_account_manager_v28');
         if (saved) {
             let dataStore = JSON.parse(saved);
             for (let tableId in dataStore) {
@@ -1099,6 +1111,8 @@
                 }
             }
         }
+
+        applyLanguage();
 
         let savedTable = localStorage.getItem('abdul_selected_table');
         if (savedTable) {
