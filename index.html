@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abdul's Smart Financial Dashboard</title>
-    <!-- Google Fonts: Anek Bangla & Times New Roman (fallback) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -99,7 +99,6 @@
         }
         .nav-btn:hover { background: var(--border-color); }
 
-        /* Navbar Dropdown Jump Menu */
         .nav-select {
             background: var(--bg-color);
             color: var(--text-main);
@@ -112,7 +111,7 @@
             cursor: pointer;
         }
 
-        /* Separated Widgets Grid (Top Widgets Only) */
+        /* Widgets Grid */
         .widgets-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -144,7 +143,7 @@
             color: var(--text-main);
         }
 
-        /* Full Month Calendar Widget */
+        /* Calendar */
         .calendar-container {
             margin-top: 6px;
         }
@@ -181,17 +180,10 @@
             color: var(--text-main);
         }
 
-        .cal-date.empty {
-            background: transparent;
-        }
+        .cal-date.empty { background: transparent; }
+        .cal-date.today { background: var(--primary); color: white; font-weight: 700; }
 
-        .cal-date.today {
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-        }
-
-        /* Section Cards (Initially Hidden, Shown when selected) */
+        /* Section Cards */
         .section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -199,11 +191,11 @@
             padding: 16px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         .section-card.active-table {
-            display: block; /* Shown when selected */
+            display: block;
         }
 
         .table-header-wrap { 
@@ -372,11 +364,10 @@
 <body>
 
 <div class="container">
-    <!-- Navbar with Jump Menu -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-brand">Abdul's Financial Dashboard</div>
         <div class="nav-controls">
-            <!-- Dropdown Jump Menu -->
             <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
                 <option value="" disabled selected>📂 Select Table...</option>
                 <option value="cardAED">AED Account & BDT</option>
@@ -387,27 +378,24 @@
                 <option value="cardExpense">Monthly Expenses & Plans</option>
                 <option value="cardZakat">Zakat Calculator</option>
             </select>
-            <button class="nav-btn" onclick="exportToCSV()" title="Export Excel Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
-            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="Restore Backup File"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
+            <button class="nav-btn" onclick="exportToCSV()" title="Export Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
+            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="Restore Backup"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
             <input type="file" id="csvFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
             <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
             <button class="nav-btn" onclick="window.print()">🖨 Print</button>
         </div>
     </nav>
 
-    <!-- Top Widgets Grid (Time, Location, Calendar) -->
+    <!-- Widgets Grid -->
     <div class="widgets-grid">
-        <!-- Time Widget -->
         <div class="widget-card">
             <div class="widget-header">⏰ Live Time</div>
             <div class="widget-content" id="liveTime">--:--:--</div>
         </div>
-        <!-- Location Widget -->
         <div class="widget-card">
             <div class="widget-header">📍 Location</div>
             <div class="widget-content">Dubai, UAE</div>
         </div>
-        <!-- Full Month Calendar Widget -->
         <div class="widget-card" style="grid-column: 1 / -1;">
             <div class="widget-header">📅 Full Month Calendar</div>
             <div class="calendar-container">
@@ -421,14 +409,11 @@
                     <div class="cal-day-name">Fr</div>
                     <div class="cal-day-name">Sa</div>
                 </div>
-                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;">
-                    <!-- JavaScript will generate days here -->
-                </div>
+                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Default Welcome Notice -->
     <div class="welcome-notice" id="welcomeNotice">
         👉 Select any table or account from the top menu dropdown.
     </div>
@@ -594,7 +579,7 @@
 </div>
 
 <script>
-    /* Live Clock & Full Month Calendar */
+    /* Live Clock & Calendar */
     function updateDateTime() {
         const now = new Date();
         document.getElementById('liveTime').innerText = now.toLocaleTimeString();
@@ -627,15 +612,12 @@
             let dayCell = document.createElement('div');
             dayCell.className = 'cal-date';
             dayCell.innerText = d;
-            if (d === todayDate) {
-                dayCell.classList.add('today');
-            }
+            if (d === todayDate) dayCell.classList.add('today');
             daysContainer.appendChild(dayCell);
         }
     }
     renderFullCalendar();
 
-    /* Theme Toggle */
     function toggleTheme() {
         const html = document.documentElement;
         const btn = document.getElementById('themeBtn');
@@ -650,7 +632,6 @@
         }
     }
 
-    /* Show Selected Table & Hide Others */
     function showSelectedTable(cardId) {
         const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
         cards.forEach(id => {
@@ -830,7 +811,7 @@
         saveDataSilently();
     }
 
-    // 1. Export Data Backup (JSON/Excel style backup)
+    // Export Backup File
     function exportToCSV() {
         const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
         let dataStore = {};
@@ -856,7 +837,7 @@
         downloadAnchor.remove();
     }
 
-    // 2. Import / Restore Backup File
+    // Restore Backup File & re-apply contenteditable fix
     function importFromJSON(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -881,14 +862,39 @@
                         }
                     }
                 }
+                restoreEditability();
                 calculateAll();
                 alert('Backup restored successfully!');
             } catch (err) {
-                alert('Failed to read backup file. Please select a valid backup file.');
+                alert('Failed to read backup file.');
             }
             event.target.value = '';
         };
         reader.readAsText(file);
+    }
+
+    // Ensures input cells remain editable after local storage load or backup restore
+    function restoreEditability() {
+        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
+        tables.forEach(tableId => {
+            let table = document.getElementById(tableId);
+            if (!table) return;
+            for (let i = 1; i < table.rows.length; i++) {
+                let row = table.rows[i];
+                // Skip auto-calculated or locked rows to preserve structure
+                if (row.classList.contains('calculated-row') || row.classList.contains('locked-row') || row.classList.contains('final-zakat-row')) {
+                    continue;
+                }
+                for (let j = 0; j < row.cells.length - 1; j++) {
+                    let cell = row.cells[j];
+                    // If it's not a delete button column, make it editable
+                    if (!cell.querySelector('button')) {
+                        cell.setAttribute('contenteditable', 'true');
+                        cell.setAttribute('oninput', 'calculateAll()');
+                    }
+                }
+            }
+        });
     }
 
     function saveDataSilently() {
@@ -943,6 +949,9 @@
                 }
             }
         }
+
+        // Fix editability on load
+        restoreEditability();
 
         let savedTable = localStorage.getItem('abdul_selected_table');
         if (savedTable) {
