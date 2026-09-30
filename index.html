@@ -383,6 +383,9 @@
                 <option value="cardExpense" id="opt6">Monthly Expenses & Plans</option>
                 <option value="cardZakat" id="opt7">Zakat Calculator</option>
             </select>
+            <button class="nav-btn" onclick="exportToCSV()" title="এক্সেল ব্যাকআপ (CSV Download)">📥 ব্যাকআপ</button>
+            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="ব্যাকআপ ফাইল রিস্টোর">📤 রিস্টোর</button>
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="importFromCSV(event)">
             <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
             <button class="nav-btn" onclick="toggleLang()" id="langBtn">🇧🇩 BN</button>
             <button class="nav-btn" onclick="window.print()">🖨 Print</button>
@@ -932,6 +935,101 @@
         const msg = document.getElementById('success-msg');
         msg.style.display = 'inline';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    // এক্সেল ব্যাকআপ (CSV Export) ফিচার
+    function exportToCSV() {
+        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
+        let csvContent = "\uFEFFTable_ID,Row_Index,Col_0,Col_1,Col_2\n";
+
+        tables.forEach(tableId => {
+            let table = document.getElementById(tableId);
+            if (table) {
+                for (let i = 1; i < table.rows.length; i++) {
+                    let r = table.rows[i];
+                    let col0 = r.cells[0] ? r.cells[0].innerText.replace(/"/g, '""') : "";
+                    let col1 = r.cells[1] ? r.cells[1].innerText.replace(/"/g, '""') : "";
+                    let col2 = r.cells[2] ? r.cells[2].innerText.replace(/"/g, '""') : "-";
+                    csvContent += `"${tableId}","${i}","${col0}","${col1}","${col2}"\n`;
+                }
+            }
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Abdul_Finance_Backup_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // ব্যাকআপ ফাইল থেকে ডাটা রিস্টোর (CSV Import) ফিচার
+    function importFromCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            let restoredData = {};
+
+            for (let i = 1; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+
+                let row = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                if (!row || row.length < 5) {
+                    row = line.split(',');
+                }
+
+                if (row && row.length >= 5) {
+                    let tableId = row[0].replace(/"/g, '').trim();
+                    let col0 = row[2].replace(/"/g, '').trim();
+                    let col1 = row[3].replace(/"/g, '').trim();
+                    let col2 = row[4].replace(/"/g, '').trim();
+
+                    if (!restoredData[tableId]) {
+                        restoredData[tableId] = [];
+                    }
+                    restoredData[tableId].push([col0, col1, col2]);
+                }
+            }
+
+            // লোকালস্টোরেজে ডেটা সেট করা এবং রিফ্রেশ করা
+            let formattedStore = {};
+            for (let tableId in restoredData) {
+                let table = document.getElementById(tableId);
+                if (table) {
+                    while (table.rows.length > 1) {
+                        table.deleteRow(1);
+                    }
+                    let rowsArr = [];
+                    restoredData[tableId].forEach(item => {
+                        let newRow = table.insertRow();
+                        let c0 = newRow.insertCell(); c0.innerHTML = item[0];
+                        let c1 = newRow.insertCell(); c1.innerHTML = item[1];
+                        let c2 = newRow.insertCell(); c2.innerHTML = item[2];
+
+                        // এডিটেবল সেল ঠিক রাখা
+                        if (item[2] !== '-' && !item[2].includes('button')) {
+                            c1.contentEditable = "true";
+                            c1.setAttribute("oninput", "calculateAll()");
+                        }
+                        rowsArr.push([c0.innerHTML, c1.innerHTML, c2.innerHTML]);
+                    });
+                    formattedStore[tableId] = rowsArr;
+                }
+            }
+
+            localStorage.setItem('abdul_account_manager_v25', JSON.stringify(formattedStore));
+            calculateAll();
+            alert('সফলভাবে ব্যাকআপ ফাইল থেকে ডাটা রিস্টোর করা হয়েছে!');
+            event.target.value = '';
+        };
+        reader.readAsText(file, 'UTF-8');
     }
 
     window.onload = function() {
