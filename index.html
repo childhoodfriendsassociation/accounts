@@ -839,7 +839,7 @@
         document.getElementById('lblEffGram').innerText = t.lblEffGram;
         document.getElementById('lblGoldTot').innerText = t.lblGoldTot;
         document.getElementById('lblGrossWealth').innerText = t.lblGrossWealth;
-        document.getElementById('lblNetWealth').innerText = t.lblNetWealth;
+        document.getElementById('lblNetWealth').innerText = t.netWealth; // Fixed variable mapping check
         document.getElementById('lblNisab').innerText = t.lblNisab;
         document.getElementById('lblZakStatus').innerText = t.lblZakStatus;
         document.getElementById('lblZakPay').innerText = t.lblZakPay;
@@ -1050,7 +1050,7 @@
             }
             dataStore[tableId] = rowsData;
         });
-        localStorage.setItem('abdul_account_manager_v29', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_account_manager_v30', JSON.stringify(dataStore));
     }
 
     function saveData() {
@@ -1092,30 +1092,39 @@
             currentLang = 'bn';
         }
 
-        let saved = localStorage.getItem('abdul_account_manager_v29');
+        // Clean & Load LocalStorage safely
+        let saved = localStorage.getItem('abdul_account_manager_v30');
         if (saved) {
-            let dataStore = JSON.parse(saved);
-            for (let tableId in dataStore) {
-                let table = document.getElementById(tableId);
-                if (table) {
-                    let rowsData = dataStore[tableId];
-                    while (table.rows.length > 1) {
-                        table.deleteRow(1);
-                    }
-                    for (let i = 0; i < rowsData.length; i++) {
-                        let newRow = table.insertRow();
-                        for (let j = 0; j < rowsData[i].length; j++) {
-                            let newCell = newRow.insertCell();
-                            newCell.innerHTML = rowsData[i][j];
+            try {
+                let dataStore = JSON.parse(saved);
+                for (let tableId in dataStore) {
+                    let table = document.getElementById(tableId);
+                    if (table) {
+                        let rowsData = dataStore[tableId];
+                        while (table.rows.length > 1) {
+                            table.deleteRow(1);
+                        }
+                        for (let i = 0; i < rowsData.length; i++) {
+                            let newRow = table.insertRow();
+                            for (let j = 0; j < rowsData[i].length; j++) {
+                                let newCell = newRow.insertCell();
+                                newCell.innerHTML = rowsData[i][j];
+                                // Force contenteditable restoration for input value cells
+                                if (j === 1 && !newCell.parentElement.classList.contains('calculated-row') && !newCell.parentElement.classList.contains('locked-row') && !newCell.parentElement.classList.contains('final-zakat-row')) {
+                                    newCell.setAttribute('contenteditable', 'true');
+                                }
+                            }
                         }
                     }
                 }
+            } catch (e) {
+                console.error("Error loading saved data", e);
             }
         }
 
         applyLanguage();
 
-        // Global Event Listener for real-time calculation whenever any cell is edited
+        // Guaranteed live calculation on every single keystroke/input across all tables
         document.addEventListener('input', function(e) {
             if (e.target && e.target.getAttribute('contenteditable') === 'true') {
                 calculateAll();
