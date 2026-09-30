@@ -95,7 +95,6 @@
         }
         .nav-btn:hover { background: var(--border-color); }
 
-        /* Navbar Dropdown Jump Menu */
         .nav-select {
             background: var(--bg-color);
             color: var(--text-main);
@@ -108,7 +107,6 @@
             cursor: pointer;
         }
 
-        /* Separated Widgets Grid (Top Widgets Only) */
         .widgets-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -140,7 +138,6 @@
             color: var(--text-main);
         }
 
-        /* Full Month Calendar Widget */
         .calendar-container {
             margin-top: 6px;
         }
@@ -177,17 +174,9 @@
             color: var(--text-main);
         }
 
-        .cal-date.empty {
-            background: transparent;
-        }
+        .cal-date.empty { background: transparent; }
+        .cal-date.today { background: var(--primary); color: white; font-weight: 700; }
 
-        .cal-date.today {
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-        }
-
-        /* Section Cards (Initially Hidden, Shown when selected) */
         .section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -195,12 +184,10 @@
             padding: 16px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            display: none; /* Hidden by default */
+            display: none;
         }
 
-        .section-card.active-table {
-            display: block; /* Shown when selected */
-        }
+        .section-card.active-table { display: block; }
 
         .table-header-wrap { 
             display: flex; 
@@ -255,10 +242,7 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        td {
-            border-bottom: 1px solid var(--border-color);
-        }
-
+        td { border-bottom: 1px solid var(--border-color); }
         tr:last-child td { border-bottom: none; }
         tr:nth-child(even) { background-color: rgba(0,0,0,0.01); }
         [data-theme="dark"] tr:nth-child(even) { background-color: rgba(255,255,255,0.01); }
@@ -368,11 +352,10 @@
 <body>
 
 <div class="container">
-    <!-- Navbar with Jump Menu -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-brand" id="brandTitle">আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড</div>
         <div class="nav-controls">
-            <!-- Dropdown Jump Menu -->
             <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
                 <option value="" disabled selected id="jumpDefaultOpt">📂 টেবিল সিলেক্ট করুন...</option>
                 <option value="cardAED" id="opt1">এইডি অ্যাকাউন্ট ও বিডিটি</option>
@@ -389,19 +372,16 @@
         </div>
     </nav>
 
-    <!-- Top Widgets Grid (Time, Location, Calendar) -->
+    <!-- Widgets Grid -->
     <div class="widgets-grid">
-        <!-- Time Widget -->
         <div class="widget-card">
             <div class="widget-header" id="lblTime">⏰ লাইভ সময়</div>
             <div class="widget-content" id="liveTime">--:--:--</div>
         </div>
-        <!-- Location Widget -->
         <div class="widget-card">
             <div class="widget-header" id="lblLocation">📍 লোকেশন</div>
             <div class="widget-content" id="lblLocationVal">দুবাই, সংযুক্ত আরব আমিরাত</div>
         </div>
-        <!-- Full Month Calendar Widget -->
         <div class="widget-card" style="grid-column: 1 / -1;">
             <div class="widget-header" id="lblCalendar">📅 ফুল মান্থ ক্যালেন্ডার</div>
             <div class="calendar-container">
@@ -415,19 +395,16 @@
                     <div class="cal-day-name" id="dFri">Fr</div>
                     <div class="cal-day-name" id="dSat">Sa</div>
                 </div>
-                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;">
-                    <!-- JavaScript will generate days here -->
-                </div>
+                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Default Welcome Notice (Shown when no table selected) -->
     <div class="welcome-notice" id="welcomeNotice">
         👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।
     </div>
 
-    <!-- AED Account Status -->
+    <!-- Tables Sections -->
     <div class="section-card" id="cardAED">
         <div class="table-header-wrap">
             <h2 id="t1Title">এইডি অ্যাকাউন্ট ও বিডিটি কনভার্শন</h2>
@@ -452,7 +429,6 @@
         </div>
     </div>
 
-    <!-- BDT Account Status -->
     <div class="section-card" id="cardBDT">
         <div class="table-header-wrap">
             <h2 id="t2Title">বিডিটি অ্যাকাউন্ট স্ট্যাটাস</h2>
@@ -475,7 +451,6 @@
         </div>
     </div>
 
-    <!-- Investment & Installment -->
     <div class="section-card" id="cardInvestment">
         <div class="table-header-wrap">
             <h2 id="t3Title">ইনভেস্টমেন্ট ও কিস্তি হিসাব</h2>
@@ -494,7 +469,6 @@
         </div>
     </div>
 
-    <!-- Credit Card Status -->
     <div class="section-card" id="cardCredit">
         <div class="table-header-wrap">
             <h2 id="t4Title">ক্রেডিট কার্ড স্ট্যাটাস</h2>
@@ -511,7 +485,6 @@
         </div>
     </div>
 
-    <!-- Monthly Outstanding -->
     <div class="section-card" id="cardOutstanding">
         <div class="table-header-wrap">
             <h2 id="t5Title">মাসিক বকেয়া পেমেন্ট (Outstanding)</h2>
@@ -529,7 +502,6 @@
         </div>
     </div>
 
-    <!-- Monthly Expenses -->
     <div class="section-card" id="cardExpense">
         <div class="table-header-wrap">
             <h2 id="t6Title">মাসিক খরচ ও পরিকল্পনা</h2>
@@ -554,7 +526,6 @@
         </div>
     </div>
 
-    <!-- Zakat Calculator -->
     <div class="section-card" id="cardZakat">
         <div class="table-header-wrap">
             <h2 id="t7Title">যাকাত ক্যালকুলেটর</h2>
@@ -588,6 +559,37 @@
 </div>
 
 <script>
+    /* Google Sheets API Integration URL */
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbysZiPjqykVgCxFkMMhO1RD-a4DxKzGgu-DMv_Yc_rLjbMR53du8XPjhRxVizMP4Z9k/exec";
+
+    function sendDataToGoogleSheets(tableName, itemName, amount) {
+        if (!WEB_APP_URL) {
+            console.warn("Google Apps Script URL is not configured yet.");
+            return;
+        }
+
+        const payload = {
+            tableName: tableName,
+            itemName: itemName,
+            amount: amount
+        };
+
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            console.log("Data synced with Google Sheets.");
+        })
+        .catch(error => {
+            console.error("Google Sheets sync error:", error);
+        });
+    }
+
     /* Live Clock & Full Month Calendar */
     function updateDateTime() {
         const now = new Date();
@@ -629,7 +631,6 @@
     }
     renderFullCalendar();
 
-    /* Theme Toggle */
     function toggleTheme() {
         const html = document.documentElement;
         const btn = document.getElementById('themeBtn');
@@ -644,9 +645,7 @@
         }
     }
 
-    /* Language Switcher Text Dictionary */
-    let currentLang = 'bn'; // Default language set to Bangla
-
+    let currentLang = 'bn';
     const dict = {
         en: {
             brand: "Abdul's Financial Dashboard",
@@ -672,7 +671,7 @@
             t7: "Zakat Calculator",
             save: "💾 Save Changes",
             calc: "🔄 Recalculate",
-            savedMsg: "✅ Saved Successfully!",
+            savedMsg: "✅ Saved & Synced Successfully!",
             printBtn: "🖨 Print",
             addBtn: "+ Add",
             dSun: "Su", dMon: "Mo", dTue: "Tu", dWed: "We", dThu: "Th", dFri: "Fr", dSat: "Sa",
@@ -733,7 +732,7 @@
             t7: "যাকাত ক্যালকুলেটর",
             save: "💾 সেভ করুন",
             calc: "🔄 রি-ক্যালকুলেট",
-            savedMsg: "✅ সফলভাবে সেভ হয়েছে!",
+            savedMsg: "✅ সফলভাবে সেভ ও শিটে সিন্স হয়েছে!",
             printBtn: "🖨 প্রিন্ট",
             addBtn: "+ যোগ করুন",
             dSun: "রবি", dMon: "সোম", dTue: "মঙ্গল", dWed: "বুধ", dThu: "বৃহস্পতি", dFri: "শুক্র", dSat: "শনি",
@@ -820,7 +819,6 @@
         document.getElementById('dFri').innerText = t.dFri;
         document.getElementById('dSat').innerText = t.dSat;
 
-        // Table headers
         updateTableHeaders('thAED', t.thAED);
         updateTableHeaders('thBDT', t.thBDT);
         updateTableHeaders('thInv', t.thInv);
@@ -829,7 +827,6 @@
         updateTableHeaders('thExp', t.thExp);
         updateTableHeaders('thZak', t.thZak);
 
-        // Locked/Calculated row labels
         document.getElementById('lblAedTot').innerText = t.lblAedTot;
         document.getElementById('lblInc').innerText = t.lblInc;
         document.getElementById('lblFinRate').innerText = t.lblFinRate;
@@ -866,7 +863,6 @@
         }
     }
 
-    /* Show Selected Table & Hide Others */
     function showSelectedTable(cardId) {
         const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
         cards.forEach(id => {
@@ -891,32 +887,24 @@
 
     function addRow(tableId, isAED = false, isBDT = false, isOutstanding = false, isExpense = false) {
         let table = document.getElementById(tableId);
-        let newRow = table.insertRow();
-        
         if (isAED) {
             let insertIndex = table.rows.length - 5;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isBDT) {
-            let insertIndex = 6;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            table.insertRow(6).innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isOutstanding) {
             let insertIndex = table.rows.length - 1;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isExpense) {
             let insertIndex = table.rows.length - 2;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            table.insertRow(insertIndex).innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         }
         calculateAll();
     }
 
     function deleteRow(btn) {
         let row = btn.parentNode.parentNode;
-        let table = row.parentNode;
-        table.deleteRow(row.rowIndex);
+        row.parentNode.deleteRow(row.rowIndex);
         calculateAll();
     }
 
@@ -1067,6 +1055,10 @@
 
     function saveData() {
         calculateAll();
+
+        // গুগল শিটে ডেটা পাঠানো (প্রথম টেবিলের প্রথম অ্যাকাউন্ট ও ব্যালেন্স পাঠানোর উদাহরণ)
+        sendDataToGoogleSheets("AED Account", document.getElementById('tableAED').rows[1].cells[0].innerText, document.getElementById('tableAED').rows[1].cells[1].innerText);
+
         const msg = document.getElementById('success-msg');
         msg.style.display = 'inline';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
@@ -1083,7 +1075,7 @@
         if (savedLang) {
             currentLang = savedLang;
         } else {
-            currentLang = 'bn'; // Default to Bangla
+            currentLang = 'bn';
         }
         applyLanguage();
 
