@@ -891,7 +891,7 @@
             newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isOutstanding) {
             let insertIndex = table.rows.length - 1;
-            newRow = table.insertRow(index);
+            newRow = table.insertRow(insertIndex);
             newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isExpense) {
             let insertIndex = table.rows.length - 2;
@@ -958,15 +958,14 @@
         let monthlyInstallmentTotal = monthsCount * 15000;
         document.getElementById('invMonthlyTotal').innerText = monthlyInstallmentTotal.toFixed(2);
 
-        let totalInvestmentSum = downPayment + monthlyInstallmentTotal; // Last 4th row result
+        let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
         document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
 
-        let customAmount = getNum(invTable.rows[4].cells[1].innerText); // Last 3rd row (Amount to Divide by 12)
-        let dividedBy12 = customAmount / 12; // Last 2nd row value
+        let amountToDivide = getNum(invTable.rows[4].cells[1].innerText); 
+        let dividedBy12 = amountToDivide / 12; // ১) ১২ দিয়ে ভাগ করা সেল
         document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
 
-        // Last row = Last 4th result - Last 2nd result
-        let committeeDue = totalInvestmentSum - dividedBy12; 
+        let committeeDue = dividedBy12 - totalInvestmentSum; // ২) কমিটি পাওনা পেমেন্ট = (১২ দিয়ে ভাগ করা সেলের মান) - (মোট ইনভেস্টমেন্ট)
         document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
 
         let creditTable = document.getElementById('tableCredit');
