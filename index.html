@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আবদুল এর স্মার্ট ফিনান্সিয়াল ড্যাশবোর্ড</title>
+    <title>Abdul's Smart Financial Dashboard</title>
     <!-- Google Fonts: Anek Bangla & Times New Roman (fallback) -->
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #4f46e5;
@@ -92,6 +93,9 @@
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .nav-btn:hover { background: var(--border-color); }
 
@@ -370,24 +374,23 @@
 <div class="container">
     <!-- Navbar with Jump Menu -->
     <nav class="navbar">
-        <div class="nav-brand" id="brandTitle">আবদুল এর ড্যাশবোর্ড</div>
+        <div class="nav-brand">Abdul's Financial Dashboard</div>
         <div class="nav-controls">
-            <!-- Dropdown Jump Menu moved to Top Navbar -->
+            <!-- Dropdown Jump Menu -->
             <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
-                <option value="" disabled selected id="jumpDefaultOpt">📂 Select Table...</option>
-                <option value="cardAED" id="opt1">AED Account & BDT</option>
-                <option value="cardBDT" id="opt2">BDT Account Status</option>
-                <option value="cardInvestment" id="opt3">Investment & Installment</option>
-                <option value="cardCredit" id="opt4">Credit Card Status</option>
-                <option value="cardOutstanding" id="opt5">Monthly Outstanding</option>
-                <option value="cardExpense" id="opt6">Monthly Expenses & Plans</option>
-                <option value="cardZakat" id="opt7">Zakat Calculator</option>
+                <option value="" disabled selected>📂 Select Table...</option>
+                <option value="cardAED">AED Account & BDT</option>
+                <option value="cardBDT">BDT Account Status</option>
+                <option value="cardInvestment">Investment & Installment</option>
+                <option value="cardCredit">Credit Card Status</option>
+                <option value="cardOutstanding">Monthly Outstanding</option>
+                <option value="cardExpense">Monthly Expenses & Plans</option>
+                <option value="cardZakat">Zakat Calculator</option>
             </select>
-            <button class="nav-btn" onclick="exportToCSV()" title="এক্সেল ব্যাকআপ (CSV Download)">📥 ব্যাকআপ</button>
-            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="ব্যাকআপ ফাইল রিস্টোর">📤 রিস্টোর</button>
-            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="importFromCSV(event)">
+            <button class="nav-btn" onclick="exportToCSV()" title="Export Excel Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
+            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="Restore Backup File"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
+            <input type="file" id="csvFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
             <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
-            <button class="nav-btn" onclick="toggleLang()" id="langBtn">🇧🇩 BN</button>
             <button class="nav-btn" onclick="window.print()">🖨 Print</button>
         </div>
     </nav>
@@ -396,17 +399,17 @@
     <div class="widgets-grid">
         <!-- Time Widget -->
         <div class="widget-card">
-            <div class="widget-header" id="lblTime">⏰ লাইভ সময়</div>
+            <div class="widget-header">⏰ Live Time</div>
             <div class="widget-content" id="liveTime">--:--:--</div>
         </div>
         <!-- Location Widget -->
         <div class="widget-card">
-            <div class="widget-header" id="lblLocation">📍 লোকেশন</div>
+            <div class="widget-header">📍 Location</div>
             <div class="widget-content">Dubai, UAE</div>
         </div>
         <!-- Full Month Calendar Widget -->
         <div class="widget-card" style="grid-column: 1 / -1;">
-            <div class="widget-header" id="lblCalendar">📅 ফুল মান্থ ক্যালেন্ডার</div>
+            <div class="widget-header">📅 Full Month Calendar</div>
             <div class="calendar-container">
                 <div class="cal-header" id="calMonthYear">--</div>
                 <div class="cal-grid">
@@ -425,15 +428,15 @@
         </div>
     </div>
 
-    <!-- Default Welcome Notice (Shown when no table selected) -->
+    <!-- Default Welcome Notice -->
     <div class="welcome-notice" id="welcomeNotice">
-        👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।
+        👉 Select any table or account from the top menu dropdown.
     </div>
 
     <!-- AED Account Status -->
     <div class="section-card" id="cardAED">
         <div class="table-header-wrap">
-            <h2 id="t1Title">AED Account Status & BDT</h2>
+            <h2>AED Account Status & BDT</h2>
             <button class="btn-add" onclick="addRow('tableAED', true)">+ Add</button>
         </div>
         <div class="table-responsive">
@@ -458,7 +461,7 @@
     <!-- BDT Account Status -->
     <div class="section-card" id="cardBDT">
         <div class="table-header-wrap">
-            <h2 id="t2Title">BDT Account Status</h2>
+            <h2>BDT Account Status</h2>
             <button class="btn-add" onclick="addRow('tableBDT', false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
@@ -481,7 +484,7 @@
     <!-- Investment & Installment -->
     <div class="section-card" id="cardInvestment">
         <div class="table-header-wrap">
-            <h2 id="t3Title">Investment & Installment</h2>
+            <h2>Investment & Installment</h2>
         </div>
         <div class="table-responsive">
             <table id="tableInvestment">
@@ -500,7 +503,7 @@
     <!-- Credit Card Status -->
     <div class="section-card" id="cardCredit">
         <div class="table-header-wrap">
-            <h2 id="t4Title">Credit Card Status</h2>
+            <h2>Credit Card Status</h2>
         </div>
         <div class="table-responsive">
             <table id="tableCredit">
@@ -517,7 +520,7 @@
     <!-- Monthly Outstanding -->
     <div class="section-card" id="cardOutstanding">
         <div class="table-header-wrap">
-            <h2 id="t5Title">Monthly Outstanding Payments</h2>
+            <h2>Monthly Outstanding Payments</h2>
             <button class="btn-add" onclick="addRow('tableMonthlyOutstanding', false, false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
@@ -535,7 +538,7 @@
     <!-- Monthly Expenses -->
     <div class="section-card" id="cardExpense">
         <div class="table-header-wrap">
-            <h2 id="t6Title">Monthly Expenses & Plans</h2>
+            <h2>Monthly Expenses & Plans</h2>
             <button class="btn-add" onclick="addRow('tableExpense', false, false, false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
@@ -560,7 +563,7 @@
     <!-- Zakat Calculator -->
     <div class="section-card" id="cardZakat">
         <div class="table-header-wrap">
-            <h2 id="t7Title">Zakat Calculator</h2>
+            <h2>Zakat Calculator</h2>
         </div>
         <div class="table-responsive">
             <table id="tableZakat">
@@ -579,14 +582,14 @@
                 <tr class="final-zakat-row"><td>Total Zakat Payable (2.5%)</td><td id="zakatPayableFinal">0.00</td><td>-</td></tr>
             </table>
         </div>
-        <div class="info-note" id="zakatNote">💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.</div>
+        <div class="info-note">💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.</div>
     </div>
 
     <!-- Action Bar -->
     <div class="action-bar">
-        <button class="btn" onclick="saveData()" id="saveBtn">💾 Save Changes</button>
+        <button class="btn" onclick="saveData()">💾 Save Changes</button>
         <span id="success-msg">✅ Saved Successfully!</span>
-        <button class="btn btn-secondary" onclick="calculateAll()" id="calcBtn">🔄 Recalculate</button>
+        <button class="btn btn-secondary" onclick="calculateAll()">🔄 Recalculate</button>
     </div>
 </div>
 
@@ -647,90 +650,6 @@
         }
     }
 
-    /* Language Switcher Text Dictionary */
-    let currentLang = 'en';
-    const dict = {
-        en: {
-            brand: "Abdul's Dashboard",
-            lblTime: "⏰ Live Time",
-            lblLocation: "📍 Location",
-            lblCalendar: "📅 Full Month Calendar",
-            jumpDefault: "📂 Select Table...",
-            opt1: "AED Account & BDT",
-            opt2: "BDT Account Status",
-            opt3: "Investment & Installment",
-            opt4: "Credit Card Status",
-            opt5: "Monthly Outstanding",
-            opt6: "Monthly Expenses & Plans",
-            opt7: "Zakat Calculator",
-            welcome: "👉 Select any table or account from the top menu.",
-            t1: "AED Account Status & BDT",
-            t2: "BDT Account Status",
-            t3: "Investment & Installment",
-            t4: "Credit Card Status",
-            t5: "Monthly Outstanding Payments",
-            t6: "Monthly Expenses & Plans",
-            t7: "Zakat Calculator",
-            save: "💾 Save Changes",
-            calc: "🔄 Recalculate",
-            savedMsg: "✅ Saved Successfully!"
-        },
-        bn: {
-            brand: "আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড",
-            lblTime: "⏰ লাইভ সময়",
-            lblLocation: "📍 লোকেশন",
-            lblCalendar: "📅 ফুল মান্থ ক্যালেন্ডার",
-            jumpDefault: "📂 টেবিল সিলেক্ট করুন...",
-            opt1: "এইডি অ্যাকাউন্ট ও বিডিটি",
-            opt2: "বিডিটি অ্যাকাউন্ট স্ট্যাটাস",
-            opt3: "ইনভেস্টমেন্ট ও কিস্তি হিসাব",
-            opt4: "ক্রেডিট কার্ড স্ট্যাটাস",
-            opt5: "মাসিক বকেয়া পেমেন্ট",
-            opt6: "মাসিক খরচ ও পরিকল্পনা",
-            opt7: "যাকাত ক্যালকুলেটর",
-            welcome: "👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।",
-            t1: "এইডি অ্যাকাউন্ট ও বিডিটি কনভার্শন",
-            t2: "বিডিটি অ্যাকাউন্ট স্ট্যাটাস",
-            t3: "ইনভেস্টমেন্ট ও কিস্তি হিসাব",
-            t4: "ক্রেডিট কার্ড স্ট্যাটাস",
-            t5: "মাসিক বকেয়া পেমেন্ট (Outstanding)",
-            t6: "মাসিক খরচ ও পরিকল্পনা",
-            t7: "যাকাত ক্যালকুলেটর",
-            save: "💾 সেভ করুন",
-            calc: "🔄 রি-ক্যালকুলেট",
-            savedMsg: "✅ সফলভাবে সেভ হয়েছে!"
-        }
-    };
-
-    function toggleLang() {
-        currentLang = currentLang === 'en' ? 'bn' : 'en';
-        document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇩 BN' : '🇬🇧 EN';
-        document.getElementById('brandTitle').innerText = dict[currentLang].brand;
-        document.getElementById('lblTime').innerText = dict[currentLang].lblTime;
-        document.getElementById('lblLocation').innerText = dict[currentLang].lblLocation;
-        document.getElementById('lblCalendar').innerText = dict[currentLang].lblCalendar;
-        document.getElementById('jumpDefaultOpt').innerText = dict[currentLang].jumpDefault;
-        document.getElementById('opt1').innerText = dict[currentLang].opt1;
-        document.getElementById('opt2').innerText = dict[currentLang].opt2;
-        document.getElementById('opt3').innerText = dict[currentLang].opt3;
-        document.getElementById('opt4').innerText = dict[currentLang].opt4;
-        document.getElementById('opt5').innerText = dict[currentLang].opt5;
-        document.getElementById('opt6').innerText = dict[currentLang].opt6;
-        document.getElementById('opt7').innerText = dict[currentLang].opt7;
-        document.getElementById('welcomeNotice').innerText = dict[currentLang].welcome;
-        document.getElementById('t1Title').innerText = dict[currentLang].t1;
-        document.getElementById('t2Title').innerText = dict[currentLang].t2;
-        document.getElementById('t3Title').innerText = dict[currentLang].t3;
-        document.getElementById('t4Title').innerText = dict[currentLang].t4;
-        document.getElementById('t5Title').innerText = dict[currentLang].t5;
-        document.getElementById('t6Title').innerText = dict[currentLang].t6;
-        document.getElementById('t7Title').innerText = dict[currentLang].t7;
-        document.getElementById('saveBtn').innerText = dict[currentLang].save;
-        document.getElementById('calcBtn').innerText = dict[currentLang].calc;
-        document.getElementById('success-msg').innerText = dict[currentLang].savedMsg;
-        localStorage.setItem('abdul_lang', currentLang);
-    }
-
     /* Show Selected Table & Hide Others */
     function showSelectedTable(cardId) {
         const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
@@ -743,7 +662,6 @@
             }
         });
 
-        // Hide welcome notice once a table is selected
         let notice = document.getElementById('welcomeNotice');
         if (notice) notice.style.display = 'none';
 
@@ -899,17 +817,78 @@
 
         let zakatPayableVal = 0;
         if (netCombinedWealth >= combinedNisab) {
-            zakatStatusBox.innerText = currentLang === 'en' ? "Applicable - Zakat Due" : "প্রযোজ্য - যাকাত ফরজ হয়েছে";
+            zakatStatusBox.innerText = "Applicable - Zakat Due";
             zakatStatusBox.style.color = "#16a34a";
             zakatPayableVal = (netCombinedWealth * 25) / 1000;
         } else {
-            zakatStatusBox.innerText = currentLang === 'en' ? "Not Applicable - Below Nisab" : "প্রযোজ্য নয় - নিসাব পরিমাণ হয়নি";
+            zakatStatusBox.innerText = "Not Applicable - Below Nisab";
             zakatStatusBox.style.color = "#dc2626";
             zakatPayableVal = 0;
         }
         zakatPayableBox.innerText = zakatPayableVal.toFixed(2);
 
         saveDataSilently();
+    }
+
+    // 1. Export Data Backup (JSON/Excel style backup)
+    function exportToCSV() {
+        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
+        let dataStore = {};
+        tables.forEach(tableId => {
+            let table = document.getElementById(tableId);
+            let rowsData = [];
+            for (let i = 1; i < table.rows.length; i++) {
+                let rowCells = [];
+                for (let j = 0; j < table.rows[i].cells.length; j++) {
+                    rowCells.push(table.rows[i].cells[j].innerHTML);
+                }
+                rowsData.push(rowCells);
+            }
+            dataStore[tableId] = rowsData;
+        });
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataStore, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `Financial_Dashboard_Backup_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    // 2. Import / Restore Backup File
+    function importFromJSON(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let dataStore = JSON.parse(e.target.result);
+                for (let tableId in dataStore) {
+                    let table = document.getElementById(tableId);
+                    if (table) {
+                        let rowsData = dataStore[tableId];
+                        while (table.rows.length > 1) {
+                            table.deleteRow(1);
+                        }
+                        for (let i = 0; i < rowsData.length; i++) {
+                            let newRow = table.insertRow();
+                            for (let j = 0; j < rowsData[i].length; j++) {
+                                let newCell = newRow.insertCell();
+                                newCell.innerHTML = rowsData[i][j];
+                            }
+                        }
+                    }
+                }
+                calculateAll();
+                alert('Backup restored successfully!');
+            } catch (err) {
+                alert('Failed to read backup file. Please select a valid backup file.');
+            }
+            event.target.value = '';
+        };
+        reader.readAsText(file);
     }
 
     function saveDataSilently() {
@@ -927,7 +906,7 @@
             }
             dataStore[tableId] = rowsData;
         });
-        localStorage.setItem('abdul_account_manager_v25', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_account_manager_v26', JSON.stringify(dataStore));
     }
 
     function saveData() {
@@ -937,113 +916,14 @@
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
     }
 
-    // এক্সেল ব্যাকআপ (CSV Export) ফিচার
-    function exportToCSV() {
-        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
-        let csvContent = "\uFEFFTable_ID,Row_Index,Col_0,Col_1,Col_2\n";
-
-        tables.forEach(tableId => {
-            let table = document.getElementById(tableId);
-            if (table) {
-                for (let i = 1; i < table.rows.length; i++) {
-                    let r = table.rows[i];
-                    let col0 = r.cells[0] ? r.cells[0].innerText.replace(/"/g, '""') : "";
-                    let col1 = r.cells[1] ? r.cells[1].innerText.replace(/"/g, '""') : "";
-                    let col2 = r.cells[2] ? r.cells[2].innerText.replace(/"/g, '""') : "-";
-                    csvContent += `"${tableId}","${i}","${col0}","${col1}","${col2}"\n`;
-                }
-            }
-        });
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', `Abdul_Finance_Backup_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // ব্যাকআপ ফাইল থেকে ডাটা রিস্টোর (CSV Import) ফিচার
-    function importFromCSV(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            let restoredData = {};
-
-            for (let i = 1; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (!line) continue;
-
-                let row = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if (!row || row.length < 5) {
-                    row = line.split(',');
-                }
-
-                if (row && row.length >= 5) {
-                    let tableId = row[0].replace(/"/g, '').trim();
-                    let col0 = row[2].replace(/"/g, '').trim();
-                    let col1 = row[3].replace(/"/g, '').trim();
-                    let col2 = row[4].replace(/"/g, '').trim();
-
-                    if (!restoredData[tableId]) {
-                        restoredData[tableId] = [];
-                    }
-                    restoredData[tableId].push([col0, col1, col2]);
-                }
-            }
-
-            // লোকালস্টোরেজে ডেটা সেট করা এবং রিফ্রেশ করা
-            let formattedStore = {};
-            for (let tableId in restoredData) {
-                let table = document.getElementById(tableId);
-                if (table) {
-                    while (table.rows.length > 1) {
-                        table.deleteRow(1);
-                    }
-                    let rowsArr = [];
-                    restoredData[tableId].forEach(item => {
-                        let newRow = table.insertRow();
-                        let c0 = newRow.insertCell(); c0.innerHTML = item[0];
-                        let c1 = newRow.insertCell(); c1.innerHTML = item[1];
-                        let c2 = newRow.insertCell(); c2.innerHTML = item[2];
-
-                        // এডিটেবল সেল ঠিক রাখা
-                        if (item[2] !== '-' && !item[2].includes('button')) {
-                            c1.contentEditable = "true";
-                            c1.setAttribute("oninput", "calculateAll()");
-                        }
-                        rowsArr.push([c0.innerHTML, c1.innerHTML, c2.innerHTML]);
-                    });
-                    formattedStore[tableId] = rowsArr;
-                }
-            }
-
-            localStorage.setItem('abdul_account_manager_v25', JSON.stringify(formattedStore));
-            calculateAll();
-            alert('সফলভাবে ব্যাকআপ ফাইল থেকে ডাটা রিস্টোর করা হয়েছে!');
-            event.target.value = '';
-        };
-        reader.readAsText(file, 'UTF-8');
-    }
-
     window.onload = function() {
         let savedTheme = localStorage.getItem('abdul_theme');
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
             document.getElementById('themeBtn').innerText = '☀️ Light';
         }
-        let savedLang = localStorage.getItem('abdul_lang');
-        if (savedLang === 'bn') {
-            toggleLang();
-        }
 
-        let saved = localStorage.getItem('abdul_account_manager_v25');
+        let saved = localStorage.getItem('abdul_account_manager_v26');
         if (saved) {
             let dataStore = JSON.parse(saved);
             for (let tableId in dataStore) {
