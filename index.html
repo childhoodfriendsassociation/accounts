@@ -950,6 +950,7 @@
         }
         document.getElementById('bdtHoldTotal').innerText = holdSum.toFixed(2);
 
+        /* Investment & Installment Calculations */
         let invTable = document.getElementById('tableInvestment');
         let downPayment = getNum(invTable.rows[1].cells[1].innerText);
         let monthsCount = getNum(invTable.rows[2].cells[1].innerText);
