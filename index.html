@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আবদুল এর স্মার্ট ফিনান্সিয়াল ড্যাশবোর্ড</title>
-    <!-- Google Fonts: Anek Bangla & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Anek Bangla & Times New Roman (fallback) -->
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -34,7 +34,7 @@
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-            font-family: 'Anek Bangla', 'Inter', sans-serif; 
+            font-family: 'Anek Bangla', 'Times New Roman', Times, serif; 
             transition: background 0.3s, color 0.3s; 
         }
         
@@ -95,6 +95,7 @@
         }
         .nav-btn:hover { background: var(--border-color); }
 
+        /* Navbar Dropdown Jump Menu */
         .nav-select {
             background: var(--bg-color);
             color: var(--text-main);
@@ -107,6 +108,7 @@
             cursor: pointer;
         }
 
+        /* Separated Widgets Grid (Top Widgets Only) */
         .widgets-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -138,6 +140,7 @@
             color: var(--text-main);
         }
 
+        /* Full Month Calendar Widget */
         .calendar-container {
             margin-top: 6px;
         }
@@ -174,9 +177,17 @@
             color: var(--text-main);
         }
 
-        .cal-date.empty { background: transparent; }
-        .cal-date.today { background: var(--primary); color: white; font-weight: 700; }
+        .cal-date.empty {
+            background: transparent;
+        }
 
+        .cal-date.today {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Section Cards (Initially Hidden, Shown when selected) */
         .section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -184,10 +195,12 @@
             padding: 16px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            display: none;
+            display: none; /* Hidden by default */
         }
 
-        .section-card.active-table { display: block; }
+        .section-card.active-table {
+            display: block; /* Shown when selected */
+        }
 
         .table-header-wrap { 
             display: flex; 
@@ -242,13 +255,16 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        td { border-bottom: 1px solid var(--border-color); }
+        td {
+            border-bottom: 1px solid var(--border-color);
+        }
+
         tr:last-child td { border-bottom: none; }
         tr:nth-child(even) { background-color: rgba(0,0,0,0.01); }
         [data-theme="dark"] tr:nth-child(even) { background-color: rgba(255,255,255,0.01); }
         
         td[contenteditable="true"] { 
-            background-color: rgba(234, 179, 8, 0.12); 
+            background-color: rgba(234, 179, 8, 0.08); 
             cursor: pointer; 
             border-radius: 4px;
         }
@@ -352,199 +368,212 @@
 <body>
 
 <div class="container">
-    <!-- Navbar -->
+    <!-- Navbar with Jump Menu -->
     <nav class="navbar">
-        <div class="nav-brand" id="brandTitle">আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড</div>
+        <div class="nav-brand" id="brandTitle">আবদুল এর ড্যাশবোর্ড</div>
         <div class="nav-controls">
+            <!-- Dropdown Jump Menu moved to Top Navbar -->
             <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
-                <option value="" disabled selected id="jumpDefaultOpt">📂 টেবিল সিলেক্ট করুন...</option>
-                <option value="cardAED" id="opt1">এইডি অ্যাকাউন্ট ও বিডিটি</option>
-                <option value="cardBDT" id="opt2">বিডিটি অ্যাকাউন্ট স্ট্যাটাস</option>
-                <option value="cardInvestment" id="opt3">ইনভেস্টমেন্ট ও কিস্তি হিসাব</option>
-                <option value="cardCredit" id="opt4">ক্রেডিট কার্ড স্ট্যাটাস</option>
-                <option value="cardOutstanding" id="opt5">মাসিক বকেয়া পেমেন্ট</option>
-                <option value="cardExpense" id="opt6">মাসিক খরচ ও পরিকল্পনা</option>
-                <option value="cardZakat" id="opt7">যাকাত ক্যালকুলেটর</option>
+                <option value="" disabled selected id="jumpDefaultOpt">📂 Select Table...</option>
+                <option value="cardAED" id="opt1">AED Account & BDT</option>
+                <option value="cardBDT" id="opt2">BDT Account Status</option>
+                <option value="cardInvestment" id="opt3">Investment & Installment</option>
+                <option value="cardCredit" id="opt4">Credit Card Status</option>
+                <option value="cardOutstanding" id="opt5">Monthly Outstanding</option>
+                <option value="cardExpense" id="opt6">Monthly Expenses & Plans</option>
+                <option value="cardZakat" id="opt7">Zakat Calculator</option>
             </select>
             <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
-            <button class="nav-btn" onclick="toggleLang()" id="langBtn">🇬🇧 EN</button>
-            <button class="nav-btn" onclick="window.print()" id="printBtn">🖨 প্রিন্ট</button>
+            <button class="nav-btn" onclick="toggleLang()" id="langBtn">🇧🇩 BN</button>
+            <button class="nav-btn" onclick="window.print()">🖨 Print</button>
         </div>
     </nav>
 
-    <!-- Widgets Grid -->
+    <!-- Top Widgets Grid (Time, Location, Calendar) -->
     <div class="widgets-grid">
+        <!-- Time Widget -->
         <div class="widget-card">
             <div class="widget-header" id="lblTime">⏰ লাইভ সময়</div>
             <div class="widget-content" id="liveTime">--:--:--</div>
         </div>
+        <!-- Location Widget -->
         <div class="widget-card">
             <div class="widget-header" id="lblLocation">📍 লোকেশন</div>
-            <div class="widget-content" id="lblLocationVal">দুবাই, সংযুক্ত আরব আমিরাত</div>
+            <div class="widget-content">Dubai, UAE</div>
         </div>
+        <!-- Full Month Calendar Widget -->
         <div class="widget-card" style="grid-column: 1 / -1;">
             <div class="widget-header" id="lblCalendar">📅 ফুল মান্থ ক্যালেন্ডার</div>
             <div class="calendar-container">
                 <div class="cal-header" id="calMonthYear">--</div>
                 <div class="cal-grid">
-                    <div class="cal-day-name" id="dSun">Su</div>
-                    <div class="cal-day-name" id="dMon">Mo</div>
-                    <div class="cal-day-name" id="dTue">Tu</div>
-                    <div class="cal-day-name" id="dWed">We</div>
-                    <div class="cal-day-name" id="dThu">Th</div>
-                    <div class="cal-day-name" id="dFri">Fr</div>
-                    <div class="cal-day-name" id="dSat">Sa</div>
+                    <div class="cal-day-name">Su</div>
+                    <div class="cal-day-name">Mo</div>
+                    <div class="cal-day-name">Tu</div>
+                    <div class="cal-day-name">We</div>
+                    <div class="cal-day-name">Th</div>
+                    <div class="cal-day-name">Fr</div>
+                    <div class="cal-day-name">Sa</div>
                 </div>
-                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;"></div>
+                <div class="cal-grid" id="calDaysGrid" style="margin-top: 4px;">
+                    <!-- JavaScript will generate days here -->
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Default Welcome Notice (Shown when no table selected) -->
     <div class="welcome-notice" id="welcomeNotice">
         👉 ওপরের মেনু থেকে যেকোনো একটি টেবিল বা হিসাব সিলেক্ট করুন।
     </div>
 
-    <!-- Tables Sections -->
+    <!-- AED Account Status -->
     <div class="section-card" id="cardAED">
         <div class="table-header-wrap">
-            <h2 id="t1Title">এইডি অ্যাকাউন্ট ও বিডিটি কনভার্শন</h2>
-            <button class="btn-add" onclick="addRow('tableAED', true)" id="addBtn1">+ Add</button>
+            <h2 id="t1Title">AED Account Status & BDT</h2>
+            <button class="btn-add" onclick="addRow('tableAED', true)">+ Add</button>
         </div>
         <div class="table-responsive">
             <table id="tableAED">
-                <tr id="thAED"><th>Account Name</th><th>Balance / Rate</th><th>Action</th></tr>
-                <tr><td contenteditable="true">HSBC</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">HSBC GMA</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Ruya</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">PayIt</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Botim</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Fakhrul</td><td contenteditable="true">48.33</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Current Month Salary</td><td contenteditable="true">2555.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td id="lblAedTot">In AED Total</td><td id="aedTotal">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">AED to BDT Rate</td><td contenteditable="true">33.43</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblInc">2.5% Incentive (Auto)</td><td id="incentiveBox">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblFinRate">Final Rate</td><td id="finalRate">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblConvBdt">Converted Total in BDT</td><td id="convertedBDT">0.00</td><td>-</td></tr>
+                <tr><th>Account Name</th><th>Balance / Rate</th><th>Action</th></tr>
+                <tr><td contenteditable="true">HSBC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">HSBC GMA</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Ruya</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">PayIt</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Botim</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Fakhrul</td><td contenteditable="true" oninput="calculateAll()">48.33</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Current Month Salary</td><td contenteditable="true" oninput="calculateAll()">2555.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td>In AED Total</td><td id="aedTotal">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">AED to BDT Rate</td><td contenteditable="true" oninput="calculateAll()">33.43</td><td>-</td></tr>
+                <tr class="locked-row"><td>2.5% Incentive (Auto)</td><td id="incentiveBox">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Final Rate</td><td id="finalRate">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Converted Total in BDT</td><td id="convertedBDT">0.00</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- BDT Account Status -->
     <div class="section-card" id="cardBDT">
         <div class="table-header-wrap">
-            <h2 id="t2Title">বিডিটি অ্যাকাউন্ট স্ট্যাটাস</h2>
-            <button class="btn-add" onclick="addRow('tableBDT', false, true)" id="addBtn2">+ Add</button>
+            <h2 id="t2Title">BDT Account Status</h2>
+            <button class="btn-add" onclick="addRow('tableBDT', false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
             <table id="tableBDT">
-                <tr id="thBDT"><th>Account Name</th><th>Balance (BDT)</th><th>Action</th></tr>
-                <tr><td contenteditable="true">MTB Savings</td><td contenteditable="true">199.37</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">MTB NRB</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">BRAC PLC</td><td contenteditable="true">35.38</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">DBBL Agent</td><td contenteditable="true">290.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">UCB PLC</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td id="lblUsableBdt">Usable Asset in BDT</td><td id="bdtUsableTotal">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">DBBL Core</td><td contenteditable="true">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Pubali Bank PLC</td><td contenteditable="true">5040.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">IBBL PLC</td><td contenteditable="true">251.50</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td id="lblHoldBdt">Amount In Hold In Bank</td><td id="bdtHoldTotal">0.00</td><td>-</td></tr>
+                <tr><th>Account Name</th><th>Balance (BDT)</th><th>Action</th></tr>
+                <tr><td contenteditable="true">MTB Savings</td><td contenteditable="true" oninput="calculateAll()">199.37</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">MTB NRB</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">BRAC PLC</td><td contenteditable="true" oninput="calculateAll()">35.38</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">DBBL Agent</td><td contenteditable="true" oninput="calculateAll()">290.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">UCB PLC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td>Usable Asset in BDT</td><td id="bdtUsableTotal">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">DBBL Core</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Pubali Bank PLC</td><td contenteditable="true" oninput="calculateAll()">5040.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">IBBL PLC</td><td contenteditable="true" oninput="calculateAll()">251.50</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td>Amount In Hold In Bank</td><td id="bdtHoldTotal">0.00</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- Investment & Installment -->
     <div class="section-card" id="cardInvestment">
         <div class="table-header-wrap">
-            <h2 id="t3Title">ইনভেস্টমেন্ট ও কিস্তি হিসাব</h2>
+            <h2 id="t3Title">Investment & Installment</h2>
         </div>
         <div class="table-responsive">
             <table id="tableInvestment">
-                <tr id="thInv"><th>Parameter</th><th>Value / Number</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Down Payment (BDT)</td><td contenteditable="true">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Monthly Installment Count (Months)</td><td contenteditable="true">0</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblInvMonTot">Total Monthly Installments [Auto]</td><td id="invMonthlyTotal">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblInvTot">Total Investment</td><td id="invTotalSum">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Amount to Divide by 12</td><td contenteditable="true">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblInvDiv">Amount Divided by 12 [Auto]</td><td id="invDividedBy12">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblComDue">Committee Due Payment [Auto]</td><td id="invDifference">0.00</td><td>-</td></tr>
+                <tr><th>Parameter</th><th>Value / Number</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Down Payment (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Monthly Installment Count (Months)</td><td contenteditable="true" oninput="calculateAll()">0</td><td>-</td></tr>
+                <tr class="locked-row"><td>Total Monthly Installments [Auto]</td><td id="invMonthlyTotal">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Total Investment</td><td id="invTotalSum">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Amount to Divide by 12</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Amount Divided by 12 [Auto]</td><td id="invDividedBy12">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Committee Due Payment [Auto]</td><td id="invDifference">0.00</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- Credit Card Status -->
     <div class="section-card" id="cardCredit">
         <div class="table-header-wrap">
-            <h2 id="t4Title">ক্রেডিট কার্ড স্ট্যাটাস</h2>
+            <h2 id="t4Title">Credit Card Status</h2>
         </div>
         <div class="table-responsive">
             <table id="tableCredit">
-                <tr id="thCred"><th>Credit / Option Name</th><th>Amount / Details</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Tabby Credit Limit</td><td contenteditable="true">6700.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblTabBal">Tabby Credit Balance</td><td id="tabbyBalanceBox">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Tabby Credit Used</td><td contenteditable="true">1503.84</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblTabOut">Tabby Outstanding (Auto)</td><td id="tabbyOutstandingBox">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Tabby Split Charge</td><td contenteditable="true">1.15</td><td>-</td></tr>
+                <tr><th>Credit / Option Name</th><th>Amount / Details</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Tabby Credit Limit</td><td contenteditable="true" oninput="calculateAll()">6700.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Tabby Credit Balance</td><td id="tabbyBalanceBox">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Tabby Credit Used</td><td contenteditable="true" oninput="calculateAll()">1503.84</td><td>-</td></tr>
+                <tr class="locked-row"><td>Tabby Outstanding (Auto)</td><td id="tabbyOutstandingBox">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Tabby Split Charge</td><td contenteditable="true" oninput="calculateAll()">1.15</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- Monthly Outstanding -->
     <div class="section-card" id="cardOutstanding">
         <div class="table-header-wrap">
-            <h2 id="t5Title">মাসিক বকেয়া পেমেন্ট (Outstanding)</h2>
-            <button class="btn-add" onclick="addRow('tableMonthlyOutstanding', false, false, true)" id="addBtn3">+ Add</button>
+            <h2 id="t5Title">Monthly Outstanding Payments</h2>
+            <button class="btn-add" onclick="addRow('tableMonthlyOutstanding', false, false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
             <table id="tableMonthlyOutstanding">
-                <tr id="thOut"><th>Month / Name</th><th>Amount</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-10-01)</td><td contenteditable="true">451.44</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-11-01)</td><td contenteditable="true">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-12-01)</td><td contenteditable="true">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2027-01-01)</td><td contenteditable="true">351.19</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td id="lblOutTot">Total Monthly Outstanding</td><td id="monthlyOutstandingTotal">0.00</td><td>-</td></tr>
+                <tr><th>Month / Name</th><th>Amount</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-10-01)</td><td contenteditable="true" oninput="calculateAll()">451.44</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-11-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2026-12-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Monthly Outstanding (2027-01-01)</td><td contenteditable="true" oninput="calculateAll()">351.19</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td>Total Monthly Outstanding</td><td id="monthlyOutstandingTotal">0.00</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- Monthly Expenses -->
     <div class="section-card" id="cardExpense">
         <div class="table-header-wrap">
-            <h2 id="t6Title">মাসিক খরচ ও পরিকল্পনা</h2>
-            <button class="btn-add" onclick="addRow('tableExpense', false, false, false, true)" id="addBtn4">+ Add</button>
+            <h2 id="t6Title">Monthly Expenses & Plans</h2>
+            <button class="btn-add" onclick="addRow('tableExpense', false, false, false, true)">+ Add</button>
         </div>
         <div class="table-responsive">
             <table id="tableExpense">
-                <tr id="thExp"><th>Expense Item</th><th>Amount (BDT)</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Mother</td><td contenteditable="true">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">House Rent</td><td contenteditable="true">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">WIFI Bill</td><td contenteditable="true">500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Gas Bill</td><td contenteditable="true">1500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Dust Bill</td><td contenteditable="true">100.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Madrasah Fee</td><td contenteditable="true">2600.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Home Tuition Fee</td><td contenteditable="true">1020.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Electric Bill</td><td contenteditable="true">2500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Food & Others</td><td contenteditable="true">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Associates</td><td contenteditable="true">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td id="lblExpTot">Total Expenses & Plans</td><td id="expenseTotal">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblExpAed">In AED</td><td id="expenseAEDTotal">0.00</td><td>-</td></tr>
+                <tr><th>Expense Item</th><th>Amount (BDT)</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Mother</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">House Rent</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">WIFI Bill</td><td contenteditable="true" oninput="calculateAll()">500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Gas Bill</td><td contenteditable="true" oninput="calculateAll()">1500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Dust Bill</td><td contenteditable="true" oninput="calculateAll()">100.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Madrasah Fee</td><td contenteditable="true" oninput="calculateAll()">2600.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Home Tuition Fee</td><td contenteditable="true" oninput="calculateAll()">1020.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Electric Bill</td><td contenteditable="true" oninput="calculateAll()">2500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Food & Others</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr><td contenteditable="true">Associates</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
+                <tr class="calculated-row"><td>Total Expenses & Plans</td><td id="expenseTotal">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>In AED</td><td id="expenseAEDTotal">0.00</td><td>-</td></tr>
             </table>
         </div>
     </div>
 
+    <!-- Zakat Calculator -->
     <div class="section-card" id="cardZakat">
         <div class="table-header-wrap">
-            <h2 id="t7Title">যাকাত ক্যালকুলেটর</h2>
+            <h2 id="t7Title">Zakat Calculator</h2>
         </div>
         <div class="table-responsive">
             <table id="tableZakat">
-                <tr id="thZak"><th>Zakat Parameter</th><th>Value / Amount</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Total Cash / Bank Asset (BDT)</td><td contenteditable="true">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Gold Weight (in Grams)</td><td contenteditable="true">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Gold Price per Vori (BDT)</td><td contenteditable="true">115000.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblEffGram">Gold Effective Price / Gram (-17%)</td><td id="effectiveGramRate">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblGoldTot">Total Gold Market Value (BDT)</td><td id="zakatGoldTotal">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblGrossWealth">Total Gross Wealth</td><td id="totalGrossWealth">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Total Liabilities / Debts</td><td contenteditable="true">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td id="lblNetWealth">Net Combined Wealth</td><td id="netCombinedWealth">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Silver Price per Vori (Nisab)</td><td contenteditable="true">1400.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblNisab">Combined Nisab Threshold</td><td id="combinedNisabThreshold">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td id="lblZakStatus">Zakat Eligibility Status</td><td id="zakatStatus">Not Applicable</td><td>-</td></tr>
-                <tr class="final-zakat-row"><td id="lblZakPay">Total Zakat Payable (2.5%)</td><td id="zakatPayableFinal">0.00</td><td>-</td></tr>
+                <tr><th>Zakat Parameter</th><th>Value / Amount</th><th>Action</th></tr>
+                <tr><td contenteditable="true">Total Cash / Bank Asset (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Gold Weight (in Grams)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Gold Price per Vori (BDT)</td><td contenteditable="true" oninput="calculateAll()">115000.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Gold Effective Price / Gram (-17%)</td><td id="effectiveGramRate">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Total Gold Market Value (BDT)</td><td id="zakatGoldTotal">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Total Gross Wealth</td><td id="totalGrossWealth">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Total Liabilities / Debts</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
+                <tr class="calculated-row"><td>Net Combined Wealth</td><td id="netCombinedWealth">0.00</td><td>-</td></tr>
+                <tr><td contenteditable="true">Silver Price per Vori (Nisab)</td><td contenteditable="true" oninput="calculateAll()">1400.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Combined Nisab Threshold</td><td id="combinedNisabThreshold">0.00</td><td>-</td></tr>
+                <tr class="locked-row"><td>Zakat Eligibility Status</td><td id="zakatStatus">Not Applicable</td><td>-</td></tr>
+                <tr class="final-zakat-row"><td>Total Zakat Payable (2.5%)</td><td id="zakatPayableFinal">0.00</td><td>-</td></tr>
             </table>
         </div>
         <div class="info-note" id="zakatNote">💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.</div>
@@ -552,38 +581,13 @@
 
     <!-- Action Bar -->
     <div class="action-bar">
-        <button class="btn" onclick="saveData()" id="saveBtn">💾 সেভ ও সিঙ্ক করুন</button>
-        <span id="success-msg">✅ সফলভাবে সেভ ও শিটে সিঙ্ক হয়েছে!</span>
-        <button class="btn btn-secondary" onclick="calculateAll()" id="calcBtn">🔄 রি-ক্যালকুলেট</button>
+        <button class="btn" onclick="saveData()" id="saveBtn">💾 Save Changes</button>
+        <span id="success-msg">✅ Saved Successfully!</span>
+        <button class="btn btn-secondary" onclick="calculateAll()" id="calcBtn">🔄 Recalculate</button>
     </div>
 </div>
 
 <script>
-    /* Google Sheets API / Web App URL Integration */
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbysZiPjqykVgCxFkMMhO1RD-a4DxKzGgu-DMv_Yc_rLjbMR53du8XPjhRxVizMP4Z9k/exec";
-
-    function sendDataToGoogleSheets(dataStore) {
-        if (!WEB_APP_URL) {
-            console.warn("Google Apps Script URL is not configured yet.");
-            return;
-        }
-
-        fetch(WEB_APP_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataStore)
-        })
-        .then(() => {
-            console.log("Data synced with Google Sheets successfully.");
-        })
-        .catch(error => {
-            console.error("Google Sheets sync error:", error);
-        });
-    }
-
     /* Live Clock & Full Month Calendar */
     function updateDateTime() {
         const now = new Date();
@@ -625,6 +629,7 @@
     }
     renderFullCalendar();
 
+    /* Theme Toggle */
     function toggleTheme() {
         const html = document.documentElement;
         const btn = document.getElementById('themeBtn');
@@ -639,13 +644,13 @@
         }
     }
 
-    let currentLang = 'bn';
+    /* Language Switcher Text Dictionary */
+    let currentLang = 'en';
     const dict = {
         en: {
-            brand: "Abdul's Financial Dashboard",
+            brand: "Abdul's Dashboard",
             lblTime: "⏰ Live Time",
             lblLocation: "📍 Location",
-            lblLocationVal: "Dubai, UAE",
             lblCalendar: "📅 Full Month Calendar",
             jumpDefault: "📂 Select Table...",
             opt1: "AED Account & BDT",
@@ -663,50 +668,14 @@
             t5: "Monthly Outstanding Payments",
             t6: "Monthly Expenses & Plans",
             t7: "Zakat Calculator",
-            save: "💾 Save & Sync",
+            save: "💾 Save Changes",
             calc: "🔄 Recalculate",
-            savedMsg: "✅ Saved & Synced Successfully!",
-            printBtn: "🖨 Print",
-            addBtn: "+ Add",
-            dSun: "Su", dMon: "Mo", dTue: "Tu", dWed: "We", dThu: "Th", dFri: "Fr", dSat: "Sa",
-            thAED: ["Account Name", "Balance / Rate", "Action"],
-            thBDT: ["Account Name", "Balance (BDT)", "Action"],
-            thInv: ["Parameter", "Value / Number", "Action"],
-            thCred: ["Credit / Option Name", "Amount / Details", "Action"],
-            thOut: ["Month / Name", "Amount", "Action"],
-            thExp: ["Expense Item", "Amount (BDT)", "Action"],
-            thZak: ["Zakat Parameter", "Value / Amount", "Action"],
-            lblAedTot: "In AED Total",
-            lblInc: "2.5% Incentive (Auto)",
-            lblFinRate: "Final Rate",
-            lblConvBdt: "Converted Total in BDT",
-            lblUsableBdt: "Usable Asset in BDT",
-            lblHoldBdt: "Amount In Hold In Bank",
-            lblInvMonTot: "Total Monthly Installments [Auto]",
-            lblInvTot: "Total Investment",
-            lblInvDiv: "Amount Divided by 12 [Auto]",
-            lblComDue: "Committee Due Payment [Auto]",
-            lblTabBal: "Tabby Credit Balance",
-            lblTabOut: "Tabby Outstanding (Auto)",
-            lblOutTot: "Total Monthly Outstanding",
-            lblExpTot: "Total Expenses & Plans",
-            lblExpAed: "In AED",
-            lblEffGram: "Gold Effective Price / Gram (-17%)",
-            lblGoldTot: "Total Gold Market Value (BDT)",
-            lblGrossWealth: "Total Gross Wealth",
-            lblNetWealth: "Net Combined Wealth",
-            lblNisab: "Combined Nisab Threshold",
-            lblZakStatus: "Zakat Eligibility Status",
-            lblZakPay: "Total Zakat Payable (2.5%)",
-            zakatNote: "💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.",
-            zakApp: "Applicable - Zakat Due",
-            zakNotApp: "Not Applicable - Below Nisab"
+            savedMsg: "✅ Saved Successfully!"
         },
         bn: {
             brand: "আবদুল এর ফিনান্সিয়াল ড্যাশবোর্ড",
             lblTime: "⏰ লাইভ সময়",
             lblLocation: "📍 লোকেশন",
-            lblLocationVal: "দুবাই, সংযুক্ত আরব আমিরাত",
             lblCalendar: "📅 ফুল মান্থ ক্যালেন্ডার",
             jumpDefault: "📂 টেবিল সিলেক্ট করুন...",
             opt1: "এইডি অ্যাকাউন্ট ও বিডিটি",
@@ -724,139 +693,42 @@
             t5: "মাসিক বকেয়া পেমেন্ট (Outstanding)",
             t6: "মাসিক খরচ ও পরিকল্পনা",
             t7: "যাকাত ক্যালকুলেটর",
-            save: "💾 সেভ ও সিঙ্ক করুন",
+            save: "💾 সেভ করুন",
             calc: "🔄 রি-ক্যালকুলেট",
-            savedMsg: "✅ সফলভাবে সেভ ও শিটে সিঙ্ক হয়েছে!",
-            printBtn: "🖨 প্রিন্ট",
-            addBtn: "+ যোগ করুন",
-            dSun: "রবি", dMon: "সোম", dTue: "মঙ্গল", dWed: "বুধ", dThu: "বৃহস্পতি", dFri: "শুক্র", dSat: "শনি",
-            thAED: ["অ্যাকাউন্টের নাম", "ব্যালেন্স / রেট", "অ্যাকশন"],
-            thBDT: ["অ্যাকাউন্টের নাম", "ব্যালেন্স (বিডিটি)", "অ্যাকশন"],
-            thInv: ["প্যারামিটার", "মান / সংখ্যা", "অ্যাকশন"],
-            thCred: ["ক্রেডিট / অপশনের নাম", "পরিমাণ / বিবরণ", "অ্যাকশন"],
-            thOut: ["মাস / নাম", "পরিমাণ", "অ্যাকশন"],
-            thExp: ["খরচের খাত", "পরিমাণ (বিডিটি)", "অ্যাকশন"],
-            thZak: ["যাকাতের প্যারামিটার", "মান / পরিমাণ", "অ্যাকশন"],
-            lblAedTot: "এইডি মোট",
-            lblInc: "২.৫% ইনসেন্টিভ (অটো)",
-            lblFinRate: "চূড়ান্ত রেট",
-            lblConvBdt: "বিডিটি-তে রূপান্তরিত মোট",
-            lblUsableBdt: "ব্যবহারযোগ্য সম্পদ (বিডিটি)",
-            lblHoldBdt: "ব্যাংকে হোল্ড থাকা পরিমাণ",
-            lblInvMonTot: "মোট মাসিক কিস্তি [অটো]",
-            lblInvTot: "মোট ইনভেস্টমেন্ট",
-            lblInvDiv: "১২ দিয়ে ভাগকৃত পরিমাণ [অটো]",
-            lblComDue: "কমিটি পাওনা পেমেন্ট [অটো]",
-            lblTabBal: "টাবি ক্রেডিট ব্যালেন্স",
-            lblTabOut: "টাবি বকেয়া (অটো)",
-            lblOutTot: "মোট মাসিক বকেয়া",
-            lblExpTot: "মোট খরচ ও পরিকল্পনা",
-            lblExpAed: "এইডি-তে মোট",
-            lblEffGram: "প্রতি গ্রাম সোনার কার্যকরী মূল্য (-১৭%)",
-            lblGoldTot: "সোনার মোট বাজারমূল্য (বিডিটি)",
-            lblGrossWealth: "মোট স্থূল সম্পদ",
-            lblNetWealth: "নিট সম্মিলিত সম্পদ",
-            lblNisab: "সম্মিলিত নিসাব সীমা",
-            lblZakStatus: "যাকাতের যোগ্যতা স্ট্যাটাস",
-            lblZakPay: "প্রদেয় মোট যাকাত (২.৫%)",
-            zakatNote: "💡 নোট: নিসাবের বেশি নিট সম্পদ থাকলে স্বয়ংক্রিয়ভাবে ২.৫% যাকাত হিসাব হবে।",
-            zakApp: "প্রযোজ্য - যাকাত ফরজ হয়েছে",
-            zakNotApp: "প্রযোজ্য নয় - নিসাব পরিমাণ হয়নি"
+            savedMsg: "✅ সফলভাবে সেভ হয়েছে!"
         }
     };
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'bn' : 'en';
-        applyLanguage();
+        document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇩 BN' : '🇬🇧 EN';
+        document.getElementById('brandTitle').innerText = dict[currentLang].brand;
+        document.getElementById('lblTime').innerText = dict[currentLang].lblTime;
+        document.getElementById('lblLocation').innerText = dict[currentLang].lblLocation;
+        document.getElementById('lblCalendar').innerText = dict[currentLang].lblCalendar;
+        document.getElementById('jumpDefaultOpt').innerText = dict[currentLang].jumpDefault;
+        document.getElementById('opt1').innerText = dict[currentLang].opt1;
+        document.getElementById('opt2').innerText = dict[currentLang].opt2;
+        document.getElementById('opt3').innerText = dict[currentLang].opt3;
+        document.getElementById('opt4').innerText = dict[currentLang].opt4;
+        document.getElementById('opt5').innerText = dict[currentLang].opt5;
+        document.getElementById('opt6').innerText = dict[currentLang].opt6;
+        document.getElementById('opt7').innerText = dict[currentLang].opt7;
+        document.getElementById('welcomeNotice').innerText = dict[currentLang].welcome;
+        document.getElementById('t1Title').innerText = dict[currentLang].t1;
+        document.getElementById('t2Title').innerText = dict[currentLang].t2;
+        document.getElementById('t3Title').innerText = dict[currentLang].t3;
+        document.getElementById('t4Title').innerText = dict[currentLang].t4;
+        document.getElementById('t5Title').innerText = dict[currentLang].t5;
+        document.getElementById('t6Title').innerText = dict[currentLang].t6;
+        document.getElementById('t7Title').innerText = dict[currentLang].t7;
+        document.getElementById('saveBtn').innerText = dict[currentLang].save;
+        document.getElementById('calcBtn').innerText = dict[currentLang].calc;
+        document.getElementById('success-msg').innerText = dict[currentLang].savedMsg;
         localStorage.setItem('abdul_lang', currentLang);
     }
 
-    function applyLanguage() {
-        const t = dict[currentLang];
-        document.getElementById('langBtn').innerText = currentLang === 'en' ? '🇧🇩 BN' : '🇬🇧 EN';
-        document.getElementById('brandTitle').innerText = t.brand;
-        document.getElementById('lblTime').innerText = t.lblTime;
-        document.getElementById('lblLocation').innerText = t.lblLocation;
-        document.getElementById('lblLocationVal').innerText = t.lblLocationVal;
-        document.getElementById('lblCalendar').innerText = t.lblCalendar;
-        document.getElementById('jumpDefaultOpt').innerText = t.jumpDefault;
-        document.getElementById('opt1').innerText = t.opt1;
-        document.getElementById('opt2').innerText = t.opt2;
-        document.getElementById('opt3').innerText = t.opt3;
-        document.getElementById('opt4').innerText = t.opt4;
-        document.getElementById('opt5').innerText = t.opt5;
-        document.getElementById('opt6').innerText = t.opt6;
-        document.getElementById('opt7').innerText = t.opt7;
-        document.getElementById('welcomeNotice').innerText = t.welcome;
-        document.getElementById('t1Title').innerText = t.t1;
-        document.getElementById('t2Title').innerText = t.t2;
-        document.getElementById('t3Title').innerText = t.t3;
-        document.getElementById('t4Title').innerText = t.t4;
-        document.getElementById('t5Title').innerText = t.t5;
-        document.getElementById('t6Title').innerText = t.t6;
-        document.getElementById('t7Title').innerText = t.t7;
-        document.getElementById('saveBtn').innerText = t.save;
-        document.getElementById('calcBtn').innerText = t.calc;
-        document.getElementById('success-msg').innerText = t.savedMsg;
-        document.getElementById('printBtn').innerText = t.printBtn;
-
-        document.getElementById('addBtn1').innerText = t.addBtn;
-        document.getElementById('addBtn2').innerText = t.addBtn;
-        document.getElementById('addBtn3').innerText = t.addBtn;
-        document.getElementById('addBtn4').innerText = t.addBtn;
-
-        document.getElementById('dSun').innerText = t.dSun;
-        document.getElementById('dMon').innerText = t.dMon;
-        document.getElementById('dTue').innerText = t.dTue;
-        document.getElementById('dWed').innerText = t.dWed;
-        document.getElementById('dThu').innerText = t.dThu;
-        document.getElementById('dFri').innerText = t.dFri;
-        document.getElementById('dSat').innerText = t.dSat;
-
-        updateTableHeaders('thAED', t.thAED);
-        updateTableHeaders('thBDT', t.thBDT);
-        updateTableHeaders('thInv', t.thInv);
-        updateTableHeaders('thCred', t.thCred);
-        updateTableHeaders('thOut', t.thOut);
-        updateTableHeaders('thExp', t.thExp);
-        updateTableHeaders('thZak', t.thZak);
-
-        document.getElementById('lblAedTot').innerText = t.lblAedTot;
-        document.getElementById('lblInc').innerText = t.lblInc;
-        document.getElementById('lblFinRate').innerText = t.lblFinRate;
-        document.getElementById('lblConvBdt').innerText = t.lblConvBdt;
-        document.getElementById('lblUsableBdt').innerText = t.lblUsableBdt;
-        document.getElementById('lblHoldBdt').innerText = t.lblHoldBdt;
-        document.getElementById('lblInvMonTot').innerText = t.lblInvMonTot;
-        document.getElementById('lblInvTot').innerText = t.lblInvTot;
-        document.getElementById('lblInvDiv').innerText = t.lblInvDiv;
-        document.getElementById('lblComDue').innerText = t.lblComDue;
-        document.getElementById('lblTabBal').innerText = t.lblTabBal;
-        document.getElementById('lblTabOut').innerText = t.lblTabOut;
-        document.getElementById('lblOutTot').innerText = t.lblOutTot;
-        document.getElementById('lblExpTot').innerText = t.lblExpTot;
-        document.getElementById('lblExpAed').innerText = t.lblExpAed;
-        document.getElementById('lblEffGram').innerText = t.lblEffGram;
-        document.getElementById('lblGoldTot').innerText = t.lblGoldTot;
-        document.getElementById('lblGrossWealth').innerText = t.lblGrossWealth;
-        document.getElementById('lblNetWealth').innerText = t.netWealth;
-        document.getElementById('lblNisab').innerText = t.lblNisab;
-        document.getElementById('lblZakStatus').innerText = t.lblZakStatus;
-        document.getElementById('lblZakPay').innerText = t.lblZakPay;
-        document.getElementById('zakatNote').innerText = t.zakatNote;
-
-        calculateAll();
-    }
-
-    function updateTableHeaders(rowId, headers) {
-        let row = document.getElementById(rowId);
-        if (row) {
-            for (let i = 0; i < headers.length; i++) {
-                if (row.cells[i]) row.cells[i].innerText = headers[i];
-            }
-        }
-    }
-
+    /* Show Selected Table & Hide Others */
     function showSelectedTable(cardId) {
         const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
         cards.forEach(id => {
@@ -868,6 +740,7 @@
             }
         });
 
+        // Hide welcome notice once a table is selected
         let notice = document.getElementById('welcomeNotice');
         if (notice) notice.style.display = 'none';
 
@@ -881,29 +754,32 @@
 
     function addRow(tableId, isAED = false, isBDT = false, isOutstanding = false, isExpense = false) {
         let table = document.getElementById(tableId);
-        let newRow;
+        let newRow = table.insertRow();
+        
         if (isAED) {
             let insertIndex = table.rows.length - 5;
             newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isBDT) {
-            newRow = table.insertRow(6);
-            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            let insertIndex = 6;
+            newRow = table.insertRow(insertIndex);
+            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isOutstanding) {
             let insertIndex = table.rows.length - 1;
             newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isExpense) {
             let insertIndex = table.rows.length - 2;
             newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
+            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         }
         calculateAll();
     }
 
     function deleteRow(btn) {
         let row = btn.parentNode.parentNode;
-        row.parentNode.deleteRow(row.rowIndex);
+        let table = row.parentNode;
+        table.deleteRow(row.rowIndex);
         calculateAll();
     }
 
@@ -933,7 +809,7 @@
         let bdtHoldTotalIdx = bdtTable.rows.length - 1;
 
         for (let i = 1; i < bdtTable.rows.length; i++) {
-            if (bdtTable.rows[i].cells[0].innerText.includes("Usable Asset") || bdtTable.rows[i].cells[0].innerText.includes("ব্যবহারযোগ্য সম্পদ")) {
+            if (bdtTable.rows[i].cells[0].innerText.includes("Usable Asset in BDT")) {
                 bdtUsableTotalIdx = i;
                 break;
             }
@@ -950,7 +826,6 @@
         }
         document.getElementById('bdtHoldTotal').innerText = holdSum.toFixed(2);
 
-        /* Investment & Installment Calculations (Updated Logic) */
         let invTable = document.getElementById('tableInvestment');
         let downPayment = getNum(invTable.rows[1].cells[1].innerText);
         let monthsCount = getNum(invTable.rows[2].cells[1].innerText);
@@ -961,16 +836,16 @@
         let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
         document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
 
-        let amountToDivide = getNum(invTable.rows[4].cells[1].innerText); 
-        let dividedBy12 = amountToDivide / 12; // ১) ১২ দিয়ে ভাগ করা সেল
+        let customAmount = getNum(invTable.rows[5].cells[1].innerText); 
+        let dividedBy12 = customAmount / 12;
         document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
 
-        let committeeDue = dividedBy12 - totalInvestmentSum; // ২) কমিটি পাওনা পেমেন্ট = (১২ দিয়ে ভাগ করা সেলের মান) - (মোট ইনভেস্টমেন্ট)
+        let committeeDue = dividedBy12 - totalInvestmentSum;
         document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
 
         let creditTable = document.getElementById('tableCredit');
-        let creditLimit = getNum(creditTable.rows[0].cells[1].innerText);
-        let creditUsed = getNum(creditTable.rows[2].cells[1].innerText);
+        let creditLimit = getNum(creditTable.rows[1].cells[1].innerText);
+        let creditUsed = getNum(creditTable.rows[3].cells[1].innerText);
         let creditBalance = creditLimit - creditUsed;
         document.getElementById('tabbyBalanceBox').innerText = creditBalance.toFixed(2);
 
@@ -993,9 +868,9 @@
         document.getElementById('expenseAEDTotal').innerText = expenseAED.toFixed(2);
 
         let zakatTable = document.getElementById('tableZakat');
-        let cashAsset = getNum(zakatTable.rows[0].cells[1].innerText);
-        let goldWeightGrams = getNum(zakatTable.rows[1].cells[1].innerText);
-        let voriPriceBDT = getNum(zakatTable.rows[2].cells[1].innerText);
+        let cashAsset = getNum(zakatTable.rows[1].cells[1].innerText);
+        let goldWeightGrams = getNum(zakatTable.rows[2].cells[1].innerText);
+        let voriPriceBDT = getNum(zakatTable.rows[3].cells[1].innerText);
         
         let pricePerGram = voriPriceBDT / 11.664;
         let effectiveGramRate = pricePerGram * (1 - 0.17);
@@ -1018,15 +893,14 @@
 
         let zakatStatusBox = document.getElementById('zakatStatus');
         let zakatPayableBox = document.getElementById('zakatPayableFinal');
-        let t = dict[currentLang];
 
         let zakatPayableVal = 0;
         if (netCombinedWealth >= combinedNisab) {
-            zakatStatusBox.innerText = t.zakApp;
+            zakatStatusBox.innerText = currentLang === 'en' ? "Applicable - Zakat Due" : "প্রযোজ্য - যাকাত ফরজ হয়েছে";
             zakatStatusBox.style.color = "#16a34a";
             zakatPayableVal = (netCombinedWealth * 25) / 1000;
         } else {
-            zakatStatusBox.innerText = t.zakNotApp;
+            zakatStatusBox.innerText = currentLang === 'en' ? "Not Applicable - Below Nisab" : "প্রযোজ্য নয় - নিসাব পরিমাণ হয়নি";
             zakatStatusBox.style.color = "#dc2626";
             zakatPayableVal = 0;
         }
@@ -1050,29 +924,11 @@
             }
             dataStore[tableId] = rowsData;
         });
-        localStorage.setItem('abdul_account_manager_v31', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_account_manager_v25', JSON.stringify(dataStore));
     }
 
     function saveData() {
         calculateAll();
-        
-        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
-        let fullDataStore = {};
-        tables.forEach(tableId => {
-            let table = document.getElementById(tableId);
-            let rowsData = [];
-            for (let i = 1; i < table.rows.length; i++) {
-                let rowCells = [];
-                for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    rowCells.push(table.rows[i].cells[j].innerText);
-                }
-                rowsData.push(rowCells);
-            }
-            fullDataStore[tableId] = rowsData;
-        });
-
-        sendDataToGoogleSheets(fullDataStore);
-
         const msg = document.getElementById('success-msg');
         msg.style.display = 'inline';
         setTimeout(() => { msg.style.display = 'none'; }, 3000);
@@ -1084,49 +940,31 @@
             document.documentElement.setAttribute('data-theme', 'dark');
             document.getElementById('themeBtn').innerText = '☀️ Light';
         }
-
         let savedLang = localStorage.getItem('abdul_lang');
-        if (savedLang) {
-            currentLang = savedLang;
-        } else {
-            currentLang = 'bn';
+        if (savedLang === 'bn') {
+            toggleLang();
         }
 
-        let saved = localStorage.getItem('abdul_account_manager_v31');
+        let saved = localStorage.getItem('abdul_account_manager_v25');
         if (saved) {
-            try {
-                let dataStore = JSON.parse(saved);
-                for (let tableId in dataStore) {
-                    let table = document.getElementById(tableId);
-                    if (table) {
-                        let rowsData = dataStore[tableId];
-                        while (table.rows.length > 1) {
-                            table.deleteRow(1);
-                        }
-                        for (let i = 0; i < rowsData.length; i++) {
-                            let newRow = table.insertRow();
-                            for (let j = 0; j < rowsData[i].length; j++) {
-                                let newCell = newRow.insertCell();
-                                newCell.innerHTML = rowsData[i][j];
-                                if (j === 1 && !newCell.parentElement.classList.contains('calculated-row') && !newCell.parentElement.classList.contains('locked-row') && !newCell.parentElement.classList.contains('final-zakat-row')) {
-                                    newCell.setAttribute('contenteditable', 'true');
-                                }
-                            }
+            let dataStore = JSON.parse(saved);
+            for (let tableId in dataStore) {
+                let table = document.getElementById(tableId);
+                if (table) {
+                    let rowsData = dataStore[tableId];
+                    while (table.rows.length > 1) {
+                        table.deleteRow(1);
+                    }
+                    for (let i = 0; i < rowsData.length; i++) {
+                        let newRow = table.insertRow();
+                        for (let j = 0; j < rowsData[i].length; j++) {
+                            let newCell = newRow.insertCell();
+                            newCell.innerHTML = rowsData[i][j];
                         }
                     }
                 }
-            } catch (e) {
-                console.error("Error loading saved data", e);
             }
         }
-
-        applyLanguage();
-
-        document.addEventListener('input', function(e) {
-            if (e.target && e.target.getAttribute('contenteditable') === 'true') {
-                calculateAll();
-            }
-        });
 
         let savedTable = localStorage.getItem('abdul_selected_table');
         if (savedTable) {
