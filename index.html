@@ -839,7 +839,7 @@
         document.getElementById('lblEffGram').innerText = t.lblEffGram;
         document.getElementById('lblGoldTot').innerText = t.lblGoldTot;
         document.getElementById('lblGrossWealth').innerText = t.lblGrossWealth;
-        document.getElementById('lblNetWealth').innerText = t.netWealth; // Fixed variable mapping check
+        document.getElementById('lblNetWealth').innerText = t.netWealth;
         document.getElementById('lblNisab').innerText = t.lblNisab;
         document.getElementById('lblZakStatus').innerText = t.lblZakStatus;
         document.getElementById('lblZakPay').innerText = t.lblZakPay;
@@ -891,7 +891,7 @@
             newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isOutstanding) {
             let insertIndex = table.rows.length - 1;
-            newRow = table.insertRow(insertIndex);
+            newRow = table.insertRow(index);
             newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
         } else if (isExpense) {
             let insertIndex = table.rows.length - 2;
@@ -950,7 +950,7 @@
         }
         document.getElementById('bdtHoldTotal').innerText = holdSum.toFixed(2);
 
-        /* Investment & Installment Calculations */
+        /* Investment & Installment Calculations (Updated Logic) */
         let invTable = document.getElementById('tableInvestment');
         let downPayment = getNum(invTable.rows[1].cells[1].innerText);
         let monthsCount = getNum(invTable.rows[2].cells[1].innerText);
@@ -958,14 +958,15 @@
         let monthlyInstallmentTotal = monthsCount * 15000;
         document.getElementById('invMonthlyTotal').innerText = monthlyInstallmentTotal.toFixed(2);
 
-        let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
+        let totalInvestmentSum = downPayment + monthlyInstallmentTotal; // Last 4th row result
         document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
 
-        let customAmount = getNum(invTable.rows[4].cells[1].innerText); 
-        let dividedBy12 = customAmount / 12;
+        let customAmount = getNum(invTable.rows[4].cells[1].innerText); // Last 3rd row (Amount to Divide by 12)
+        let dividedBy12 = customAmount / 12; // Last 2nd row value
         document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
 
-        let committeeDue = dividedBy12 - totalInvestmentSum;
+        // Last row = Last 4th result - Last 2nd result
+        let committeeDue = totalInvestmentSum - dividedBy12; 
         document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
 
         let creditTable = document.getElementById('tableCredit');
@@ -1050,7 +1051,7 @@
             }
             dataStore[tableId] = rowsData;
         });
-        localStorage.setItem('abdul_account_manager_v30', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_account_manager_v31', JSON.stringify(dataStore));
     }
 
     function saveData() {
@@ -1092,8 +1093,7 @@
             currentLang = 'bn';
         }
 
-        // Clean & Load LocalStorage safely
-        let saved = localStorage.getItem('abdul_account_manager_v30');
+        let saved = localStorage.getItem('abdul_account_manager_v31');
         if (saved) {
             try {
                 let dataStore = JSON.parse(saved);
@@ -1109,7 +1109,6 @@
                             for (let j = 0; j < rowsData[i].length; j++) {
                                 let newCell = newRow.insertCell();
                                 newCell.innerHTML = rowsData[i][j];
-                                // Force contenteditable restoration for input value cells
                                 if (j === 1 && !newCell.parentElement.classList.contains('calculated-row') && !newCell.parentElement.classList.contains('locked-row') && !newCell.parentElement.classList.contains('final-zakat-row')) {
                                     newCell.setAttribute('contenteditable', 'true');
                                 }
@@ -1124,7 +1123,6 @@
 
         applyLanguage();
 
-        // Guaranteed live calculation on every single keystroke/input across all tables
         document.addEventListener('input', function(e) {
             if (e.target && e.target.getAttribute('contenteditable') === 'true') {
                 calculateAll();
