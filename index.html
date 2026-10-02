@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdul's Smart Financial Dashboard</title>
+    <title>Abdul's Financial Dashboard</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,7 +47,7 @@
         }
 
         .container { 
-            max-width: 950px; 
+            max-width: 800px; 
             margin: 0 auto; 
         }
 
@@ -98,18 +98,6 @@
             gap: 5px;
         }
         .nav-btn:hover { background: var(--border-color); }
-
-        .nav-select {
-            background: var(--bg-color);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            outline: none;
-            cursor: pointer;
-        }
 
         /* Widgets Grid */
         .widgets-grid {
@@ -191,11 +179,6 @@
             padding: 16px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            display: none;
-        }
-
-        .section-card.active-table {
-            display: block;
         }
 
         .table-header-wrap { 
@@ -238,7 +221,7 @@
         }
 
         th, td { 
-            padding: 10px 12px; 
+            padding: 12px 16px; 
             text-align: left; 
             font-size: 12px; 
             color: var(--text-main);
@@ -256,8 +239,6 @@
         }
 
         tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) { background-color: rgba(0,0,0,0.01); }
-        [data-theme="dark"] tr:nth-child(even) { background-color: rgba(255,255,255,0.01); }
         
         td[contenteditable="true"] { 
             background-color: rgba(234, 179, 8, 0.08); 
@@ -271,31 +252,7 @@
         
         .calculated-row { background-color: rgba(14, 165, 233, 0.08) !important; font-weight: 600; color: #0284c7; }
         .locked-row { background-color: rgba(100, 116, 139, 0.08) !important; font-weight: 600; color: var(--text-muted); }
-        .final-zakat-row { background-color: rgba(34, 197, 94, 0.08) !important; font-weight: 700; color: #16a34a; font-size: 13px; }
-
-        .btn-add { 
-            background-color: rgba(79, 70, 229, 0.1); 
-            color: var(--primary); 
-            border: none; 
-            padding: 5px 10px; 
-            font-size: 11px; 
-            font-weight: 600; 
-            border-radius: 6px; 
-            cursor: pointer; 
-        }
-        .btn-add:hover { background-color: rgba(79, 70, 229, 0.2); }
-        
-        .btn-del { 
-            background-color: rgba(220, 38, 38, 0.1); 
-            color: #dc2626; 
-            border: none; 
-            padding: 4px 8px; 
-            font-size: 10px; 
-            font-weight: 600;
-            border-radius: 4px; 
-            cursor: pointer; 
-        }
-        .btn-del:hover { background-color: rgba(220, 38, 38, 0.2); }
+        .section-header-row { background-color: rgba(79, 70, 229, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center; }
 
         .action-bar { 
             display: flex; 
@@ -336,22 +293,28 @@
             display: none; 
         }
 
-        .info-note { 
-            font-size: 11px; 
-            color: var(--text-muted); 
-            font-style: italic; 
-            margin-top: 8px; 
-        }
-
-        .welcome-notice {
-            text-align: center;
-            padding: 30px 20px;
+        /* Footer & Disclaimer */
+        .footer {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .footer-disclaimer {
+            font-size: 12px;
             color: var(--text-muted);
-            font-size: 13px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
         }
 
         @media(min-width: 640px) {
@@ -368,19 +331,9 @@
     <nav class="navbar">
         <div class="nav-brand">Abdul's Financial Dashboard</div>
         <div class="nav-controls">
-            <select class="nav-select" id="jumpMenu" onchange="showSelectedTable(this.value)">
-                <option value="" disabled selected>📂 Select Table...</option>
-                <option value="cardAED">AED Account & BDT</option>
-                <option value="cardBDT">BDT Account Status</option>
-                <option value="cardInvestment">Investment & Installment</option>
-                <option value="cardCredit">Credit Card Status</option>
-                <option value="cardOutstanding">Monthly Outstanding</option>
-                <option value="cardExpense">Monthly Expenses & Plans</option>
-                <option value="cardZakat">Zakat Calculator</option>
-            </select>
-            <button class="nav-btn" onclick="exportToCSV()" title="Export Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
-            <button class="nav-btn" onclick="document.getElementById('csvFileInput').click()" title="Restore Backup"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
-            <input type="file" id="csvFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
+            <button class="nav-btn" onclick="exportToJSON()" title="Export Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
+            <button class="nav-btn" onclick="document.getElementById('jsonFileInput').click()" title="Restore Backup"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
             <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
             <button class="nav-btn" onclick="window.print()">🖨 Print</button>
         </div>
@@ -414,160 +367,378 @@
         </div>
     </div>
 
-    <div class="welcome-notice" id="welcomeNotice">
-        👉 Select any table or account from the top menu dropdown.
-    </div>
-
-    <!-- AED Account Status -->
-    <div class="section-card" id="cardAED">
+    <!-- Currency Converter Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
-            <h2>AED Account Status & BDT</h2>
-            <button class="btn-add" onclick="addRow('tableAED', true)">+ Add</button>
+            <h2>Currency Converter</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableAED">
-                <tr><th>Account Name</th><th>Balance / Rate</th><th>Action</th></tr>
-                <tr><td contenteditable="true">HSBC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">HSBC GMA</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Ruya</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">PayIt</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Botim</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Fakhrul</td><td contenteditable="true" oninput="calculateAll()">48.33</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Current Month Salary</td><td contenteditable="true" oninput="calculateAll()">2555.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td>In AED Total</td><td id="aedTotal">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">AED to BDT Rate</td><td contenteditable="true" oninput="calculateAll()">33.43</td><td>-</td></tr>
-                <tr class="locked-row"><td>2.5% Incentive (Auto)</td><td id="incentiveBox">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Final Rate</td><td id="finalRate">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Converted Total in BDT</td><td id="convertedBDT">0.00</td><td>-</td></tr>
+            <table id="tableCurrency">
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Rate</td>
+                    <td contenteditable="true" id="rateInput" oninput="calculateAll()">33.43</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Rate x 2.5% Incentive Result</td>
+                    <td id="incentiveResult">0.00</td>
+                </tr>
+                <tr>
+                    <td>AED Amount</td>
+                    <td contenteditable="true" id="aedAmountInput" oninput="calculateAll()">1000.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Final Converted Result</td>
+                    <td id="finalResult">0.00</td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <!-- BDT Account Status -->
-    <div class="section-card" id="cardBDT">
+    <!-- UAE Accounts Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
-            <h2>BDT Account Status</h2>
-            <button class="btn-add" onclick="addRow('tableBDT', false, true)">+ Add</button>
+            <h2>UAE Accounts</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableBDT">
-                <tr><th>Account Name</th><th>Balance (BDT)</th><th>Action</th></tr>
-                <tr><td contenteditable="true">MTB Savings</td><td contenteditable="true" oninput="calculateAll()">199.37</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">MTB NRB</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">BRAC PLC</td><td contenteditable="true" oninput="calculateAll()">35.38</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">DBBL Agent</td><td contenteditable="true" oninput="calculateAll()">290.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">UCB PLC</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td>Usable Asset in BDT</td><td id="bdtUsableTotal">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">DBBL Core</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Pubali Bank PLC</td><td contenteditable="true" oninput="calculateAll()">5040.81</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">IBBL PLC</td><td contenteditable="true" oninput="calculateAll()">251.50</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td>Amount In Hold In Bank</td><td id="bdtHoldTotal">0.00</td><td>-</td></tr>
+            <table id="tableUAE">
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>HSBC</td>
+                    <td contenteditable="true" id="hsbcInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>HSBC GMA</td>
+                    <td contenteditable="true" id="hsbcGmaInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Ruya</td>
+                    <td contenteditable="true" id="ruyaInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Payit</td>
+                    <td contenteditable="true" id="payitInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Botim</td>
+                    <td contenteditable="true" id="botimInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Tabby Debit</td>
+                    <td contenteditable="true" id="tabbyInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Current Month Salary</td>
+                    <td id="salaryResult">0.00</td>
+                </tr>
+                <tr>
+                    <td>Over Time</td>
+                    <td contenteditable="true" id="otDaysInput" oninput="calculateAll()">0</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Over Time Total Amount</td>
+                    <td id="otResult">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total AED</td>
+                    <td id="uaeTotalAED">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total Converted in BDT</td>
+                    <td id="uaeTotalBDT">0.00</td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <!-- Investment & Installment -->
-    <div class="section-card" id="cardInvestment">
+    <!-- BD Accounts Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
-            <h2>Investment & Installment</h2>
+            <h2>BD Accounts</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableInvestment">
-                <tr><th>Parameter</th><th>Value / Number</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Down Payment (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Monthly Installment Count (Months)</td><td contenteditable="true" oninput="calculateAll()">0</td><td>-</td></tr>
-                <tr class="locked-row"><td>Total Monthly Installments [Auto]</td><td id="invMonthlyTotal">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Total Investment</td><td id="invTotalSum">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Amount to Divide by 12</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Amount Divided by 12 [Auto]</td><td id="invDividedBy12">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Committee Due Payment [Auto]</td><td id="invDifference">0.00</td><td>-</td></tr>
+            <table id="tableBD">
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>MTB Savings</td>
+                    <td contenteditable="true" id="mtbSavingsInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>MTB NRB</td>
+                    <td contenteditable="true" id="mtbNrbInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>BRAC Provashi</td>
+                    <td contenteditable="true" id="bracProvashiInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>DBBL Agent</td>
+                    <td contenteditable="true" id="dbblAgentInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>UCBL Islamic</td>
+                    <td contenteditable="true" id="ucblIslamicInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Usable Amount</td>
+                    <td id="usableAmountResult">0.00</td>
+                </tr>
+                <tr>
+                    <td>DBBL Core</td>
+                    <td contenteditable="true" id="dbblCoreInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Pubali Islamic</td>
+                    <td contenteditable="true" id="pubaliIslamicInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>IBBL Savings</td>
+                    <td contenteditable="true" id="ibblSavingsInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Hold Amount</td>
+                    <td id="holdAmountResult">0.00</td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <!-- Credit Card Status -->
-    <div class="section-card" id="cardCredit">
+    <!-- Credit Card Accounts Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
-            <h2>Credit Card Status</h2>
+            <h2>Credit Card Accounts</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableCredit">
-                <tr><th>Credit / Option Name</th><th>Amount / Details</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Tabby Credit Limit</td><td contenteditable="true" oninput="calculateAll()">6700.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Tabby Credit Balance</td><td id="tabbyBalanceBox">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Tabby Credit Used</td><td contenteditable="true" oninput="calculateAll()">1503.84</td><td>-</td></tr>
-                <tr class="locked-row"><td>Tabby Outstanding (Auto)</td><td id="tabbyOutstandingBox">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Tabby Split Charge</td><td contenteditable="true" oninput="calculateAll()">1.15</td><td>-</td></tr>
+            <table id="tableCreditCard">
+                <tr>
+                    <th>Monthly Outstanding Payment</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td id="ccMonth1Label">Next Month</td>
+                    <td contenteditable="true" id="ccMonth1Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="ccMonth2Label">Next Next Month</td>
+                    <td contenteditable="true" id="ccMonth2Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="ccMonth3Label">Next Next Next Month</td>
+                    <td contenteditable="true" id="ccMonth3Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="ccMonth4Label">Next Next Next Next Month</td>
+                    <td contenteditable="true" id="ccMonth4Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="ccMonth5Label">Next Next Next Next Next Month</td>
+                    <td contenteditable="true" id="ccMonth5Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total Credit Card Outstanding</td>
+                    <td id="ccTotalResult">0.00</td>
+                </tr>
+                <tr class="section-header-row">
+                    <td colspan="2">Tabby Credit Card Status</td>
+                </tr>
+                <tr>
+                    <td>Credit Limit</td>
+                    <td contenteditable="true" id="tabbyLimitInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Credit Balance</td>
+                    <td id="tabbyBalanceResult">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Credit Used</td>
+                    <td id="tabbyUsedResult">0.00</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Outstanding</td>
+                    <td id="tabbyOutstandingResult">0.00</td>
+                </tr>
+                <tr>
+                    <td>Split Charge</td>
+                    <td contenteditable="true" id="tabbySplitInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="section-header-row">
+                    <td colspan="2">Monthly Split Purchase Status</td>
+                </tr>
+                <tr>
+                    <td id="splitMonth1Label">Next Month</td>
+                    <td contenteditable="true" id="splitMonth1Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="splitMonth2Label">Next Next Month</td>
+                    <td contenteditable="true" id="splitMonth2Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="splitMonth3Label">Next Next Next Month</td>
+                    <td contenteditable="true" id="splitMonth3Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="splitMonth4Label">Next Next Next Next Month</td>
+                    <td contenteditable="true" id="splitMonth4Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td id="splitMonth5Label">Next Next Next Next Next Month</td>
+                    <td contenteditable="true" id="splitMonth5Input" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total Split Amount</td>
+                    <td id="splitTotalResult">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Upcoming Payment</td>
+                    <td id="upcomingPaymentResult">0.00</td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <!-- Monthly Outstanding -->
-    <div class="section-card" id="cardOutstanding">
+    <!-- Monthly Expenses Planing Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
-            <h2>Monthly Outstanding Payments</h2>
-            <button class="btn-add" onclick="addRow('tableMonthlyOutstanding', false, false, true)">+ Add</button>
+            <h2>Monthly Expenses Planing</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableMonthlyOutstanding">
-                <tr><th>Month / Name</th><th>Amount</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-10-01)</td><td contenteditable="true" oninput="calculateAll()">451.44</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-11-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2026-12-01)</td><td contenteditable="true" oninput="calculateAll()">351.18</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Monthly Outstanding (2027-01-01)</td><td contenteditable="true" oninput="calculateAll()">351.19</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td>Total Monthly Outstanding</td><td id="monthlyOutstandingTotal">0.00</td><td>-</td></tr>
+            <table id="tableExpenses">
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>For Mother</td>
+                    <td contenteditable="true" id="expMotherInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For House Rent</td>
+                    <td contenteditable="true" id="expRentInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For WiFi Bill</td>
+                    <td contenteditable="true" id="expWifiInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Gas Cylinder</td>
+                    <td contenteditable="true" id="expGasInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Dust Bill</td>
+                    <td contenteditable="true" id="expDustInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Madrasha Fee's</td>
+                    <td contenteditable="true" id="expMadrashaInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Tutor Fee's</td>
+                    <td contenteditable="true" id="expTutorInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Electric Bill</td>
+                    <td contenteditable="true" id="expElectricInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>For Food & Others</td>
+                    <td contenteditable="true" id="expFoodInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total</td>
+                    <td id="expTotalResult">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>In AED</td>
+                    <td id="expInAedResult">0.00</td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <!-- Monthly Expenses -->
-    <div class="section-card" id="cardExpense">
-        <div class="table-header-wrap">
-            <h2>Monthly Expenses & Plans</h2>
-            <button class="btn-add" onclick="addRow('tableExpense', false, false, false, true)">+ Add</button>
-        </div>
-        <div class="table-responsive">
-            <table id="tableExpense">
-                <tr><th>Expense Item</th><th>Amount (BDT)</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Mother</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">House Rent</td><td contenteditable="true" oninput="calculateAll()">5000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">WIFI Bill</td><td contenteditable="true" oninput="calculateAll()">500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Gas Bill</td><td contenteditable="true" oninput="calculateAll()">1500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Dust Bill</td><td contenteditable="true" oninput="calculateAll()">100.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Madrasah Fee</td><td contenteditable="true" oninput="calculateAll()">2600.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Home Tuition Fee</td><td contenteditable="true" oninput="calculateAll()">1020.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Electric Bill</td><td contenteditable="true" oninput="calculateAll()">2500.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Food & Others</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr><td contenteditable="true">Associates</td><td contenteditable="true" oninput="calculateAll()">15000.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td></tr>
-                <tr class="calculated-row"><td>Total Expenses & Plans</td><td id="expenseTotal">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>In AED</td><td id="expenseAEDTotal">0.00</td><td>-</td></tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- Zakat Calculator -->
-    <div class="section-card" id="cardZakat">
+    <!-- Zakat Calculator Table -->
+    <div class="section-card">
         <div class="table-header-wrap">
             <h2>Zakat Calculator</h2>
         </div>
         <div class="table-responsive">
             <table id="tableZakat">
-                <tr><th>Zakat Parameter</th><th>Value / Amount</th><th>Action</th></tr>
-                <tr><td contenteditable="true">Total Cash / Bank Asset (BDT)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Gold Weight (in Grams)</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Gold Price per Vori (BDT)</td><td contenteditable="true" oninput="calculateAll()">115000.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Gold Effective Price / Gram (-17%)</td><td id="effectiveGramRate">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Total Gold Market Value (BDT)</td><td id="zakatGoldTotal">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Total Gross Wealth</td><td id="totalGrossWealth">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Total Liabilities / Debts</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td>-</td></tr>
-                <tr class="calculated-row"><td>Net Combined Wealth</td><td id="netCombinedWealth">0.00</td><td>-</td></tr>
-                <tr><td contenteditable="true">Silver Price per Vori (Nisab)</td><td contenteditable="true" oninput="calculateAll()">1400.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Combined Nisab Threshold</td><td id="combinedNisabThreshold">0.00</td><td>-</td></tr>
-                <tr class="locked-row"><td>Zakat Eligibility Status</td><td id="zakatStatus">Not Applicable</td><td>-</td></tr>
-                <tr class="final-zakat-row"><td>Total Zakat Payable (2.5%)</td><td id="zakatPayableFinal">0.00</td><td>-</td></tr>
+                <tr>
+                    <th>Description</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Total Cash & Bank Balances</td>
+                    <td contenteditable="true" id="zakatCashInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="section-header-row">
+                    <td colspan="2">Gold Value Calculation</td>
+                </tr>
+                <tr>
+                    <td>Gold Gram (Weight)</td>
+                    <td contenteditable="true" id="zakatGoldGramInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Current Market Price (Per Gram)</td>
+                    <td contenteditable="true" id="zakatGoldPriceInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Gold Value (Market Price x Gram - 17%)</td>
+                    <td id="zakatGoldValueResult">0.00</td>
+                </tr>
+                <tr class="section-header-row">
+                    <td colspan="2">Other Assets & Liabilities</td>
+                </tr>
+                <tr>
+                    <td>Business Assets & Investments</td>
+                    <td contenteditable="true" id="zakatBusinessInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr>
+                    <td>Lent Money / Receivables</td>
+                    <td contenteditable="true" id="zakatReceivablesInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total Assets</td>
+                    <td id="zakatTotalAssets">0.00</td>
+                </tr>
+                <tr>
+                    <td>Deductions (Immediate Liabilities / Debts)</td>
+                    <td contenteditable="true" id="zakatLiabilitiesInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Net Zakatable Wealth</td>
+                    <td id="zakatNetWealth">0.00</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Nisab Silver Standard Weight (Fixed)</td>
+                    <td id="zakatSilverWeight">612.36 grams (52.5 Tolas)</td>
+                </tr>
+                <tr>
+                    <td>Current Silver Price (Per Gram/Unit)</td>
+                    <td contenteditable="true" id="zakatSilverPriceInput" oninput="calculateAll()">0.00</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Nisab Threshold (Silver Value)</td>
+                    <td id="zakatNisabThreshold">0.00</td>
+                </tr>
+                <tr class="locked-row">
+                    <td>Nisab Status</td>
+                    <td id="zakatNisabStatus">Not Eligible (Below Nisab)</td>
+                </tr>
+                <tr class="calculated-row">
+                    <td>Total Zakat Payable (2.5%)</td>
+                    <td id="zakatPayableResult">0.00</td>
+                </tr>
             </table>
         </div>
-        <div class="info-note">💡 Note: Combined net wealth exceeding nisab will automatically calculate 2.5% zakat.</div>
     </div>
 
     <!-- Action Bar -->
@@ -576,6 +747,16 @@
         <span id="success-msg">✅ Saved Successfully!</span>
         <button class="btn btn-secondary" onclick="calculateAll()">🔄 Recalculate</button>
     </div>
+
+    <!-- Footer & Disclaimer -->
+    <footer class="footer">
+        <div class="footer-disclaimer">
+            ডিসক্লাইমার: ইহা আবদুল আউয়াল এর একান্ত নিজস্ব হিসেব নিকেশের খাতা। এখানে প্রদর্শিত সমস্ত তথ্য ও হিসাব-নিকাশ শুধুমাত্র ব্যক্তিগত আর্থিক ব্যবস্থাপনার উদ্দেশ্যে ব্যবহৃত হয়।
+        </div>
+        <div class="footer-copyright">
+            &copy; <span id="footerYear"></span> Abdul Awal. All Rights Reserved.
+        </div>
+    </footer>
 </div>
 
 <script>
@@ -583,9 +764,41 @@
     function updateDateTime() {
         const now = new Date();
         document.getElementById('liveTime').innerText = now.toLocaleTimeString();
+        document.getElementById('footerYear').innerText = now.getFullYear();
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
+
+    function getCalendarData() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const todayDate = now.getDate();
+
+        const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let totalSundays = 0;
+        let pastSundays = 0;
+
+        for (let d = 1; d <= totalDaysInMonth; d++) {
+            let checkDate = new Date(year, month, d);
+            if (checkDate.getDay() === 0) { // Sunday
+                totalSundays++;
+                if (d <= todayDate) {
+                    pastSundays++;
+                }
+            }
+        }
+
+        const workingDaysTotal = totalDaysInMonth - totalSundays;
+        const pastWorkingDays = todayDate - pastSundays;
+
+        return {
+            totalDays: totalDaysInMonth,
+            workingDaysTotal: workingDaysTotal > 0 ? workingDaysTotal : 1,
+            pastWorkingDays: pastWorkingDays >= 0 ? pastWorkingDays : 0
+        };
+    }
 
     function renderFullCalendar() {
         const now = new Date();
@@ -595,6 +808,16 @@
 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
+
+        // Update Credit Card & Split Dynamic Month Labels
+        for (let i = 1; i <= 5; i++) {
+            let targetDate = new Date(year, month + i, 1);
+            let mName = monthNames[targetDate.getMonth()];
+            let yNum = targetDate.getFullYear();
+            let labelText = `${mName} ${yNum}`;
+            document.getElementById(`ccMonth${i}Label`).innerText = labelText;
+            document.getElementById(`splitMonth${i}Label`).innerText = labelText;
+        }
 
         const firstDayIndex = new Date(year, month, 1).getDay();
         const totalDays = new Date(year, month + 1, 0).getDate();
@@ -623,7 +846,7 @@
         const btn = document.getElementById('themeBtn');
         if (html.getAttribute('data-theme') === 'light') {
             html.setAttribute('data-theme', 'dark');
-            btn.innerText = '☀️ Light';
+            btn.innerText = '☀ Light';
             localStorage.setItem('abdul_theme', 'dark');
         } else {
             html.setAttribute('data-theme', 'light');
@@ -632,201 +855,207 @@
         }
     }
 
-    function showSelectedTable(cardId) {
-        const cards = ['cardAED', 'cardBDT', 'cardInvestment', 'cardCredit', 'cardOutstanding', 'cardExpense', 'cardZakat'];
-        cards.forEach(id => {
-            let el = document.getElementById(id);
-            if (id === cardId) {
-                el.classList.add('active-table');
-            } else {
-                el.classList.remove('active-table');
-            }
-        });
-
-        let notice = document.getElementById('welcomeNotice');
-        if (notice) notice.style.display = 'none';
-
-        localStorage.setItem('abdul_selected_table', cardId);
-    }
-
     function getNum(cellValue) {
         let val = parseFloat(cellValue);
         return isNaN(val) ? 0 : val;
     }
 
-    function addRow(tableId, isAED = false, isBDT = false, isOutstanding = false, isExpense = false) {
-        let table = document.getElementById(tableId);
-        let newRow = table.insertRow();
-        
-        if (isAED) {
-            let insertIndex = table.rows.length - 5;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
-        } else if (isBDT) {
-            let insertIndex = 6;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New BDT Account</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
-        } else if (isOutstanding) {
-            let insertIndex = table.rows.length - 1;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">Monthly Outstanding</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
-        } else if (isExpense) {
-            let insertIndex = table.rows.length - 2;
-            newRow = table.insertRow(insertIndex);
-            newRow.innerHTML = `<td contenteditable="true">New Expense</td><td contenteditable="true" oninput="calculateAll()">0.00</td><td><button class="btn-del" onclick="deleteRow(this)">Delete</button></td>`;
-        }
-        calculateAll();
-    }
-
-    function deleteRow(btn) {
-        let row = btn.parentNode.parentNode;
-        let table = row.parentNode;
-        table.deleteRow(row.rowIndex);
-        calculateAll();
-    }
-
     function calculateAll() {
-        let aedTable = document.getElementById('tableAED');
-        let aedSum = 0;
-        let aedTotalRowIdx = aedTable.rows.length - 5;
-        for (let i = 1; i < aedTotalRowIdx; i++) {
-            aedSum += getNum(aedTable.rows[i].cells[1].innerText);
-        }
-        document.getElementById('aedTotal').innerText = aedSum.toFixed(2);
+        // Table 1 Calculations (Currency Converter)
+        let rate = getNum(document.getElementById('rateInput').innerText);
+        let aedAmount = getNum(document.getElementById('aedAmountInput').innerText);
 
-        let rateRowIdx = aedTotalRowIdx + 1;
-        let rate = getNum(aedTable.rows[rateRowIdx].cells[1].innerText);
-        let incentive = rate * 0.025;
-        document.getElementById('incentiveBox').innerText = incentive.toFixed(4);
+        let incentiveResult = rate + (rate * 0.025);
+        document.getElementById('incentiveResult').innerText = incentiveResult.toFixed(4);
 
-        let finalRate = rate + incentive;
-        document.getElementById('finalRate').innerText = finalRate.toFixed(4);
+        let finalResult = incentiveResult * aedAmount;
+        document.getElementById('finalResult').innerText = finalResult.toFixed(2);
 
-        let converted = aedSum * finalRate;
-        document.getElementById('convertedBDT').innerText = converted.toFixed(2);
+        // Table 2 Calculations (Monthly Expenses Planing)
+        let expMother = getNum(document.getElementById('expMotherInput').innerText);
+        let expRent = getNum(document.getElementById('expRentInput').innerText);
+        let expWifi = getNum(document.getElementById('expWifiInput').innerText);
+        let expGas = getNum(document.getElementById('expGasInput').innerText);
+        let expDust = getNum(document.getElementById('expDustInput').innerText);
+        let expMadrasha = getNum(document.getElementById('expMadrashaInput').innerText);
+        let expTutor = getNum(document.getElementById('expTutorInput').innerText);
+        let expElectric = getNum(document.getElementById('expElectricInput').innerText);
+        let expFood = getNum(document.getElementById('expFoodInput').innerText);
 
-        let bdtTable = document.getElementById('tableBDT');
-        let usableSum = 0;
-        let bdtUsableTotalIdx = -1;
-        let bdtHoldTotalIdx = bdtTable.rows.length - 1;
+        let expTotal = expMother + expRent + expWifi + expGas + expDust + expMadrasha + expTutor + expElectric + expFood;
+        document.getElementById('expTotalResult').innerText = expTotal.toFixed(2);
 
-        for (let i = 1; i < bdtTable.rows.length; i++) {
-            if (bdtTable.rows[i].cells[0].innerText.includes("Usable Asset in BDT")) {
-                bdtUsableTotalIdx = i;
-                break;
-            }
-        }
+        // In AED = Total divided convertor table per AED = BDT with incentive results
+        let expInAed = incentiveResult > 0 ? expTotal / incentiveResult : 0;
+        document.getElementById('expInAedResult').innerText = expInAed.toFixed(2);
 
-        for (let i = 1; i < bdtUsableTotalIdx; i++) {
-            usableSum += getNum(bdtTable.rows[i].cells[1].innerText);
-        }
-        document.getElementById('bdtUsableTotal').innerText = usableSum.toFixed(2);
+        // Table 3 Calculations (UAE Accounts)
+        let hsbc = getNum(document.getElementById('hsbcInput').innerText);
+        let hsbcGma = getNum(document.getElementById('hsbcGmaInput').innerText);
+        let ruya = getNum(document.getElementById('ruyaInput').innerText);
+        let payit = getNum(document.getElementById('payitInput').innerText);
+        let botim = getNum(document.getElementById('botimInput').innerText);
+        let tabby = getNum(document.getElementById('tabbyInput').innerText);
 
-        let holdSum = usableSum;
-        for (let i = bdtUsableTotalIdx + 1; i < bdtHoldTotalIdx; i++) {
-            holdSum += getNum(bdtTable.rows[i].cells[1].innerText);
-        }
-        document.getElementById('bdtHoldTotal').innerText = holdSum.toFixed(2);
+        let cal = getCalendarData();
+        let salary = (((342 / 26) * cal.workingDaysTotal + 1920) / cal.workingDaysTotal) * cal.pastWorkingDays;
+        document.getElementById('salaryResult').innerText = salary.toFixed(2);
 
-        let invTable = document.getElementById('tableInvestment');
-        let downPayment = getNum(invTable.rows[1].cells[1].innerText);
-        let monthsCount = getNum(invTable.rows[2].cells[1].innerText);
+        let otDays = getNum(document.getElementById('otDaysInput').innerText);
+        let otAmount = 73.25 * otDays;
+        document.getElementById('otResult').innerText = otAmount.toFixed(2);
+
+        let totalAED = hsbc + hsbcGma + ruya + payit + botim + tabby + salary + otAmount;
+        document.getElementById('uaeTotalAED').innerText = totalAED.toFixed(2);
+
+        let totalBDT = totalAED * incentiveResult;
+        document.getElementById('uaeTotalBDT').innerText = totalBDT.toFixed(2);
+
+        // Table 4 Calculations (BD Accounts)
+        let mtbSavings = getNum(document.getElementById('mtbSavingsInput').innerText);
+        let mtbNrb = getNum(document.getElementById('mtbNrbInput').innerText);
+        let bracProvashi = getNum(document.getElementById('bracProvashiInput').innerText);
+        let dbblAgent = getNum(document.getElementById('dbblAgentInput').innerText);
+        let ucblIslamic = getNum(document.getElementById('ucblIslamicInput').innerText);
+
+        let usableAmount = mtbSavings + mtbNrb + bracProvashi + dbblAgent + ucblIslamic;
+        document.getElementById('usableAmountResult').innerText = usableAmount.toFixed(2);
+
+        let dbblCore = getNum(document.getElementById('dbblCoreInput').innerText);
+        let pubaliIslamic = getNum(document.getElementById('pubaliIslamicInput').innerText);
+        let ibblSavings = getNum(document.getElementById('ibblSavingsInput').innerText);
+
+        let holdAmount = dbblCore + pubaliIslamic + ibblSavings;
+        document.getElementById('holdAmountResult').innerText = holdAmount.toFixed(2);
+
+        // Table 5 Calculations (Credit Card Accounts)
+        let ccMonth1 = getNum(document.getElementById('ccMonth1Input').innerText);
+        let ccMonth2 = getNum(document.getElementById('ccMonth2Input').innerText);
+        let ccMonth3 = getNum(document.getElementById('ccMonth3Input').innerText);
+        let ccMonth4 = getNum(document.getElementById('ccMonth4Input').innerText);
+        let ccMonth5 = getNum(document.getElementById('ccMonth5Input').innerText);
+
+        let ccTotal = ccMonth1 + ccMonth2 + ccMonth3 + ccMonth4 + ccMonth5;
+        document.getElementById('ccTotalResult').innerText = ccTotal.toFixed(2);
+
+        // Tabby Calculations
+        let tabbyLimit = getNum(document.getElementById('tabbyLimitInput').innerText);
+        let tabbySplit = getNum(document.getElementById('tabbySplitInput').innerText);
+
+        document.getElementById('tabbyOutstandingResult').innerText = ccTotal.toFixed(2);
+
+        let tabbyUsed = ccTotal - tabbySplit;
+        document.getElementById('tabbyUsedResult').innerText = tabbyUsed.toFixed(2);
+
+        let tabbyBalance = tabbyLimit - tabbyUsed;
+        document.getElementById('tabbyBalanceResult').innerText = tabbyBalance.toFixed(2);
+
+        // Monthly Split Purchase Calculations
+        let splitMonth1 = getNum(document.getElementById('splitMonth1Input').innerText);
+        let splitMonth2 = getNum(document.getElementById('splitMonth2Input').innerText);
+        let splitMonth3 = getNum(document.getElementById('splitMonth3Input').innerText);
+        let splitMonth4 = getNum(document.getElementById('splitMonth4Input').innerText);
+        let splitMonth5 = getNum(document.getElementById('splitMonth5Input').innerText);
+
+        let splitTotal = splitMonth1 + splitMonth2 + splitMonth3 + splitMonth4 + splitMonth5;
+        document.getElementById('splitTotalResult').innerText = splitTotal.toFixed(2);
+
+        // Upcoming Payment Calculation
+        let upcomingPayment = ccMonth1 + splitMonth1;
+        document.getElementById('upcomingPaymentResult').innerText = upcomingPayment.toFixed(2);
+
+        // Zakat Calculator Calculations
+        let zakatCash = getNum(document.getElementById('zakatCashInput').innerText);
         
-        let monthlyInstallmentTotal = monthsCount * 15000;
-        document.getElementById('invMonthlyTotal').innerText = monthlyInstallmentTotal.toFixed(2);
+        // Gold Value Calculation: (Gold Gram * Gold Price) - 17%
+        let goldGram = getNum(document.getElementById('zakatGoldGramInput').innerText);
+        let goldPrice = getNum(document.getElementById('zakatGoldPriceInput').innerText);
+        let rawGoldValue = goldGram * goldPrice;
+        let zakatGoldValue = rawGoldValue - (rawGoldValue * 0.17);
+        if (zakatGoldValue < 0) zakatGoldValue = 0;
+        document.getElementById('zakatGoldValueResult').innerText = zakatGoldValue.toFixed(2);
 
-        let totalInvestmentSum = downPayment + monthlyInstallmentTotal;
-        document.getElementById('invTotalSum').innerText = totalInvestmentSum.toFixed(2);
+        let zakatBusiness = getNum(document.getElementById('zakatBusinessInput').innerText);
+        let zakatReceivables = getNum(document.getElementById('zakatReceivablesInput').innerText);
 
-        let customAmount = getNum(invTable.rows[5].cells[1].innerText); 
-        let dividedBy12 = customAmount / 12;
-        document.getElementById('invDividedBy12').innerText = dividedBy12.toFixed(2);
+        let zakatTotalAssets = zakatCash + zakatGoldValue + zakatBusiness + zakatReceivables;
+        document.getElementById('zakatTotalAssets').innerText = zakatTotalAssets.toFixed(2);
 
-        let committeeDue = dividedBy12 - totalInvestmentSum;
-        document.getElementById('invDifference').innerText = committeeDue.toFixed(2);
+        let zakatLiabilities = getNum(document.getElementById('zakatLiabilitiesInput').innerText);
+        let zakatNetWealth = zakatTotalAssets - zakatLiabilities;
+        if (zakatNetWealth < 0) zakatNetWealth = 0;
+        document.getElementById('zakatNetWealth').innerText = zakatNetWealth.toFixed(2);
 
-        let creditTable = document.getElementById('tableCredit');
-        let creditLimit = getNum(creditTable.rows[1].cells[1].innerText);
-        let creditUsed = getNum(creditTable.rows[3].cells[1].innerText);
-        let creditBalance = creditLimit - creditUsed;
-        document.getElementById('tabbyBalanceBox').innerText = creditBalance.toFixed(2);
+        // Nisab calculation: 612.36 grams * silver price per gram
+        const silverWeight = 612.36;
+        let silverPrice = getNum(document.getElementById('zakatSilverPriceInput').innerText);
+        let zakatNisabThreshold = silverWeight * silverPrice;
+        document.getElementById('zakatNisabThreshold').innerText = zakatNisabThreshold.toFixed(2);
 
-        let outTable = document.getElementById('tableMonthlyOutstanding');
-        let outSum = 0;
-        for (let i = 1; i < outTable.rows.length - 1; i++) {
-            outSum += getNum(outTable.rows[i].cells[1].innerText);
-        }
-        document.getElementById('monthlyOutstandingTotal').innerText = outSum.toFixed(2);
-        document.getElementById('tabbyOutstandingBox').innerText = outSum.toFixed(2);
-
-        let expTable = document.getElementById('tableExpense');
-        let expSum = 0;
-        for (let i = 1; i < expTable.rows.length - 2; i++) {
-            expSum += getNum(expTable.rows[i].cells[1].innerText);
-        }
-        document.getElementById('expenseTotal').innerText = expSum.toFixed(2);
-
-        let expenseAED = finalRate > 0 ? (expSum / finalRate) : 0;
-        document.getElementById('expenseAEDTotal').innerText = expenseAED.toFixed(2);
-
-        let zakatTable = document.getElementById('tableZakat');
-        let cashAsset = getNum(zakatTable.rows[1].cells[1].innerText);
-        let goldWeightGrams = getNum(zakatTable.rows[2].cells[1].innerText);
-        let voriPriceBDT = getNum(zakatTable.rows[3].cells[1].innerText);
-        
-        let pricePerGram = voriPriceBDT / 11.664;
-        let effectiveGramRate = pricePerGram * (1 - 0.17);
-        document.getElementById('effectiveGramRate').innerText = effectiveGramRate.toFixed(2);
-
-        let totalGoldVal = goldWeightGrams * effectiveGramRate;
-        document.getElementById('zakatGoldTotal').innerText = totalGoldVal.toFixed(2);
-
-        let totalGrossWealth = cashAsset + totalGoldVal;
-        document.getElementById('totalGrossWealth').innerText = totalGrossWealth.toFixed(2);
-
-        let liabilities = getNum(zakatTable.rows[6].cells[1].innerText);
-        let netCombinedWealth = totalGrossWealth - liabilities;
-        if (netCombinedWealth < 0) netCombinedWealth = 0;
-        document.getElementById('netCombinedWealth').innerText = netCombinedWealth.toFixed(2);
-
-        let silverVoriPrice = getNum(zakatTable.rows[8].cells[1].innerText);
-        let combinedNisab = 52.5 * silverVoriPrice;
-        document.getElementById('combinedNisabThreshold').innerText = combinedNisab.toFixed(2);
-
-        let zakatStatusBox = document.getElementById('zakatStatus');
-        let zakatPayableBox = document.getElementById('zakatPayableFinal');
-
-        let zakatPayableVal = 0;
-        if (netCombinedWealth >= combinedNisab) {
-            zakatStatusBox.innerText = "Applicable - Zakat Due";
-            zakatStatusBox.style.color = "#16a34a";
-            zakatPayableVal = (netCombinedWealth * 25) / 1000;
+        let zakatPayable = 0;
+        if (zakatNetWealth >= zakatNisabThreshold && zakatNisabThreshold > 0) {
+            document.getElementById('zakatNisabStatus').innerText = 'Eligible (Above Nisab)';
+            document.getElementById('zakatNisabStatus').style.color = '#16a34a';
+            zakatPayable = zakatNetWealth * 0.025;
         } else {
-            zakatStatusBox.innerText = "Not Applicable - Below Nisab";
-            zakatStatusBox.style.color = "#dc2626";
-            zakatPayableVal = 0;
+            document.getElementById('zakatNisabStatus').innerText = 'Not Eligible (Below Nisab)';
+            document.getElementById('zakatNisabStatus').style.color = 'var(--text-muted)';
+            zakatPayable = 0;
         }
-        zakatPayableBox.innerText = zakatPayableVal.toFixed(2);
+        document.getElementById('zakatPayableResult').innerText = zakatPayable.toFixed(2);
 
         saveDataSilently();
     }
 
     // Export Backup File
-    function exportToCSV() {
-        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
-        let dataStore = {};
-        tables.forEach(tableId => {
-            let table = document.getElementById(tableId);
-            let rowsData = [];
-            for (let i = 1; i < table.rows.length; i++) {
-                let rowCells = [];
-                for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    rowCells.push(table.rows[i].cells[j].innerHTML);
-                }
-                rowsData.push(rowCells);
-            }
-            dataStore[tableId] = rowsData;
-        });
+    function exportToJSON() {
+        let dataStore = {
+            rate: document.getElementById('rateInput').innerText,
+            aedAmount: document.getElementById('aedAmountInput').innerText,
+            expMother: document.getElementById('expMotherInput').innerText,
+            expRent: document.getElementById('expRentInput').innerText,
+            expWifi: document.getElementById('expWifiInput').innerText,
+            expGas: document.getElementById('expGasInput').innerText,
+            expDust: document.getElementById('expDustInput').innerText,
+            expMadrasha: document.getElementById('expMadrashaInput').innerText,
+            expTutor: document.getElementById('expTutorInput').innerText,
+            expElectric: document.getElementById('expElectricInput').innerText,
+            expFood: document.getElementById('expFoodInput').innerText,
+            hsbc: document.getElementById('hsbcInput').innerText,
+            hsbcGma: document.getElementById('hsbcGmaInput').innerText,
+            ruya: document.getElementById('ruyaInput').innerText,
+            payit: document.getElementById('payitInput').innerText,
+            botim: document.getElementById('botimInput').innerText,
+            tabby: document.getElementById('tabbyInput').innerText,
+            otDays: document.getElementById('otDaysInput').innerText,
+            mtbSavings: document.getElementById('mtbSavingsInput').innerText,
+            mtbNrb: document.getElementById('mtbNrbInput').innerText,
+            bracProvashi: document.getElementById('bracProvashiInput').innerText,
+            dbblAgent: document.getElementById('dbblAgentInput').innerText,
+            ucblIslamic: document.getElementById('ucblIslamicInput').innerText,
+            dbblCore: document.getElementById('dbblCoreInput').innerText,
+            pubaliIslamic: document.getElementById('pubaliIslamicInput').innerText,
+            ibblSavings: document.getElementById('ibblSavingsInput').innerText,
+            ccMonth1: document.getElementById('ccMonth1Input').innerText,
+            ccMonth2: document.getElementById('ccMonth2Input').innerText,
+            ccMonth3: document.getElementById('ccMonth3Input').innerText,
+            ccMonth4: document.getElementById('ccMonth4Input').innerText,
+            ccMonth5: document.getElementById('ccMonth5Input').innerText,
+            tabbyLimit: document.getElementById('tabbyLimitInput').innerText,
+            tabbySplit: document.getElementById('tabbySplitInput').innerText,
+            splitMonth1: document.getElementById('splitMonth1Input').innerText,
+            splitMonth2: document.getElementById('splitMonth2Input').innerText,
+            splitMonth3: document.getElementById('splitMonth3Input').innerText,
+            splitMonth4: document.getElementById('splitMonth4Input').innerText,
+            splitMonth5: document.getElementById('splitMonth5Input').innerText,
+            zakatCash: document.getElementById('zakatCashInput').innerText,
+            zakatGoldGram: document.getElementById('zakatGoldGramInput').innerText,
+            zakatGoldPrice: document.getElementById('zakatGoldPriceInput').innerText,
+            zakatBusiness: document.getElementById('zakatBusinessInput').innerText,
+            zakatReceivables: document.getElementById('zakatReceivablesInput').innerText,
+            zakatLiabilities: document.getElementById('zakatLiabilitiesInput').innerText,
+            zakatSilverPrice: document.getElementById('zakatSilverPriceInput').innerText
+        };
 
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataStore, null, 2));
         const downloadAnchor = document.createElement('a');
@@ -837,7 +1066,7 @@
         downloadAnchor.remove();
     }
 
-    // Restore Backup File & re-apply contenteditable fix
+    // Restore Backup File
     function importFromJSON(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -846,23 +1075,52 @@
         reader.onload = function(e) {
             try {
                 let dataStore = JSON.parse(e.target.result);
-                for (let tableId in dataStore) {
-                    let table = document.getElementById(tableId);
-                    if (table) {
-                        let rowsData = dataStore[tableId];
-                        while (table.rows.length > 1) {
-                            table.deleteRow(1);
-                        }
-                        for (let i = 0; i < rowsData.length; i++) {
-                            let newRow = table.insertRow();
-                            for (let j = 0; j < rowsData[i].length; j++) {
-                                let newCell = newRow.insertCell();
-                                newCell.innerHTML = rowsData[i][j];
-                            }
-                        }
-                    }
-                }
-                restoreEditability();
+                if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
+                if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
+                if (dataStore.expMother !== undefined) document.getElementById('expMotherInput').innerText = dataStore.expMother;
+                if (dataStore.expRent !== undefined) document.getElementById('expRentInput').innerText = dataStore.expRent;
+                if (dataStore.expWifi !== undefined) document.getElementById('expWifiInput').innerText = dataStore.expWifi;
+                if (dataStore.expGas !== undefined) document.getElementById('expGasInput').innerText = dataStore.expGas;
+                if (dataStore.expDust !== undefined) document.getElementById('expDustInput').innerText = dataStore.expDust;
+                if (dataStore.expMadrasha !== undefined) document.getElementById('expMadrashaInput').innerText = dataStore.expMadrasha;
+                if (dataStore.expTutor !== undefined) document.getElementById('expTutorInput').innerText = dataStore.expTutor;
+                if (dataStore.expElectric !== undefined) document.getElementById('expElectricInput').innerText = dataStore.expElectric;
+                if (dataStore.expFood !== undefined) document.getElementById('expFoodInput').innerText = dataStore.expFood;
+                if (dataStore.hsbc !== undefined) document.getElementById('hsbcInput').innerText = dataStore.hsbc;
+                if (dataStore.hsbcGma !== undefined) document.getElementById('hsbcGmaInput').innerText = dataStore.hsbcGma;
+                if (dataStore.ruya !== undefined) document.getElementById('ruyaInput').innerText = dataStore.ruya;
+                if (dataStore.payit !== undefined) document.getElementById('payitInput').innerText = dataStore.payit;
+                if (dataStore.botim !== undefined) document.getElementById('botimInput').innerText = dataStore.botim;
+                if (dataStore.tabby !== undefined) document.getElementById('tabbyInput').innerText = dataStore.tabby;
+                if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
+                if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
+                if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
+                if (dataStore.bracProvashi !== undefined) document.getElementById('bracProvashiInput').innerText = dataStore.bracProvashi;
+                if (dataStore.dbblAgent !== undefined) document.getElementById('dbblAgentInput').innerText = dataStore.dbblAgent;
+                if (dataStore.ucblIslamic !== undefined) document.getElementById('ucblIslamicInput').innerText = dataStore.ucblIslamic;
+                if (dataStore.dbblCore !== undefined) document.getElementById('dbblCoreInput').innerText = dataStore.dbblCore;
+                if (dataStore.pubaliIslamic !== undefined) document.getElementById('pubaliIslamicInput').innerText = dataStore.pubaliIslamic;
+                if (dataStore.ibblSavings !== undefined) document.getElementById('ibblSavingsInput').innerText = dataStore.ibblSavings;
+                if (dataStore.ccMonth1 !== undefined) document.getElementById('ccMonth1Input').innerText = dataStore.ccMonth1;
+                if (dataStore.ccMonth2 !== undefined) document.getElementById('ccMonth2Input').innerText = dataStore.ccMonth2;
+                if (dataStore.ccMonth3 !== undefined) document.getElementById('ccMonth3Input').innerText = dataStore.ccMonth3;
+                if (dataStore.ccMonth4 !== undefined) document.getElementById('ccMonth4Input').innerText = dataStore.ccMonth4;
+                if (dataStore.ccMonth5 !== undefined) document.getElementById('ccMonth5Input').innerText = dataStore.ccMonth5;
+                if (dataStore.tabbyLimit !== undefined) document.getElementById('tabbyLimitInput').innerText = dataStore.tabbyLimit;
+                if (dataStore.tabbySplit !== undefined) document.getElementById('tabbySplitInput').innerText = dataStore.tabbySplit;
+                if (dataStore.splitMonth1 !== undefined) document.getElementById('splitMonth1Input').innerText = dataStore.splitMonth1;
+                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = dataStore.splitMonth2;
+                if (dataStore.splitMonth3 !== undefined) document.getElementById('splitMonth3Input').innerText = dataStore.splitMonth3;
+                if (dataStore.splitMonth4 !== undefined) document.getElementById('splitMonth4Input').innerText = dataStore.splitMonth4;
+                if (dataStore.splitMonth5 !== undefined) document.getElementById('splitMonth5Input').innerText = dataStore.splitMonth5;
+                if (dataStore.zakatCash !== undefined) document.getElementById('zakatCashInput').innerText = dataStore.zakatCash;
+                if (dataStore.zakatGoldGram !== undefined) document.getElementById('zakatGoldGramInput').innerText = dataStore.zakatGoldGram;
+                if (dataStore.zakatGoldPrice !== undefined) document.getElementById('zakatGoldPriceInput').innerText = dataStore.zakatGoldPrice;
+                if (dataStore.zakatBusiness !== undefined) document.getElementById('zakatBusinessInput').innerText = dataStore.zakatBusiness;
+                if (dataStore.zakatReceivables !== undefined) document.getElementById('zakatReceivablesInput').innerText = dataStore.zakatReceivables;
+                if (dataStore.zakatLiabilities !== undefined) document.getElementById('zakatLiabilitiesInput').innerText = dataStore.zakatLiabilities;
+                if (dataStore.zakatSilverPrice !== undefined) document.getElementById('zakatSilverPriceInput').innerText = dataStore.zakatSilverPrice;
+
                 calculateAll();
                 alert('Backup restored successfully!');
             } catch (err) {
@@ -873,46 +1131,55 @@
         reader.readAsText(file);
     }
 
-    // Ensures input cells remain editable after local storage load or backup restore
-    function restoreEditability() {
-        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
-        tables.forEach(tableId => {
-            let table = document.getElementById(tableId);
-            if (!table) return;
-            for (let i = 1; i < table.rows.length; i++) {
-                let row = table.rows[i];
-                // Skip auto-calculated or locked rows to preserve structure
-                if (row.classList.contains('calculated-row') || row.classList.contains('locked-row') || row.classList.contains('final-zakat-row')) {
-                    continue;
-                }
-                for (let j = 0; j < row.cells.length - 1; j++) {
-                    let cell = row.cells[j];
-                    // If it's not a delete button column, make it editable
-                    if (!cell.querySelector('button')) {
-                        cell.setAttribute('contenteditable', 'true');
-                        cell.setAttribute('oninput', 'calculateAll()');
-                    }
-                }
-            }
-        });
-    }
-
     function saveDataSilently() {
-        const tables = ['tableAED', 'tableBDT', 'tableInvestment', 'tableCredit', 'tableMonthlyOutstanding', 'tableExpense', 'tableZakat'];
-        let dataStore = {};
-        tables.forEach(tableId => {
-            let table = document.getElementById(tableId);
-            let rowsData = [];
-            for (let i = 1; i < table.rows.length; i++) {
-                let rowCells = [];
-                for (let j = 0; j < table.rows[i].cells.length; j++) {
-                    rowCells.push(table.rows[i].cells[j].innerHTML);
-                }
-                rowsData.push(rowCells);
-            }
-            dataStore[tableId] = rowsData;
-        });
-        localStorage.setItem('abdul_account_manager_v26', JSON.stringify(dataStore));
+        let dataStore = {
+            rate: document.getElementById('rateInput').innerText,
+            aedAmount: document.getElementById('aedAmountInput').innerText,
+            expMother: document.getElementById('expMotherInput').innerText,
+            expRent: document.getElementById('expRentInput').innerText,
+            expWifi: document.getElementById('expWifiInput').innerText,
+            expGas: document.getElementById('expGasInput').innerText,
+            expDust: document.getElementById('expDustInput').innerText,
+            expMadrasha: document.getElementById('expMadrashaInput').innerText,
+            expTutor: document.getElementById('expTutorInput').innerText,
+            expElectric: document.getElementById('expElectricInput').innerText,
+            expFood: document.getElementById('expFoodInput').innerText,
+            hsbc: document.getElementById('hsbcInput').innerText,
+            hsbcGma: document.getElementById('hsbcGmaInput').innerText,
+            ruya: document.getElementById('ruyaInput').innerText,
+            payit: document.getElementById('payitInput').innerText,
+            botim: document.getElementById('botimInput').innerText,
+            tabby: document.getElementById('tabbyInput').innerText,
+            otDays: document.getElementById('otDaysInput').innerText,
+            mtbSavings: document.getElementById('mtbSavingsInput').innerText,
+            mtbNrb: document.getElementById('mtbNrbInput').innerText,
+            bracProvashi: document.getElementById('bracProvashiInput').innerText,
+            dbblAgent: document.getElementById('dbblAgentInput').innerText,
+            ucblIslamic: document.getElementById('ucblIslamicInput').innerText,
+            dbblCore: document.getElementById('dbblCoreInput').innerText,
+            pubaliIslamic: document.getElementById('pubaliIslamicInput').innerText,
+            ibblSavings: document.getElementById('ibblSavingsInput').innerText,
+            ccMonth1: document.getElementById('ccMonth1Input').innerText,
+            ccMonth2: document.getElementById('ccMonth2Input').innerText,
+            ccMonth3: document.getElementById('ccMonth3Input').innerText,
+            ccMonth4: document.getElementById('ccMonth4Input').innerText,
+            ccMonth5: document.getElementById('ccMonth5Input').innerText,
+            tabbyLimit: document.getElementById('tabbyLimitInput').innerText,
+            tabbySplit: document.getElementById('tabbySplitInput').innerText,
+            splitMonth1: document.getElementById('splitMonth1Input').innerText,
+            splitMonth2: document.getElementById('splitMonth2Input').innerText,
+            splitMonth3: document.getElementById('splitMonth3Input').innerText,
+            splitMonth4: document.getElementById('splitMonth4Input').innerText,
+            splitMonth5: document.getElementById('splitMonth5Input').innerText,
+            zakatCash: document.getElementById('zakatCashInput').innerText,
+            zakatGoldGram: document.getElementById('zakatGoldGramInput').innerText,
+            zakatGoldPrice: document.getElementById('zakatGoldPriceInput').innerText,
+            zakatBusiness: document.getElementById('zakatBusinessInput').innerText,
+            zakatReceivables: document.getElementById('zakatReceivablesInput').innerText,
+            zakatLiabilities: document.getElementById('zakatLiabilitiesInput').innerText,
+            zakatSilverPrice: document.getElementById('zakatSilverPriceInput').innerText
+        };
+        localStorage.setItem('abdul_financial_dashboard_v15', JSON.stringify(dataStore));
     }
 
     function saveData() {
@@ -929,34 +1196,56 @@
             document.getElementById('themeBtn').innerText = '☀️ Light';
         }
 
-        let saved = localStorage.getItem('abdul_account_manager_v26');
+        let saved = localStorage.getItem('abdul_financial_dashboard_v15');
         if (saved) {
-            let dataStore = JSON.parse(saved);
-            for (let tableId in dataStore) {
-                let table = document.getElementById(tableId);
-                if (table) {
-                    let rowsData = dataStore[tableId];
-                    while (table.rows.length > 1) {
-                        table.deleteRow(1);
-                    }
-                    for (let i = 0; i < rowsData.length; i++) {
-                        let newRow = table.insertRow();
-                        for (let j = 0; j < rowsData[i].length; j++) {
-                            let newCell = newRow.insertCell();
-                            newCell.innerHTML = rowsData[i][j];
-                        }
-                    }
-                }
-            }
-        }
-
-        // Fix editability on load
-        restoreEditability();
-
-        let savedTable = localStorage.getItem('abdul_selected_table');
-        if (savedTable) {
-            document.getElementById('jumpMenu').value = savedTable;
-            showSelectedTable(savedTable);
+            try {
+                let dataStore = JSON.parse(saved);
+                if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
+                if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
+                if (dataStore.expMother !== undefined) document.getElementById('expMotherInput').innerText = dataStore.expMother;
+                if (dataStore.expRent !== undefined) document.getElementById('expRentInput').innerText = dataStore.expRent;
+                if (dataStore.expWifi !== undefined) document.getElementById('expWifiInput').innerText = dataStore.expWifi;
+                if (dataStore.expGas !== undefined) document.getElementById('expGasInput').innerText = dataStore.expGas;
+                if (dataStore.expDust !== undefined) document.getElementById('expDustInput').innerText = dataStore.expDust;
+                if (dataStore.expMadrasha !== undefined) document.getElementById('expMadrashaInput').innerText = dataStore.expMadrasha;
+                if (dataStore.expTutor !== undefined) document.getElementById('expTutorInput').innerText = dataStore.expTutor;
+                if (dataStore.expElectric !== undefined) document.getElementById('expElectricInput').innerText = dataStore.expElectric;
+                if (dataStore.expFood !== undefined) document.getElementById('expFoodInput').innerText = dataStore.expFood;
+                if (dataStore.hsbc !== undefined) document.getElementById('hsbcInput').innerText = dataStore.hsbc;
+                if (dataStore.hsbcGma !== undefined) document.getElementById('hsbcGmaInput').innerText = dataStore.hsbcGma;
+                if (dataStore.ruya !== undefined) document.getElementById('ruyaInput').innerText = dataStore.ruya;
+                if (dataStore.payit !== undefined) document.getElementById('payitInput').innerText = dataStore.payit;
+                if (dataStore.botim !== undefined) document.getElementById('botimInput').innerText = dataStore.botim;
+                if (dataStore.tabby !== undefined) document.getElementById('tabbyInput').innerText = dataStore.tabby;
+                if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
+                if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
+                if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
+                if (dataStore.bracProvashi !== undefined) document.getElementById('bracProvashiInput').innerText = dataStore.bracProvashi;
+                if (dataStore.dbblAgent !== undefined) document.getElementById('dbblAgentInput').innerText = dataStore.dbblAgent;
+                if (dataStore.ucblIslamic !== undefined) document.getElementById('ucblIslamicInput').innerText = dataStore.ucblIslamic;
+                if (dataStore.dbblCore !== undefined) document.getElementById('dbblCoreInput').innerText = dataStore.dbblCore;
+                if (dataStore.pubaliIslamic !== undefined) document.getElementById('pubaliIslamicInput').innerText = dataStore.pubaliIslamic;
+                if (dataStore.ibblSavings !== undefined) document.getElementById('ibblSavingsInput').innerText = dataStore.ibblSavings;
+                if (dataStore.ccMonth1 !== undefined) document.getElementById('ccMonth1Input').innerText = dataStore.ccMonth1;
+                if (dataStore.ccMonth2 !== undefined) document.getElementById('ccMonth2Input').innerText = dataStore.ccMonth2;
+                if (dataStore.ccMonth3 !== undefined) document.getElementById('ccMonth3Input').innerText = dataStore.ccMonth3;
+                if (dataStore.ccMonth4 !== undefined) document.getElementById('ccMonth4Input').innerText = dataStore.ccMonth4;
+                if (dataStore.ccMonth5 !== undefined) document.getElementById('ccMonth5Input').innerText = dataStore.ccMonth5;
+                if (dataStore.tabbyLimit !== undefined) document.getElementById('tabbyLimitInput').innerText = dataStore.tabbyLimit;
+                if (dataStore.tabbySplit !== undefined) document.getElementById('tabbySplitInput').innerText = dataStore.tabbySplit;
+                if (dataStore.splitMonth1 !== undefined) document.getElementById('splitMonth1Input').innerText = dataStore.splitMonth1;
+                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = dataStore.splitMonth2;
+                if (dataStore.splitMonth3 !== undefined) document.getElementById('splitMonth3Input').innerText = dataStore.splitMonth3;
+                if (dataStore.splitMonth4 !== undefined) document.getElementById('splitMonth4Input').innerText = dataStore.splitMonth4;
+                if (dataStore.splitMonth5 !== undefined) document.getElementById('splitMonth5Input').innerText = dataStore.splitMonth5;
+                if (dataStore.zakatCash !== undefined) document.getElementById('zakatCashInput').innerText = dataStore.zakatCash;
+                if (dataStore.zakatGoldGram !== undefined) document.getElementById('zakatGoldGramInput').innerText = dataStore.zakatGoldGram;
+                if (dataStore.zakatGoldPrice !== undefined) document.getElementById('zakatGoldPriceInput').innerText = dataStore.zakatGoldPrice;
+                if (dataStore.zakatBusiness !== undefined) document.getElementById('zakatBusinessInput').innerText = dataStore.zakatBusiness;
+                if (dataStore.zakatReceivables !== undefined) document.getElementById('zakatReceivablesInput').innerText = dataStore.zakatReceivables;
+                if (dataStore.zakatLiabilities !== undefined) document.getElementById('zakatLiabilitiesInput').innerText = dataStore.zakatLiabilities;
+                if (dataStore.zakatSilverPrice !== undefined) document.getElementById('zakatSilverPriceInput').innerText = dataStore.zakatSilverPrice;
+            } catch(e) {}
         }
 
         calculateAll();
