@@ -229,6 +229,7 @@
         }
         
         .table-responsive { 
+            width: 100%;
             overflow-x: auto; 
             -webkit-overflow-scrolling: touch;
             border-radius: 12px;
@@ -239,15 +240,25 @@
             width: 100%; 
             border-collapse: collapse; 
             background: var(--card-bg); 
-            white-space: nowrap;
+            table-layout: fixed; /* Ensures table columns fit inside mobile screen properly */
         }
 
         th, td { 
-            padding: 11px 14px; 
-            text-align: left; 
-            font-size: 12px; 
+            padding: 10px 8px; 
+            font-size: 11px; 
             color: var(--text-main);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
+
+        /* Standard 2-column tables alignment */
+        th:nth-child(1), td:nth-child(1) { width: 65%; text-align: left; }
+        th:nth-child(2), td:nth-child(2) { width: 35%; text-align: right; }
+
+        /* 3-column tables (with delete option): Name | Action | Value */
+        .dynamic-table th:nth-child(1), .dynamic-table td:nth-child(1) { width: 50%; text-align: left; }
+        .dynamic-table th:nth-child(2), .dynamic-table td:nth-child(2) { width: 20%; text-align: center; }
+        .dynamic-table th:nth-child(3), .dynamic-table td:nth-child(3) { width: 30%; text-align: right; }
 
         th { 
             background-color: var(--table-header); 
@@ -276,7 +287,7 @@
         
         .calculated-row { background-color: rgba(14, 165, 233, 0.06) !important; font-weight: 700; color: #0284c7; }
         .locked-row { background-color: rgba(100, 116, 139, 0.06) !important; font-weight: 600; color: var(--text-muted); }
-        .section-header-row { background-color: rgba(99, 102, 241, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center; }
+        .section-header-row { background-color: rgba(99, 102, 241, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center !important; }
 
         /* Dynamic Row Buttons & Inputs */
         .add-row-btn {
@@ -302,7 +313,6 @@
             border-radius: 6px;
             font-size: 11px;
             cursor: pointer;
-            margin-left: 8px;
         }
         .delete-row-btn:active { transform: scale(0.95); }
 
@@ -311,6 +321,8 @@
             border-radius: 4px;
             padding: 2px 6px;
             outline: none;
+            display: inline-block;
+            width: 100%;
         }
         .editable-label:focus {
             background-color: var(--card-bg);
@@ -401,7 +413,6 @@
                 padding: 0 !important;
             }
 
-            /* Hide non-printable elements */
             .navbar, 
             .widgets-grid, 
             .action-bar, 
@@ -412,12 +423,10 @@
                 display: none !important;
             }
 
-            /* Show print header */
             .print-header {
                 display: block !important;
             }
 
-            /* Separate UAE Accounts Table to a new page */
             #uaeSectionCard {
                 page-break-before: always;
                 break-before: page;
@@ -439,6 +448,7 @@
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
+                table-layout: auto !important;
             }
 
             th, td {
@@ -446,14 +456,6 @@
                 font-size: 10pt !important;
                 border: 1px solid #94a3b8 !important;
                 color: #000000 !important;
-            }
-
-            th:first-child, td:first-child {
-                text-align: left !important;
-            }
-
-            th:last-child, td:last-child {
-                text-align: right !important;
             }
 
             th {
@@ -546,23 +548,23 @@
             <table id="tableCurrency">
                 <tr>
                     <th>Description</th>
-                    <th>Value</th>
+                    <th style="text-align: right;">Value</th>
                 </tr>
                 <tr>
                     <td>Rate</td>
-                    <td contenteditable="true" id="rateInput" oninput="calculateAll()">33.43</td>
+                    <td contenteditable="true" id="rateInput" style="text-align: right;" oninput="calculateAll()">33.43</td>
                 </tr>
                 <tr class="locked-row">
                     <td>Rate x 2.5% Incentive Result</td>
-                    <td id="incentiveResult">0.00</td>
+                    <td id="incentiveResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr>
                     <td>AED Amount</td>
-                    <td contenteditable="true" id="aedAmountInput" oninput="calculateAll()">1000.00</td>
+                    <td contenteditable="true" id="aedAmountInput" style="text-align: right;" oninput="calculateAll()">1000.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Final Converted Result</td>
-                    <td id="finalResult">0.00</td>
+                    <td id="finalResult" style="text-align: right;">0.00</td>
                 </tr>
             </table>
         </div>
@@ -575,11 +577,12 @@
             <button class="add-row-btn" onclick="addUaeRow()"><i class="fas fa-plus"></i> Add Account</button>
         </div>
         <div class="table-responsive">
-            <table id="tableUAE">
+            <table id="tableUAE" class="dynamic-table">
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th>Value</th>
+                        <th style="text-align: center;">Action</th>
+                        <th style="text-align: right;">Value</th>
                     </tr>
                 </thead>
                 <tbody id="uaeTbody">
@@ -587,24 +590,24 @@
                 </tbody>
                 <tfoot>
                     <tr class="locked-row">
-                        <td>Current Month Salary</td>
-                        <td id="salaryResult">0.00</td>
+                        <td colspan="2">Current Month Salary</td>
+                        <td id="salaryResult" style="text-align: right;">0.00</td>
                     </tr>
                     <tr>
-                        <td>Over Time</td>
-                        <td contenteditable="true" id="otDaysInput" oninput="calculateAll()">0</td>
+                        <td colspan="2">Over Time</td>
+                        <td contenteditable="true" id="otDaysInput" style="text-align: right;" oninput="calculateAll()">0</td>
                     </tr>
                     <tr class="locked-row">
-                        <td>Over Time Total Amount</td>
-                        <td id="otResult">0.00</td>
+                        <td colspan="2">Over Time Total Amount</td>
+                        <td id="otResult" style="text-align: right;">0.00</td>
                     </tr>
                     <tr class="calculated-row">
-                        <td>Total AED</td>
-                        <td id="uaeTotalAED">0.00</td>
+                        <td colspan="2">Total AED</td>
+                        <td id="uaeTotalAED" style="text-align: right;">0.00</td>
                     </tr>
                     <tr class="calculated-row">
-                        <td>Total Converted in BDT</td>
-                        <td id="uaeTotalBDT">0.00</td>
+                        <td colspan="2">Total Converted in BDT</td>
+                        <td id="uaeTotalBDT" style="text-align: right;">0.00</td>
                     </tr>
                 </tfoot>
             </table>
@@ -620,47 +623,47 @@
             <table id="tableBD">
                 <tr>
                     <th>Description</th>
-                    <th>Value</th>
+                    <th style="text-align: right;">Value</th>
                 </tr>
                 <tr>
                     <td>MTB Savings</td>
-                    <td contenteditable="true" id="mtbSavingsInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="mtbSavingsInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>MTB NRB</td>
-                    <td contenteditable="true" id="mtbNrbInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="mtbNrbInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>BRAC Provashi</td>
-                    <td contenteditable="true" id="bracProvashiInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="bracProvashiInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>DBBL Agent</td>
-                    <td contenteditable="true" id="dbblAgentInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="dbblAgentInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>UCBL Islamic</td>
-                    <td contenteditable="true" id="ucblIslamicInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ucblIslamicInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Usable Amount</td>
-                    <td id="usableAmountResult">0.00</td>
+                    <td id="usableAmountResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr>
                     <td>DBBL Core</td>
-                    <td contenteditable="true" id="dbblCoreInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="dbblCoreInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>Pubali Islamic</td>
-                    <td contenteditable="true" id="pubaliIslamicInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="pubaliIslamicInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>IBBL Savings</td>
-                    <td contenteditable="true" id="ibblSavingsInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ibblSavingsInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="locked-row">
                     <td>Hold Amount</td>
-                    <td id="holdAmountResult">0.00</td>
+                    <td id="holdAmountResult" style="text-align: right;">0.00</td>
                 </tr>
             </table>
         </div>
@@ -675,85 +678,85 @@
             <table id="tableCreditCard">
                 <tr>
                     <th>Monthly Outstanding Payment</th>
-                    <th>Value</th>
+                    <th style="text-align: right;">Value</th>
                 </tr>
                 <tr>
                     <td id="ccMonth1Label">Next Month</td>
-                    <td contenteditable="true" id="ccMonth1Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ccMonth1Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="ccMonth2Label">Next Next Month</td>
-                    <td contenteditable="true" id="ccMonth2Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ccMonth2Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="ccMonth3Label">Next Next Next Month</td>
-                    <td contenteditable="true" id="ccMonth3Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ccMonth3Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="ccMonth4Label">Next Next Next Next Month</td>
-                    <td contenteditable="true" id="ccMonth4Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ccMonth4Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="ccMonth5Label">Next Next Next Next Next Month</td>
-                    <td contenteditable="true" id="ccMonth5Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="ccMonth5Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Total Credit Card Outstanding</td>
-                    <td id="ccTotalResult">0.00</td>
+                    <td id="ccTotalResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="section-header-row">
                     <td colspan="2">Tabby Credit Card Status</td>
                 </tr>
                 <tr>
                     <td>Credit Limit</td>
-                    <td contenteditable="true" id="tabbyLimitInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="tabbyLimitInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Credit Balance</td>
-                    <td id="tabbyBalanceResult">0.00</td>
+                    <td id="tabbyBalanceResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Credit Used</td>
-                    <td id="tabbyUsedResult">0.00</td>
+                    <td id="tabbyUsedResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="locked-row">
                     <td>Outstanding</td>
-                    <td id="tabbyOutstandingResult">0.00</td>
+                    <td id="tabbyOutstandingResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr>
                     <td>Split Charge</td>
-                    <td contenteditable="true" id="tabbySplitInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="tabbySplitInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="section-header-row">
                     <td colspan="2">Monthly Split Purchase Status</td>
                 </tr>
                 <tr>
                     <td id="splitMonth1Label">Next Month</td>
-                    <td contenteditable="true" id="splitMonth1Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="splitMonth1Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="splitMonth2Label">Next Next Month</td>
-                    <td contenteditable="true" id="splitMonth2Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="splitMonth2Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="splitMonth3Label">Next Next Next Month</td>
-                    <td contenteditable="true" id="splitMonth3Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="splitMonth3Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="splitMonth4Label">Next Next Next Next Month</td>
-                    <td contenteditable="true" id="splitMonth4Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="splitMonth4Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td id="splitMonth5Label">Next Next Next Next Next Month</td>
-                    <td contenteditable="true" id="splitMonth5Input" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="splitMonth5Input" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Total Split Amount</td>
-                    <td id="splitTotalResult">0.00</td>
+                    <td id="splitTotalResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Upcoming Payment</td>
-                    <td id="upcomingPaymentResult">0.00</td>
+                    <td id="upcomingPaymentResult" style="text-align: right;">0.00</td>
                 </tr>
             </table>
         </div>
@@ -766,11 +769,12 @@
             <button class="add-row-btn" onclick="addExpenseRow()"><i class="fas fa-plus"></i> Add Expense</button>
         </div>
         <div class="table-responsive">
-            <table id="tableExpenses">
+            <table id="tableExpenses" class="dynamic-table">
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th>Value</th>
+                        <th style="text-align: center;">Action</th>
+                        <th style="text-align: right;">Value</th>
                     </tr>
                 </thead>
                 <tbody id="expensesTbody">
@@ -778,12 +782,12 @@
                 </tbody>
                 <tfoot>
                     <tr class="calculated-row">
-                        <td>Total</td>
-                        <td id="expTotalResult">0.00</td>
+                        <td colspan="2">Total</td>
+                        <td id="expTotalResult" style="text-align: right;">0.00</td>
                     </tr>
                     <tr class="calculated-row">
-                        <td>In AED</td>
-                        <td id="expInAedResult">0.00</td>
+                        <td colspan="2">In AED</td>
+                        <td id="expInAedResult" style="text-align: right;">0.00</td>
                     </tr>
                 </tfoot>
             </table>
@@ -799,69 +803,69 @@
             <table id="tableZakat">
                 <tr>
                     <th>Description</th>
-                    <th>Value</th>
+                    <th style="text-align: right;">Value</th>
                 </tr>
                 <tr>
                     <td>Total Cash & Bank Balances</td>
-                    <td contenteditable="true" id="zakatCashInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatCashInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="section-header-row">
                     <td colspan="2">Gold Value Calculation</td>
                 </tr>
                 <tr>
                     <td>Gold Gram (Weight)</td>
-                    <td contenteditable="true" id="zakatGoldGramInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatGoldGramInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>Current Market Price (Per Gram)</td>
-                    <td contenteditable="true" id="zakatGoldPriceInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatGoldPriceInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Gold Value (Market Price x Gram - 17%)</td>
-                    <td id="zakatGoldValueResult">0.00</td>
+                    <td id="zakatGoldValueResult" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="section-header-row">
                     <td colspan="2">Other Assets & Liabilities</td>
                 </tr>
                 <tr>
                     <td>Business Assets & Investments</td>
-                    <td contenteditable="true" id="zakatBusinessInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatBusinessInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr>
                     <td>Lent Money / Receivables</td>
-                    <td contenteditable="true" id="zakatReceivablesInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatReceivablesInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Total Assets</td>
-                    <td id="zakatTotalAssets">0.00</td>
+                    <td id="zakatTotalAssets" style="text-align: right;">0.00</td>
                 </tr>
                 <tr>
                     <td>Deductions (Immediate Liabilities / Debts)</td>
-                    <td contenteditable="true" id="zakatLiabilitiesInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatLiabilitiesInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Net Zakatable Wealth</td>
-                    <td id="zakatNetWealth">0.00</td>
+                    <td id="zakatNetWealth" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="locked-row">
                     <td>Nisab Silver Standard Weight (Fixed)</td>
-                    <td id="zakatSilverWeight">612.36 grams (52.5 Tolas)</td>
+                    <td id="zakatSilverWeight" style="text-align: right;">612.36 grams (52.5 Tolas)</td>
                 </tr>
                 <tr>
                     <td>Current Silver Price (Per Gram/Unit)</td>
-                    <td contenteditable="true" id="zakatSilverPriceInput" oninput="calculateAll()">0.00</td>
+                    <td contenteditable="true" id="zakatSilverPriceInput" style="text-align: right;" oninput="calculateAll()">0.00</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Nisab Threshold (Silver Value)</td>
-                    <td id="zakatNisabThreshold">0.00</td>
+                    <td id="zakatNisabThreshold" style="text-align: right;">0.00</td>
                 </tr>
                 <tr class="locked-row">
                     <td>Nisab Status</td>
-                    <td id="zakatNisabStatus">Not Eligible (Below Nisab)</td>
+                    <td id="zakatNisabStatus" style="text-align: right;">Not Eligible (Below Nisab)</td>
                 </tr>
                 <tr class="calculated-row">
                     <td>Total Zakat Payable (2.5%)</td>
-                    <td id="zakatPayableResult">0.00</td>
+                    <td id="zakatPayableResult" style="text-align: right;">0.00</td>
                 </tr>
             </table>
         </div>
@@ -916,10 +920,8 @@
             let tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${acc.name}</span></td>
-                <td>
-                    <span contenteditable="true" class="uae-val" id="uaeVal_${index}" oninput="calculateAll()">${acc.val}</span>
-                    <button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
-                </td>
+                <td style="text-align: center;"><button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td>
+                <td style="text-align: right;"><span contenteditable="true" class="uae-val" id="uaeVal_${index}" oninput="calculateAll()">${acc.val}</span></td>
             `;
             tbody.appendChild(tr);
         });
@@ -930,10 +932,8 @@
         let tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Account</span></td>
-            <td>
-                <span contenteditable="true" class="uae-val" oninput="calculateAll()">0.00</span>
-                <button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
-            </td>
+            <td style="text-align: center;"><button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td>
+            <td style="text-align: right;"><span contenteditable="true" class="uae-val" oninput="calculateAll()">0.00</span></td>
         `;
         tbody.appendChild(tr);
         calculateAll();
@@ -953,10 +953,8 @@
             let tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${exp.name}</span></td>
-                <td>
-                    <span contenteditable="true" class="exp-val" id="expVal_${index}" oninput="calculateAll()">${exp.val}</span>
-                    <button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
-                </td>
+                <td style="text-align: center;"><button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td>
+                <td style="text-align: right;"><span contenteditable="true" class="exp-val" id="expVal_${index}" oninput="calculateAll()">${exp.val}</span></td>
             `;
             tbody.appendChild(tr);
         });
@@ -967,10 +965,8 @@
         let tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Expense</span></td>
-            <td>
-                <span contenteditable="true" class="exp-val" oninput="calculateAll()">0.00</span>
-                <button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
-            </td>
+            <td style="text-align: center;"><button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button></td>
+            <td style="text-align: right;"><span contenteditable="true" class="exp-val" oninput="calculateAll()">0.00</span></td>
         `;
         tbody.appendChild(tr);
         calculateAll();
@@ -1423,7 +1419,7 @@
                 if (dataStore.tabbyLimit !== undefined) document.getElementById('tabbyLimitInput').innerText = dataStore.tabbyLimit;
                 if (dataStore.tabbySplit !== undefined) document.getElementById('tabbySplitInput').innerText = dataStore.tabbySplit;
                 if (dataStore.splitMonth1 !== undefined) document.getElementById('splitMonth1Input').innerText = dataStore.splitMonth1;
-                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = dataStore.splitMonth2;
+                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = datastore.splitMonth2;
                 if (dataStore.splitMonth3 !== undefined) document.getElementById('splitMonth3Input').innerText = dataStore.splitMonth3;
                 if (dataStore.splitMonth4 !== undefined) document.getElementById('splitMonth4Input').innerText = dataStore.splitMonth4;
                 if (dataStore.splitMonth5 !== undefined) document.getElementById('splitMonth5Input').innerText = dataStore.splitMonth5;
