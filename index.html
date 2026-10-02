@@ -2,167 +2,189 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Abdul's Financial Dashboard</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-color: #f8fafc;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             --table-header: #f8fafc;
-            --radius: 16px;
+            --radius: 20px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg-color: #0f172a;
+            --primary: #818cf8;
+            --primary-hover: #6366f1;
+            --bg-color: #0b0f19;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
             --table-header: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-            font-family: 'Anek Bangla', 'Times New Roman', Times, serif; 
-            transition: background 0.3s, color 0.3s; 
+            font-family: 'Anek Bangla', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
         }
         
         body { 
             background: var(--bg-color); 
             color: var(--text-main); 
-            padding: 12px; 
-            line-height: 1.5;
+            padding: 8px; 
+            line-height: 1.6;
         }
 
         .container { 
-            max-width: 800px; 
+            width: 100%;
+            max-width: 600px; 
             margin: 0 auto; 
         }
 
-        /* Navbar */
+        /* Print Header - Hidden by default on screen */
+        .print-header {
+            display: none;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .print-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .print-header .print-timestamp {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Navbar - Gorgeous Glassmorphism */
         .navbar {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 12px 20px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
             position: sticky;
-            top: 10px;
+            top: 6px;
             z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
+            backdrop-filter: blur(10px);
         }
 
         .nav-brand {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+            background: linear-gradient(135deg, #6366f1, #0ea5e9);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .nav-controls {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .nav-btn {
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 7px 10px;
+            border-radius: 10px;
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
-        .nav-btn:hover { background: var(--border-color); }
+        .nav-btn:active { transform: scale(0.95); }
 
         /* Widgets Grid */
         .widgets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
         .widget-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            padding: 14px;
+            box-shadow: var(--shadow);
         }
 
         .widget-header {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .widget-content {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-main);
         }
 
         /* Calendar */
         .calendar-container {
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
         .cal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--primary);
         }
 
         .cal-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 3px;
             text-align: center;
         }
 
         .cal-day-name {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             color: var(--text-muted);
-            padding-bottom: 4px;
+            padding-bottom: 2px;
         }
 
         .cal-date {
-            font-size: 11px;
-            padding: 6px 0;
+            font-size: 10px;
+            padding: 5px 0;
             border-radius: 6px;
             background: var(--bg-color);
             color: var(--text-main);
@@ -171,27 +193,27 @@
         .cal-date.empty { background: transparent; }
         .cal-date.today { background: var(--primary); color: white; font-weight: 700; }
 
-        /* Section Cards */
+        /* Section Cards - Gorgeous Container */
         .section-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
         }
 
         .table-header-wrap { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
         }
 
         h2 { 
             font-size: 14px; 
             color: var(--text-main); 
-            font-weight: 600;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -209,7 +231,7 @@
         .table-responsive { 
             overflow-x: auto; 
             -webkit-overflow-scrolling: touch;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
         }
 
@@ -221,7 +243,7 @@
         }
 
         th, td { 
-            padding: 12px 16px; 
+            padding: 11px 14px; 
             text-align: left; 
             font-size: 12px; 
             color: var(--text-main);
@@ -241,53 +263,94 @@
         tr:last-child td { border-bottom: none; }
         
         td[contenteditable="true"] { 
-            background-color: rgba(234, 179, 8, 0.08); 
+            background-color: rgba(99, 102, 241, 0.05); 
             cursor: pointer; 
-            border-radius: 4px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--primary);
         }
         td[contenteditable="true"]:focus { 
             background-color: var(--card-bg); 
             outline: 2px solid var(--primary); 
         }
         
-        .calculated-row { background-color: rgba(14, 165, 233, 0.08) !important; font-weight: 600; color: #0284c7; }
-        .locked-row { background-color: rgba(100, 116, 139, 0.08) !important; font-weight: 600; color: var(--text-muted); }
-        .section-header-row { background-color: rgba(79, 70, 229, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center; }
+        .calculated-row { background-color: rgba(14, 165, 233, 0.06) !important; font-weight: 700; color: #0284c7; }
+        .locked-row { background-color: rgba(100, 116, 139, 0.06) !important; font-weight: 600; color: var(--text-muted); }
+        .section-header-row { background-color: rgba(99, 102, 241, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center; }
+
+        /* Dynamic Row Buttons & Inputs */
+        .add-row-btn {
+            background: var(--bg-color);
+            border: 1px dashed var(--primary);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .add-row-btn:active { transform: scale(0.95); }
+
+        .delete-row-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        .delete-row-btn:active { transform: scale(0.95); }
+
+        .editable-label {
+            background-color: rgba(99, 102, 241, 0.04);
+            border-radius: 4px;
+            padding: 2px 6px;
+            outline: none;
+        }
+        .editable-label:focus {
+            background-color: var(--card-bg);
+            outline: 1.5px solid var(--primary);
+        }
 
         .action-bar { 
             display: flex; 
             flex-direction: column;
             gap: 10px;
-            margin-top: 20px; 
+            margin-top: 15px; 
             background: var(--card-bg); 
-            padding: 16px; 
+            padding: 14px; 
             border-radius: var(--radius); 
             border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
             align-items: center;
         }
 
         .btn { 
             width: 100%;
-            background-color: #16a34a; 
+            background-color: #10b981; 
             color: white; 
             border: none; 
-            padding: 11px; 
+            padding: 12px; 
             font-size: 13px; 
-            font-weight: 600; 
-            border-radius: 8px; 
+            font-weight: 700; 
+            border-radius: 12px; 
             cursor: pointer; 
-            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
         }
-        .btn:hover { background-color: #15803d; }
+        .btn:active { transform: scale(0.98); }
         
         .btn-secondary {
             background-color: var(--primary);
-            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
         }
-        .btn-secondary:hover { background-color: var(--primary-hover); }
 
         #success-msg { 
-            color: #16a34a; 
+            color: #10b981; 
             font-weight: 600; 
             font-size: 12px;
             display: none; 
@@ -298,44 +361,151 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 20px;
-            margin-top: 25px;
+            padding: 16px;
+            margin-top: 20px;
+            margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            box-shadow: var(--shadow);
         }
 
         .footer-disclaimer {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 10px;
-            line-height: 1.6;
+            margin-bottom: 8px;
+            line-height: 1.5;
         }
 
         .footer-copyright {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-main);
         }
 
-        @media(min-width: 640px) {
-            body { padding: 25px; }
-            .action-bar { flex-direction: row; justify-content: space-between; }
-            .btn { width: auto; min-width: 150px; }
+        /* Print Adjustments (Only for Print) */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                font-size: 11pt;
+            }
+
+            .container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Hide non-printable elements */
+            .navbar, 
+            .widgets-grid, 
+            .action-bar, 
+            .footer, 
+            .add-row-btn,
+            .delete-row-btn,
+            #jsonFileInput {
+                display: none !important;
+            }
+
+            /* Show print header */
+            .print-header {
+                display: block !important;
+            }
+
+            /* Separate UAE Accounts Table to a new page */
+            #uaeSectionCard {
+                page-break-before: always;
+                break-before: page;
+            }
+
+            .section-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin-bottom: 15px !important;
+                break-inside: avoid;
+            }
+
+            .table-responsive {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+
+            th, td {
+                padding: 6px 10px !important;
+                font-size: 10pt !important;
+                border: 1px solid #94a3b8 !important;
+                color: #000000 !important;
+            }
+
+            th:first-child, td:first-child {
+                text-align: left !important;
+            }
+
+            th:last-child, td:last-child {
+                text-align: right !important;
+            }
+
+            th {
+                background-color: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            td[contenteditable="true"], .editable-label {
+                background-color: transparent !important;
+                color: #000000 !important;
+            }
+
+            .calculated-row {
+                background-color: #f0f9ff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .locked-row {
+                background-color: #f8fafc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .section-header-row {
+                background-color: #e0e7ff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                text-align: center !important;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- Print Header (Visible only when printing) -->
+    <div class="print-header">
+        <h1>আবদুল আউয়াল এর ব্যক্তিগত হিসেব</h1>
+        <div class="print-timestamp" id="printTimestamp"></div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-brand">Abdul's Financial Dashboard</div>
+        <div class="nav-brand">Abdul's Dashboard</div>
         <div class="nav-controls">
-            <button class="nav-btn" onclick="exportToJSON()" title="Export Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i> Backup</button>
-            <button class="nav-btn" onclick="document.getElementById('jsonFileInput').click()" title="Restore Backup"><i class="fas fa-file-import" style="color: var(--primary);"></i> Restore</button>
+            <button class="nav-btn" onclick="exportToJSON()" title="Backup"><i class="fas fa-file-excel" style="color: #107c41;"></i></button>
+            <button class="nav-btn" onclick="document.getElementById('jsonFileInput').click()" title="Restore"><i class="fas fa-file-import" style="color: var(--primary);"></i></button>
             <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="importFromJSON(event)">
-            <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
-            <button class="nav-btn" onclick="window.print()">🖨 Print</button>
+            <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <button class="nav-btn" onclick="handlePrint()">🖨</button>
         </div>
     </nav>
 
@@ -350,7 +520,7 @@
             <div class="widget-content">Dubai, UAE</div>
         </div>
         <div class="widget-card" style="grid-column: 1 / -1;">
-            <div class="widget-header">📅 Full Month Calendar</div>
+            <div class="widget-header">📅 Calendar & Schedule</div>
             <div class="calendar-container">
                 <div class="cal-header" id="calMonthYear">--</div>
                 <div class="cal-grid">
@@ -399,60 +569,44 @@
     </div>
 
     <!-- UAE Accounts Table -->
-    <div class="section-card">
+    <div class="section-card" id="uaeSectionCard">
         <div class="table-header-wrap">
             <h2>UAE Accounts</h2>
+            <button class="add-row-btn" onclick="addUaeRow()"><i class="fas fa-plus"></i> Add Account</button>
         </div>
         <div class="table-responsive">
             <table id="tableUAE">
-                <tr>
-                    <th>Description</th>
-                    <th>Value</th>
-                </tr>
-                <tr>
-                    <td>HSBC</td>
-                    <td contenteditable="true" id="hsbcInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>HSBC GMA</td>
-                    <td contenteditable="true" id="hsbcGmaInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>Ruya</td>
-                    <td contenteditable="true" id="ruyaInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>Payit</td>
-                    <td contenteditable="true" id="payitInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>Botim</td>
-                    <td contenteditable="true" id="botimInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>Tabby Debit</td>
-                    <td contenteditable="true" id="tabbyInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr class="locked-row">
-                    <td>Current Month Salary</td>
-                    <td id="salaryResult">0.00</td>
-                </tr>
-                <tr>
-                    <td>Over Time</td>
-                    <td contenteditable="true" id="otDaysInput" oninput="calculateAll()">0</td>
-                </tr>
-                <tr class="locked-row">
-                    <td>Over Time Total Amount</td>
-                    <td id="otResult">0.00</td>
-                </tr>
-                <tr class="calculated-row">
-                    <td>Total AED</td>
-                    <td id="uaeTotalAED">0.00</td>
-                </tr>
-                <tr class="calculated-row">
-                    <td>Total Converted in BDT</td>
-                    <td id="uaeTotalBDT">0.00</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody id="uaeTbody">
+                    <!-- Dynamic rows will load here -->
+                </tbody>
+                <tfoot>
+                    <tr class="locked-row">
+                        <td>Current Month Salary</td>
+                        <td id="salaryResult">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Over Time</td>
+                        <td contenteditable="true" id="otDaysInput" oninput="calculateAll()">0</td>
+                    </tr>
+                    <tr class="locked-row">
+                        <td>Over Time Total Amount</td>
+                        <td id="otResult">0.00</td>
+                    </tr>
+                    <tr class="calculated-row">
+                        <td>Total AED</td>
+                        <td id="uaeTotalAED">0.00</td>
+                    </tr>
+                    <tr class="calculated-row">
+                        <td>Total Converted in BDT</td>
+                        <td id="uaeTotalBDT">0.00</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -609,57 +763,29 @@
     <div class="section-card">
         <div class="table-header-wrap">
             <h2>Monthly Expenses Planing</h2>
+            <button class="add-row-btn" onclick="addExpenseRow()"><i class="fas fa-plus"></i> Add Expense</button>
         </div>
         <div class="table-responsive">
             <table id="tableExpenses">
-                <tr>
-                    <th>Description</th>
-                    <th>Value</th>
-                </tr>
-                <tr>
-                    <td>For Mother</td>
-                    <td contenteditable="true" id="expMotherInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For House Rent</td>
-                    <td contenteditable="true" id="expRentInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For WiFi Bill</td>
-                    <td contenteditable="true" id="expWifiInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Gas Cylinder</td>
-                    <td contenteditable="true" id="expGasInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Dust Bill</td>
-                    <td contenteditable="true" id="expDustInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Madrasha Fee's</td>
-                    <td contenteditable="true" id="expMadrashaInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Tutor Fee's</td>
-                    <td contenteditable="true" id="expTutorInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Electric Bill</td>
-                    <td contenteditable="true" id="expElectricInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr>
-                    <td>For Food & Others</td>
-                    <td contenteditable="true" id="expFoodInput" oninput="calculateAll()">0.00</td>
-                </tr>
-                <tr class="calculated-row">
-                    <td>Total</td>
-                    <td id="expTotalResult">0.00</td>
-                </tr>
-                <tr class="calculated-row">
-                    <td>In AED</td>
-                    <td id="expInAedResult">0.00</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody id="expensesTbody">
+                    <!-- Dynamic rows will load here -->
+                </tbody>
+                <tfoot>
+                    <tr class="calculated-row">
+                        <td>Total</td>
+                        <td id="expTotalResult">0.00</td>
+                    </tr>
+                    <tr class="calculated-row">
+                        <td>In AED</td>
+                        <td id="expInAedResult">0.00</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -760,6 +886,102 @@
 </div>
 
 <script>
+    /* Default Initial Data for Dynamic Tables */
+    let defaultUaeAccounts = [
+        { name: "HSBC", val: "0.00" },
+        { name: "HSBC GMA", val: "0.00" },
+        { name: "Ruya", val: "0.00" },
+        { name: "Payit", val: "0.00" },
+        { name: "Botim", val: "0.00" },
+        { name: "Tabby Debit", val: "0.00" }
+    ];
+
+    let defaultExpenses = [
+        { name: "For Mother", val: "0.00" },
+        { name: "For House Rent", val: "0.00" },
+        { name: "For WiFi Bill", val: "0.00" },
+        { name: "For Gas Cylinder", val: "0.00" },
+        { name: "For Dust Bill", val: "0.00" },
+        { name: "For Madrasha Fee's", val: "0.00" },
+        { name: "For Tutor Fee's", val: "0.00" },
+        { name: "For Electric Bill", val: "0.00" },
+        { name: "For Food & Others", val: "0.00" }
+    ];
+
+    /* Render Dynamic UAE Table */
+    function renderUaeTable(accounts) {
+        const tbody = document.getElementById('uaeTbody');
+        tbody.innerHTML = '';
+        accounts.forEach((acc, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${acc.name}</span></td>
+                <td>
+                    <span contenteditable="true" class="uae-val" id="uaeVal_${index}" oninput="calculateAll()">${acc.val}</span>
+                    <button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function addUaeRow() {
+        const tbody = document.getElementById('uaeTbody');
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Account</span></td>
+            <td>
+                <span contenteditable="true" class="uae-val" oninput="calculateAll()">0.00</span>
+                <button class="delete-row-btn" onclick="deleteUaeRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        calculateAll();
+    }
+
+    function deleteUaeRow(btn) {
+        let row = btn.closest('tr');
+        row.remove();
+        calculateAll();
+    }
+
+    /* Render Dynamic Expenses Table */
+    function renderExpensesTable(expenses) {
+        const tbody = document.getElementById('expensesTbody');
+        tbody.innerHTML = '';
+        expenses.forEach((exp, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">${exp.name}</span></td>
+                <td>
+                    <span contenteditable="true" class="exp-val" id="expVal_${index}" oninput="calculateAll()">${exp.val}</span>
+                    <button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function addExpenseRow() {
+        const tbody = document.getElementById('expensesTbody');
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span contenteditable="true" class="editable-label" oninput="calculateAll()">New Expense</span></td>
+            <td>
+                <span contenteditable="true" class="exp-val" oninput="calculateAll()">0.00</span>
+                <button class="delete-row-btn" onclick="deleteExpenseRow(this)" title="Delete"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        calculateAll();
+    }
+
+    function deleteExpenseRow(btn) {
+        let row = btn.closest('tr');
+        row.remove();
+        calculateAll();
+    }
+
     /* Live Clock & Calendar */
     function updateDateTime() {
         const now = new Date();
@@ -769,12 +991,18 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
+    function handlePrint() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById('printTimestamp').innerText = `তারিখ ও সময়: ${now.toLocaleString('bn-BD', options)}`;
+        window.print();
+    }
+
     function getCalendarData() {
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth();
         const todayDate = now.getDate();
-
         const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
 
         let totalSundays = 0;
@@ -782,11 +1010,9 @@
 
         for (let d = 1; d <= totalDaysInMonth; d++) {
             let checkDate = new Date(year, month, d);
-            if (checkDate.getDay() === 0) { // Sunday
+            if (checkDate.getDay() === 0) {
                 totalSundays++;
-                if (d <= todayDate) {
-                    pastSundays++;
-                }
+                if (d <= todayDate) pastSundays++;
             }
         }
 
@@ -809,7 +1035,6 @@
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
 
-        // Update Credit Card & Split Dynamic Month Labels
         for (let i = 1; i <= 5; i++) {
             let targetDate = new Date(year, month + i, 1);
             let mName = monthNames[targetDate.getMonth()];
@@ -846,11 +1071,11 @@
         const btn = document.getElementById('themeBtn');
         if (html.getAttribute('data-theme') === 'light') {
             html.setAttribute('data-theme', 'dark');
-            btn.innerText = '☀ Light';
+            btn.innerText = '☀️';
             localStorage.setItem('abdul_theme', 'dark');
         } else {
             html.setAttribute('data-theme', 'light');
-            btn.innerText = '🌙 Dark';
+            btn.innerText = '🌙';
             localStorage.setItem('abdul_theme', 'light');
         }
     }
@@ -861,7 +1086,6 @@
     }
 
     function calculateAll() {
-        // Table 1 Calculations (Currency Converter)
         let rate = getNum(document.getElementById('rateInput').innerText);
         let aedAmount = getNum(document.getElementById('aedAmountInput').innerText);
 
@@ -871,31 +1095,25 @@
         let finalResult = incentiveResult * aedAmount;
         document.getElementById('finalResult').innerText = finalResult.toFixed(2);
 
-        // Table 2 Calculations (Monthly Expenses Planing)
-        let expMother = getNum(document.getElementById('expMotherInput').innerText);
-        let expRent = getNum(document.getElementById('expRentInput').innerText);
-        let expWifi = getNum(document.getElementById('expWifiInput').innerText);
-        let expGas = getNum(document.getElementById('expGasInput').innerText);
-        let expDust = getNum(document.getElementById('expDustInput').innerText);
-        let expMadrasha = getNum(document.getElementById('expMadrashaInput').innerText);
-        let expTutor = getNum(document.getElementById('expTutorInput').innerText);
-        let expElectric = getNum(document.getElementById('expElectricInput').innerText);
-        let expFood = getNum(document.getElementById('expFoodInput').innerText);
-
-        let expTotal = expMother + expRent + expWifi + expGas + expDust + expMadrasha + expTutor + expElectric + expFood;
+        /* Calculate Dynamic Expenses */
+        let expRows = document.querySelectorAll('#expensesTbody tr');
+        let expTotal = 0;
+        expRows.forEach(row => {
+            let val = getNum(row.querySelector('.exp-val').innerText);
+            expTotal += val;
+        });
         document.getElementById('expTotalResult').innerText = expTotal.toFixed(2);
 
-        // In AED = Total divided convertor table per AED = BDT with incentive results
         let expInAed = incentiveResult > 0 ? expTotal / incentiveResult : 0;
         document.getElementById('expInAedResult').innerText = expInAed.toFixed(2);
 
-        // Table 3 Calculations (UAE Accounts)
-        let hsbc = getNum(document.getElementById('hsbcInput').innerText);
-        let hsbcGma = getNum(document.getElementById('hsbcGmaInput').innerText);
-        let ruya = getNum(document.getElementById('ruyaInput').innerText);
-        let payit = getNum(document.getElementById('payitInput').innerText);
-        let botim = getNum(document.getElementById('botimInput').innerText);
-        let tabby = getNum(document.getElementById('tabbyInput').innerText);
+        /* Calculate Dynamic UAE Accounts */
+        let uaeRows = document.querySelectorAll('#uaeTbody tr');
+        let uaeAccountsTotal = 0;
+        uaeRows.forEach(row => {
+            let val = getNum(row.querySelector('.uae-val').innerText);
+            uaeAccountsTotal += val;
+        });
 
         let cal = getCalendarData();
         let salary = (((342 / 26) * cal.workingDaysTotal + 1920) / cal.workingDaysTotal) * cal.pastWorkingDays;
@@ -905,13 +1123,12 @@
         let otAmount = 73.25 * otDays;
         document.getElementById('otResult').innerText = otAmount.toFixed(2);
 
-        let totalAED = hsbc + hsbcGma + ruya + payit + botim + tabby + salary + otAmount;
+        let totalAED = uaeAccountsTotal + salary + otAmount;
         document.getElementById('uaeTotalAED').innerText = totalAED.toFixed(2);
 
         let totalBDT = totalAED * incentiveResult;
         document.getElementById('uaeTotalBDT').innerText = totalBDT.toFixed(2);
 
-        // Table 4 Calculations (BD Accounts)
         let mtbSavings = getNum(document.getElementById('mtbSavingsInput').innerText);
         let mtbNrb = getNum(document.getElementById('mtbNrbInput').innerText);
         let bracProvashi = getNum(document.getElementById('bracProvashiInput').innerText);
@@ -928,7 +1145,6 @@
         let holdAmount = dbblCore + pubaliIslamic + ibblSavings;
         document.getElementById('holdAmountResult').innerText = holdAmount.toFixed(2);
 
-        // Table 5 Calculations (Credit Card Accounts)
         let ccMonth1 = getNum(document.getElementById('ccMonth1Input').innerText);
         let ccMonth2 = getNum(document.getElementById('ccMonth2Input').innerText);
         let ccMonth3 = getNum(document.getElementById('ccMonth3Input').innerText);
@@ -938,7 +1154,6 @@
         let ccTotal = ccMonth1 + ccMonth2 + ccMonth3 + ccMonth4 + ccMonth5;
         document.getElementById('ccTotalResult').innerText = ccTotal.toFixed(2);
 
-        // Tabby Calculations
         let tabbyLimit = getNum(document.getElementById('tabbyLimitInput').innerText);
         let tabbySplit = getNum(document.getElementById('tabbySplitInput').innerText);
 
@@ -950,7 +1165,6 @@
         let tabbyBalance = tabbyLimit - tabbyUsed;
         document.getElementById('tabbyBalanceResult').innerText = tabbyBalance.toFixed(2);
 
-        // Monthly Split Purchase Calculations
         let splitMonth1 = getNum(document.getElementById('splitMonth1Input').innerText);
         let splitMonth2 = getNum(document.getElementById('splitMonth2Input').innerText);
         let splitMonth3 = getNum(document.getElementById('splitMonth3Input').innerText);
@@ -960,14 +1174,10 @@
         let splitTotal = splitMonth1 + splitMonth2 + splitMonth3 + splitMonth4 + splitMonth5;
         document.getElementById('splitTotalResult').innerText = splitTotal.toFixed(2);
 
-        // Upcoming Payment Calculation
         let upcomingPayment = ccMonth1 + splitMonth1;
         document.getElementById('upcomingPaymentResult').innerText = upcomingPayment.toFixed(2);
 
-        // Zakat Calculator Calculations
         let zakatCash = getNum(document.getElementById('zakatCashInput').innerText);
-        
-        // Gold Value Calculation: (Gold Gram * Gold Price) - 17%
         let goldGram = getNum(document.getElementById('zakatGoldGramInput').innerText);
         let goldPrice = getNum(document.getElementById('zakatGoldPriceInput').innerText);
         let rawGoldValue = goldGram * goldPrice;
@@ -986,7 +1196,6 @@
         if (zakatNetWealth < 0) zakatNetWealth = 0;
         document.getElementById('zakatNetWealth').innerText = zakatNetWealth.toFixed(2);
 
-        // Nisab calculation: 612.36 grams * silver price per gram
         const silverWeight = 612.36;
         let silverPrice = getNum(document.getElementById('zakatSilverPriceInput').innerText);
         let zakatNisabThreshold = silverWeight * silverPrice;
@@ -995,7 +1204,7 @@
         let zakatPayable = 0;
         if (zakatNetWealth >= zakatNisabThreshold && zakatNisabThreshold > 0) {
             document.getElementById('zakatNisabStatus').innerText = 'Eligible (Above Nisab)';
-            document.getElementById('zakatNisabStatus').style.color = '#16a34a';
+            document.getElementById('zakatNisabStatus').style.color = '#10b981';
             zakatPayable = zakatNetWealth * 0.025;
         } else {
             document.getElementById('zakatNisabStatus').innerText = 'Not Eligible (Below Nisab)';
@@ -1007,26 +1216,28 @@
         saveDataSilently();
     }
 
-    // Export Backup File
     function exportToJSON() {
+        let uaeData = [];
+        document.querySelectorAll('#uaeTbody tr').forEach(tr => {
+            uaeData.push({
+                name: tr.querySelector('.editable-label').innerText,
+                val: tr.querySelector('.uae-val').innerText
+            });
+        });
+
+        let expData = [];
+        document.querySelectorAll('#expensesTbody tr').forEach(tr => {
+            expData.push({
+                name: tr.querySelector('.editable-label').innerText,
+                val: tr.querySelector('.exp-val').innerText
+            });
+        });
+
         let dataStore = {
+            uaeAccounts: uaeData,
+            expenses: expData,
             rate: document.getElementById('rateInput').innerText,
             aedAmount: document.getElementById('aedAmountInput').innerText,
-            expMother: document.getElementById('expMotherInput').innerText,
-            expRent: document.getElementById('expRentInput').innerText,
-            expWifi: document.getElementById('expWifiInput').innerText,
-            expGas: document.getElementById('expGasInput').innerText,
-            expDust: document.getElementById('expDustInput').innerText,
-            expMadrasha: document.getElementById('expMadrashaInput').innerText,
-            expTutor: document.getElementById('expTutorInput').innerText,
-            expElectric: document.getElementById('expElectricInput').innerText,
-            expFood: document.getElementById('expFoodInput').innerText,
-            hsbc: document.getElementById('hsbcInput').innerText,
-            hsbcGma: document.getElementById('hsbcGmaInput').innerText,
-            ruya: document.getElementById('ruyaInput').innerText,
-            payit: document.getElementById('payitInput').innerText,
-            botim: document.getElementById('botimInput').innerText,
-            tabby: document.getElementById('tabbyInput').innerText,
             otDays: document.getElementById('otDaysInput').innerText,
             mtbSavings: document.getElementById('mtbSavingsInput').innerText,
             mtbNrb: document.getElementById('mtbNrbInput').innerText,
@@ -1066,7 +1277,6 @@
         downloadAnchor.remove();
     }
 
-    // Restore Backup File
     function importFromJSON(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -1075,23 +1285,11 @@
         reader.onload = function(e) {
             try {
                 let dataStore = JSON.parse(e.target.result);
+                if (dataStore.uaeAccounts) renderUaeTable(dataStore.uaeAccounts);
+                if (dataStore.expenses) renderExpensesTable(dataStore.expenses);
+
                 if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
                 if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
-                if (dataStore.expMother !== undefined) document.getElementById('expMotherInput').innerText = dataStore.expMother;
-                if (dataStore.expRent !== undefined) document.getElementById('expRentInput').innerText = dataStore.expRent;
-                if (dataStore.expWifi !== undefined) document.getElementById('expWifiInput').innerText = dataStore.expWifi;
-                if (dataStore.expGas !== undefined) document.getElementById('expGasInput').innerText = dataStore.expGas;
-                if (dataStore.expDust !== undefined) document.getElementById('expDustInput').innerText = dataStore.expDust;
-                if (dataStore.expMadrasha !== undefined) document.getElementById('expMadrashaInput').innerText = dataStore.expMadrasha;
-                if (dataStore.expTutor !== undefined) document.getElementById('expTutorInput').innerText = dataStore.expTutor;
-                if (dataStore.expElectric !== undefined) document.getElementById('expElectricInput').innerText = dataStore.expElectric;
-                if (dataStore.expFood !== undefined) document.getElementById('expFoodInput').innerText = dataStore.expFood;
-                if (dataStore.hsbc !== undefined) document.getElementById('hsbcInput').innerText = dataStore.hsbc;
-                if (dataStore.hsbcGma !== undefined) document.getElementById('hsbcGmaInput').innerText = dataStore.hsbcGma;
-                if (dataStore.ruya !== undefined) document.getElementById('ruyaInput').innerText = dataStore.ruya;
-                if (dataStore.payit !== undefined) document.getElementById('payitInput').innerText = dataStore.payit;
-                if (dataStore.botim !== undefined) document.getElementById('botimInput').innerText = dataStore.botim;
-                if (dataStore.tabby !== undefined) document.getElementById('tabbyInput').innerText = dataStore.tabby;
                 if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
                 if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
                 if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
@@ -1132,24 +1330,27 @@
     }
 
     function saveDataSilently() {
+        let uaeData = [];
+        document.querySelectorAll('#uaeTbody tr').forEach(tr => {
+            uaeData.push({
+                name: tr.querySelector('.editable-label').innerText,
+                val: tr.querySelector('.uae-val').innerText
+            });
+        });
+
+        let expData = [];
+        document.querySelectorAll('#expensesTbody tr').forEach(tr => {
+            expData.push({
+                name: tr.querySelector('.editable-label').innerText,
+                val: tr.querySelector('.exp-val').innerText
+            });
+        });
+
         let dataStore = {
+            uaeAccounts: uaeData,
+            expenses: expData,
             rate: document.getElementById('rateInput').innerText,
             aedAmount: document.getElementById('aedAmountInput').innerText,
-            expMother: document.getElementById('expMotherInput').innerText,
-            expRent: document.getElementById('expRentInput').innerText,
-            expWifi: document.getElementById('expWifiInput').innerText,
-            expGas: document.getElementById('expGasInput').innerText,
-            expDust: document.getElementById('expDustInput').innerText,
-            expMadrasha: document.getElementById('expMadrashaInput').innerText,
-            expTutor: document.getElementById('expTutorInput').innerText,
-            expElectric: document.getElementById('expElectricInput').innerText,
-            expFood: document.getElementById('expFoodInput').innerText,
-            hsbc: document.getElementById('hsbcInput').innerText,
-            hsbcGma: document.getElementById('hsbcGmaInput').innerText,
-            ruya: document.getElementById('ruyaInput').innerText,
-            payit: document.getElementById('payitInput').innerText,
-            botim: document.getElementById('botimInput').innerText,
-            tabby: document.getElementById('tabbyInput').innerText,
             otDays: document.getElementById('otDaysInput').innerText,
             mtbSavings: document.getElementById('mtbSavingsInput').innerText,
             mtbNrb: document.getElementById('mtbNrbInput').innerText,
@@ -1179,7 +1380,7 @@
             zakatLiabilities: document.getElementById('zakatLiabilitiesInput').innerText,
             zakatSilverPrice: document.getElementById('zakatSilverPriceInput').innerText
         };
-        localStorage.setItem('abdul_financial_dashboard_v15', JSON.stringify(dataStore));
+        localStorage.setItem('abdul_financial_dashboard_v17', JSON.stringify(dataStore));
     }
 
     function saveData() {
@@ -1193,30 +1394,18 @@
         let savedTheme = localStorage.getItem('abdul_theme');
         if (savedTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
-            document.getElementById('themeBtn').innerText = '☀️ Light';
+            document.getElementById('themeBtn').innerText = '☀️';
         }
 
-        let saved = localStorage.getItem('abdul_financial_dashboard_v15');
+        let saved = localStorage.getItem('abdul_financial_dashboard_v17');
         if (saved) {
             try {
                 let dataStore = JSON.parse(saved);
+                renderUaeTable(dataStore.uaeAccounts || defaultUaeAccounts);
+                renderExpensesTable(dataStore.expenses || defaultExpenses);
+
                 if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
                 if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
-                if (dataStore.expMother !== undefined) document.getElementById('expMotherInput').innerText = dataStore.expMother;
-                if (dataStore.expRent !== undefined) document.getElementById('expRentInput').innerText = dataStore.expRent;
-                if (dataStore.expWifi !== undefined) document.getElementById('expWifiInput').innerText = dataStore.expWifi;
-                if (dataStore.expGas !== undefined) document.getElementById('expGasInput').innerText = dataStore.expGas;
-                if (dataStore.expDust !== undefined) document.getElementById('expDustInput').innerText = dataStore.expDust;
-                if (dataStore.expMadrasha !== undefined) document.getElementById('expMadrashaInput').innerText = dataStore.expMadrasha;
-                if (dataStore.expTutor !== undefined) document.getElementById('expTutorInput').innerText = dataStore.expTutor;
-                if (dataStore.expElectric !== undefined) document.getElementById('expElectricInput').innerText = dataStore.expElectric;
-                if (dataStore.expFood !== undefined) document.getElementById('expFoodInput').innerText = dataStore.expFood;
-                if (dataStore.hsbc !== undefined) document.getElementById('hsbcInput').innerText = dataStore.hsbc;
-                if (dataStore.hsbcGma !== undefined) document.getElementById('hsbcGmaInput').innerText = dataStore.hsbcGma;
-                if (dataStore.ruya !== undefined) document.getElementById('ruyaInput').innerText = dataStore.ruya;
-                if (dataStore.payit !== undefined) document.getElementById('payitInput').innerText = dataStore.payit;
-                if (dataStore.botim !== undefined) document.getElementById('botimInput').innerText = dataStore.botim;
-                if (dataStore.tabby !== undefined) document.getElementById('tabbyInput').innerText = dataStore.tabby;
                 if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
                 if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
                 if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
@@ -1245,7 +1434,13 @@
                 if (dataStore.zakatReceivables !== undefined) document.getElementById('zakatReceivablesInput').innerText = dataStore.zakatReceivables;
                 if (dataStore.zakatLiabilities !== undefined) document.getElementById('zakatLiabilitiesInput').innerText = dataStore.zakatLiabilities;
                 if (dataStore.zakatSilverPrice !== undefined) document.getElementById('zakatSilverPriceInput').innerText = dataStore.zakatSilverPrice;
-            } catch(e) {}
+            } catch(e) {
+                renderUaeTable(defaultUaeAccounts);
+                renderExpensesTable(defaultExpenses);
+            }
+        } else {
+            renderUaeTable(defaultUaeAccounts);
+            renderExpensesTable(defaultExpenses);
         }
 
         calculateAll();
