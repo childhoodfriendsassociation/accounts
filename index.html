@@ -240,7 +240,7 @@
             width: 100%; 
             border-collapse: collapse; 
             background: var(--card-bg); 
-            table-layout: fixed; /* Ensures table columns fit inside mobile screen properly */
+            table-layout: fixed;
         }
 
         th, td { 
@@ -251,11 +251,9 @@
             overflow-wrap: break-word;
         }
 
-        /* Standard 2-column tables alignment */
         th:nth-child(1), td:nth-child(1) { width: 65%; text-align: left; }
         th:nth-child(2), td:nth-child(2) { width: 35%; text-align: right; }
 
-        /* 3-column tables (with delete option): Name | Action | Value */
         .dynamic-table th:nth-child(1), .dynamic-table td:nth-child(1) { width: 50%; text-align: left; }
         .dynamic-table th:nth-child(2), .dynamic-table td:nth-child(2) { width: 20%; text-align: center; }
         .dynamic-table th:nth-child(3), .dynamic-table td:nth-child(3) { width: 30%; text-align: right; }
@@ -289,7 +287,6 @@
         .locked-row { background-color: rgba(100, 116, 139, 0.06) !important; font-weight: 600; color: var(--text-muted); }
         .section-header-row { background-color: rgba(99, 102, 241, 0.1) !important; font-weight: 700; color: var(--primary); text-align: center !important; }
 
-        /* Dynamic Row Buttons & Inputs */
         .add-row-btn {
             background: var(--bg-color);
             border: 1px dashed var(--primary);
@@ -368,7 +365,6 @@
             display: none; 
         }
 
-        /* Footer & Disclaimer */
         .footer {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -393,7 +389,6 @@
             color: var(--text-main);
         }
 
-        /* Print Adjustments (Only for Print) */
         @media print {
             @page {
                 size: A4 portrait;
@@ -493,7 +488,7 @@
 <body>
 
 <div class="container">
-    <!-- Print Header (Visible only when printing) -->
+    <!-- Print Header -->
     <div class="print-header">
         <h1>আবদুল আউয়াল এর ব্যক্তিগত হিসেব</h1>
         <div class="print-timestamp" id="printTimestamp"></div>
@@ -600,6 +595,11 @@
                     <tr class="locked-row">
                         <td colspan="2">Over Time Total Amount</td>
                         <td id="otResult" style="text-align: right;">0.00</td>
+                    </tr>
+                    <!-- নতুন যোগ করা Salary + OT Total Row -->
+                    <tr class="calculated-row">
+                        <td colspan="2">Salary & OT Total</td>
+                        <td id="salaryOtTotalResult" style="text-align: right;">0.00</td>
                     </tr>
                     <tr class="calculated-row">
                         <td colspan="2">Total AED</td>
@@ -890,7 +890,6 @@
 </div>
 
 <script>
-    /* Default Initial Data for Dynamic Tables */
     let defaultUaeAccounts = [
         { name: "HSBC", val: "0.00" },
         { name: "HSBC GMA", val: "0.00" },
@@ -912,7 +911,6 @@
         { name: "For Food & Others", val: "0.00" }
     ];
 
-    /* Render Dynamic UAE Table */
     function renderUaeTable(accounts) {
         const tbody = document.getElementById('uaeTbody');
         tbody.innerHTML = '';
@@ -945,7 +943,6 @@
         calculateAll();
     }
 
-    /* Render Dynamic Expenses Table */
     function renderExpensesTable(expenses) {
         const tbody = document.getElementById('expensesTbody');
         tbody.innerHTML = '';
@@ -978,7 +975,6 @@
         calculateAll();
     }
 
-    /* Live Clock & Calendar */
     function updateDateTime() {
         const now = new Date();
         document.getElementById('liveTime').innerText = now.toLocaleTimeString();
@@ -1091,7 +1087,6 @@
         let finalResult = incentiveResult * aedAmount;
         document.getElementById('finalResult').innerText = finalResult.toFixed(2);
 
-        /* Calculate Dynamic Expenses */
         let expRows = document.querySelectorAll('#expensesTbody tr');
         let expTotal = 0;
         expRows.forEach(row => {
@@ -1103,7 +1098,6 @@
         let expInAed = incentiveResult > 0 ? expTotal / incentiveResult : 0;
         document.getElementById('expInAedResult').innerText = expInAed.toFixed(2);
 
-        /* Calculate Dynamic UAE Accounts */
         let uaeRows = document.querySelectorAll('#uaeTbody tr');
         let uaeAccountsTotal = 0;
         uaeRows.forEach(row => {
@@ -1119,7 +1113,11 @@
         let otAmount = 73.25 * otDays;
         document.getElementById('otResult').innerText = otAmount.toFixed(2);
 
-        let totalAED = uaeAccountsTotal + salary + otAmount;
+        // Salary + OT Total calculation
+        let salaryOtTotal = salary + otAmount;
+        document.getElementById('salaryOtTotalResult').innerText = salaryOtTotal.toFixed(2);
+
+        let totalAED = uaeAccountsTotal + salaryOtTotal;
         document.getElementById('uaeTotalAED').innerText = totalAED.toFixed(2);
 
         let totalBDT = totalAED * incentiveResult;
@@ -1419,7 +1417,7 @@
                 if (dataStore.tabbyLimit !== undefined) document.getElementById('tabbyLimitInput').innerText = dataStore.tabbyLimit;
                 if (dataStore.tabbySplit !== undefined) document.getElementById('tabbySplitInput').innerText = dataStore.tabbySplit;
                 if (dataStore.splitMonth1 !== undefined) document.getElementById('splitMonth1Input').innerText = dataStore.splitMonth1;
-                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = datastore.splitMonth2;
+                if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = dataStore.splitMonth2;
                 if (dataStore.splitMonth3 !== undefined) document.getElementById('splitMonth3Input').innerText = dataStore.splitMonth3;
                 if (dataStore.splitMonth4 !== undefined) document.getElementById('splitMonth4Input').innerText = dataStore.splitMonth4;
                 if (dataStore.splitMonth5 !== undefined) document.getElementById('splitMonth5Input').innerText = dataStore.splitMonth5;
