@@ -667,7 +667,7 @@
 
             <!-- Weather Widget -->
             <div class="widget-card">
-                <div class="widget-header">🌤️ Weather</div>
+                <div class="widget-header">🌤️️ Weather</div>
                 <div class="weather-widget">
                     <div class="weather-icon-box" id="weatherIconBox">
                         <i class="fas fa-sun" id="weatherIcon"></i>
@@ -748,6 +748,10 @@
                     <tr class="locked-row">
                         <td colspan="2">Current Month Salary</td>
                         <td id="salaryResult" style="text-align: right;">0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Absent Days</td>
+                        <td contenteditable="true" id="absentDaysInput" style="text-align: right;" oninput="calculateAll()">0</td>
                     </tr>
                     <tr>
                         <td colspan="2">Over Time</td>
@@ -1146,37 +1150,29 @@
     // Auto-detect User Location and Load Weather + Holidays Dynamically
     async function initUserLocationAndWidgets() {
         try {
-            // Fetch IP-based location data (city, country code, lat, lon)
             const res = await fetch('https://ipapi.co/json/');
             const data = await res.json();
             
             if (data && data.city && data.country_code) {
                 const cityName = data.city;
                 const countryName = data.country_name || data.country;
-                const countryCode = data.country_code; // e.g. "AE", "BD", "US"
+                const countryCode = data.country_code;
                 const lat = data.latitude;
                 const lon = data.longitude;
 
-                // 1. Update Location Widget
                 document.getElementById('locationText').innerText = `${cityName}, ${countryName}`;
-
-                // 2. Fetch Weather using dynamic latitude & longitude
                 fetchWeather(lat, lon);
-
-                // 3. Fetch Public Holidays using dynamic country code
                 fetchPublicHolidays(countryCode, countryName);
             } else {
                 throw new Error("Location data unavailable");
             }
         } catch (error) {
-            // Fallback default (e.g. Dubai, UAE) if IP API fails or blocks
             document.getElementById('locationText').innerText = "Dubai, UAE";
             fetchWeather(25.2048, 55.2708);
             fetchPublicHolidays("AE", "UAE");
         }
     }
 
-    // Fetch Weather based on dynamic coordinates
     async function fetchWeather(lat, lon) {
         try {
             const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
@@ -1229,7 +1225,6 @@
         }
     }
 
-    // Fetch Public Holidays based on user's real country code
     async function fetchPublicHolidays(countryCode, countryName) {
         document.getElementById('holidayWidgetTitle').innerText = `🎉 Upcoming Public Holiday (${countryName})`;
         try {
@@ -1241,7 +1236,6 @@
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                // Find next upcoming holiday
                 let nextHoliday = holidays.find(h => new Date(h.date) >= today);
                 if (!nextHoliday) nextHoliday = holidays[0];
 
@@ -1275,7 +1269,6 @@
         }
     }
 
-    // Initialize location & weather/holiday fetch on load
     initUserLocationAndWidgets();
 
     function handlePrint() {
@@ -1387,7 +1380,13 @@
         });
 
         let cal = getCalendarData();
-        let salary = (((342 / 26) * cal.workingDaysTotal + 1920) / cal.workingDaysTotal) * cal.pastWorkingDays;
+        let absentDays = getNum(document.getElementById('absentDaysInput').innerText);
+        
+        // Effective past working days after subtracting absent days (cannot be less than 0)
+        let effectivePastWorkingDays = cal.pastWorkingDays - absentDays;
+        if (effectivePastWorkingDays < 0) effectivePastWorkingDays = 0;
+
+        let salary = (((342 / 26) * cal.workingDaysTotal + 1920) / cal.workingDaysTotal) * effectivePastWorkingDays;
         document.getElementById('salaryResult').innerText = salary.toFixed(2);
 
         let otDays = getNum(document.getElementById('otDaysInput').innerText);
@@ -1512,6 +1511,7 @@
             expenses: expData,
             rate: document.getElementById('rateInput').innerText,
             aedAmount: document.getElementById('aedAmountInput').innerText,
+            absentDays: document.getElementById('absentDaysInput').innerText,
             otDays: document.getElementById('otDaysInput').innerText,
             mtbSavings: document.getElementById('mtbSavingsInput').innerText,
             mtbNrb: document.getElementById('mtbNrbInput').innerText,
@@ -1564,6 +1564,7 @@
 
                 if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
                 if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
+                if (dataStore.absentDays !== undefined) document.getElementById('absentDaysInput').innerText = dataStore.absentDays;
                 if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
                 if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
                 if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
@@ -1625,6 +1626,7 @@
             expenses: expData,
             rate: document.getElementById('rateInput').innerText,
             aedAmount: document.getElementById('aedAmountInput').innerText,
+            absentDays: document.getElementById('absentDaysInput').innerText,
             otDays: document.getElementById('otDaysInput').innerText,
             mtbSavings: document.getElementById('mtbSavingsInput').innerText,
             mtbNrb: document.getElementById('mtbNrbInput').innerText,
@@ -1680,6 +1682,7 @@
 
                 if (dataStore.rate !== undefined) document.getElementById('rateInput').innerText = dataStore.rate;
                 if (dataStore.aedAmount !== undefined) document.getElementById('aedAmountInput').innerText = dataStore.aedAmount;
+                if (dataStore.absentDays !== undefined) document.getElementById('absentDaysInput').innerText = dataStore.absentDays;
                 if (dataStore.otDays !== undefined) document.getElementById('otDaysInput').innerText = dataStore.otDays;
                 if (dataStore.mtbSavings !== undefined) document.getElementById('mtbSavingsInput').innerText = dataStore.mtbSavings;
                 if (dataStore.mtbNrb !== undefined) document.getElementById('mtbNrbInput').innerText = dataStore.mtbNrb;
@@ -1698,13 +1701,12 @@
                 if (dataStore.tabbySplit !== undefined) document.getElementById('tabbySplitInput').innerText = dataStore.tabbySplit;
                 if (dataStore.splitMonth1 !== undefined) document.getElementById('splitMonth1Input').innerText = dataStore.splitMonth1;
                 if (dataStore.splitMonth2 !== undefined) document.getElementById('splitMonth2Input').innerText = dataStore.splitMonth2;
-                if (dataStore.splitMonth3 !== undefined) document.bench = dataStore.splitMonth3; // handled below safely
                 if (dataStore.splitMonth3 !== undefined) document.getElementById('splitMonth3Input').innerText = dataStore.splitMonth3;
                 if (dataStore.splitMonth4 !== undefined) document.getElementById('splitMonth4Input').innerText = dataStore.splitMonth4;
                 if (dataStore.splitMonth5 !== undefined) document.getElementById('splitMonth5Input').innerText = dataStore.splitMonth5;
                 if (dataStore.zakatCash !== undefined) document.getElementById('zakatCashInput').innerText = dataStore.zakatCash;
                 if (dataStore.zakatGoldGram !== undefined) document.getElementById('zakatGoldGramInput').innerText = dataStore.zakatGoldGram;
-                if (dataStore.zakatJobPrice !== undefined || dataStore.zakatGoldPrice !== undefined) document.getElementById('zakatGoldPriceInput').innerText = dataStore.zakatGoldPrice || 0;
+                if (dataStore.zakatGoldPrice !== undefined) document.getElementById('zakatGoldPriceInput').innerText = dataStore.zakatGoldPrice;
                 if (dataStore.zakatBusiness !== undefined) document.getElementById('zakatBusinessInput').innerText = dataStore.zakatBusiness;
                 if (dataStore.zakatReceivables !== undefined) document.getElementById('zakatReceivablesInput').innerText = dataStore.zakatReceivables;
                 if (dataStore.zakatLiabilities !== undefined) document.getElementById('zakatLiabilitiesInput').innerText = dataStore.zakatLiabilities;
